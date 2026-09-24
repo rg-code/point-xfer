@@ -23,7 +23,9 @@ Opening `index.html` directly from disk won't work because browsers block `fetch
 3. In **Settings → Actions → General → Workflow permissions**, choose **Read and write permissions** (needed if your account or org defaults to read-only).
 4. Open the **Actions** tab, pick **Track transfer bonuses**, and click **Run workflow** once to confirm everything works.
 
-The footer's "Report a mistake" link fills in your username and repo automatically when the site runs on `github.io`.
+The live site is at [milesmaximizer.com](https://milesmaximizer.com). For a custom domain of your own, point the apex at GitHub's Pages A/AAAA records and `www` at `<user>.github.io`, set the domain in **Settings → Pages**, and tick **Enforce HTTPS** once the certificate is issued.
+
+The footer's "Report a mistake" link fills in your username and repo automatically when the site runs on `github.io`. On a custom domain, add it to `CUSTOM_DOMAINS` in `assets/app.js`.
 
 After that the tracker runs every 2 hours. Each run that changes the bonus list commits `data/promotions.json`, redeploys the site, and opens an issue listing the new bonuses so you can sanity-check them.
 

@@ -45,8 +45,8 @@ jobs:
         run: |
           mkdir -p _site
           cp -r index.html manifest.webmanifest assets data _site/
-          # Cloudflare in front of the custom domain caches JS/CSS for hours. Versioned URLs
-          # make each deploy fetch fresh assets (HTML and JSON aren't edge-cached).
+          # Pages serves everything with max-age=600. Versioned URLs make each deploy's
+          # HTML fetch matching JS/CSS instead of a cached copy from the previous deploy.
           sed -i -E "s#\"(assets/(app|advice)\.js|assets/styles\.css)\"#\"\1?v=${GITHUB_SHA::7}\"#g" _site/index.html
           grep -q "app.js?v=" _site/index.html
 

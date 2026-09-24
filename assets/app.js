@@ -735,13 +735,16 @@
     writeURL();
   }
 
-  // On GitHub Pages (user.github.io/repo/), point "Report a mistake" at that repo's issues.
+  // Point "Report a mistake" at the repo's issues: taken from user.github.io/repo/ on
+  // GitHub Pages, or looked up for custom domains (which have no repo in the URL).
+  const CUSTOM_DOMAINS = { 'milesmaximizer.com': 'rg-code/point-xfer' };
   function setupReportLink() {
     const link = $('#report-link');
     const m = location.hostname.match(/^([a-z0-9-]+)\.github\.io$/i);
     const repo = location.pathname.split('/').filter(Boolean)[0];
-    if (!link || !m || !repo) return;
-    link.href = `https://github.com/${m[1]}/${repo}/issues/new?labels=data-fix`;
+    const slug = m && repo ? `${m[1]}/${repo}` : CUSTOM_DOMAINS[location.hostname];
+    if (!link || !slug) return;
+    link.href = `https://github.com/${slug}/issues/new?labels=data-fix`;
     link.hidden = false;
   }
 
