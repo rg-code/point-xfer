@@ -8,7 +8,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -16,7 +21,12 @@
       "ratio": [
         5,
         8
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -24,7 +34,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -32,7 +47,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -40,7 +60,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      },
+      "timeNote": "Amex says it can take up to 4 days"
     },
     {
       "from": "amex",
@@ -48,7 +74,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -56,7 +87,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -64,7 +100,12 @@
       "ratio": [
         5,
         4
-      ]
+      ],
+      "time": {
+        "min": 4,
+        "max": 8,
+        "unit": "hours"
+      }
     },
     {
       "from": "amex",
@@ -72,7 +113,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "minNote": "Amex adds an excise tax fee on transfers to US airlines (0.06¢ a point, up to $99)"
     },
     {
       "from": "amex",
@@ -80,7 +127,12 @@
       "ratio": [
         5,
         4
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -88,7 +140,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "amex",
@@ -96,7 +153,15 @@
       "ratio": [
         5,
         4
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "min": 250,
+      "increment": 250,
+      "minNote": "Amex adds an excise tax fee on transfers to US airlines (0.06¢ a point, up to $99)"
     },
     {
       "from": "amex",
@@ -104,7 +169,14 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "min": 500,
+      "increment": 500
     },
     {
       "from": "amex",
@@ -112,7 +184,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "amex",
@@ -120,7 +197,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "amex",
@@ -128,7 +210,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -136,7 +223,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -144,7 +236,12 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "amex",
@@ -152,7 +249,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 1,
+        "unit": "hours"
+      }
     },
     {
       "from": "amex",
@@ -160,7 +262,8 @@
       "ratio": [
         4,
         1
-      ]
+      ],
+      "timeNote": "Amex says to allow up to 72 hours"
     },
     {
       "from": "chase",
@@ -168,7 +271,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -176,7 +284,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 1,
+        "unit": "hours"
+      }
     },
     {
       "from": "chase",
@@ -184,7 +297,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Occasionally delayed 24–48 hours"
     },
     {
       "from": "chase",
@@ -192,7 +311,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Occasionally delayed 24–48 hours"
     },
     {
       "from": "chase",
@@ -200,7 +325,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -208,7 +338,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -216,7 +351,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      },
+      "timeNote": "Occasionally takes up to 7 days"
     },
     {
       "from": "chase",
@@ -224,7 +365,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -232,7 +378,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -240,7 +391,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -264,7 +420,12 @@
             3
           ]
         }
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "chase",
@@ -272,7 +433,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 8,
+        "unit": "hours"
+      }
     },
     {
       "from": "chase",
@@ -280,7 +446,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      }
     },
     {
       "from": "chase",
@@ -288,7 +459,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -296,7 +472,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      },
+      "note": "Not listed by Citi directly: transfer to Qatar Privilege Club, then combine Avios into AerClub"
     },
     {
       "from": "citi",
@@ -304,7 +486,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -313,7 +500,13 @@
         1,
         1
       ],
-      "note": "Requires Strata Premier, Strata Elite or Prestige"
+      "note": "Requires Strata Premier, Strata Elite or Prestige",
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Citi says usually within 24 hours, up to 5 business days"
     },
     {
       "from": "citi",
@@ -321,7 +514,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -329,7 +527,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -337,7 +540,12 @@
       "ratio": [
         5,
         4
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -345,7 +553,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 1,
+        "unit": "hours"
+      },
+      "timeNote": "Rarely takes up to a week"
     },
     {
       "from": "citi",
@@ -353,7 +567,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      }
     },
     {
       "from": "citi",
@@ -361,7 +580,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -369,7 +593,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "citi",
@@ -377,7 +606,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      }
     },
     {
       "from": "citi",
@@ -385,7 +619,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "citi",
@@ -393,7 +632,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 3,
+        "max": 7,
+        "unit": "days"
+      }
     },
     {
       "from": "citi",
@@ -401,7 +645,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "citi",
@@ -409,7 +658,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -417,7 +671,13 @@
       "ratio": [
         2,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 2,
+        "unit": "days"
+      },
+      "timeNote": "Reports vary from instant to 2 days"
     },
     {
       "from": "citi",
@@ -425,7 +685,12 @@
       "ratio": [
         2,
         3
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -433,7 +698,12 @@
       "ratio": [
         5,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -441,7 +711,12 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "citi",
@@ -449,7 +724,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -457,7 +737,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -465,7 +750,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -473,7 +763,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -481,7 +776,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -489,7 +789,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -497,7 +802,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      },
+      "timeNote": "Some transfers take 3–5 days"
     },
     {
       "from": "c1",
@@ -505,7 +816,12 @@
       "ratio": [
         4,
         3
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -513,7 +829,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -521,7 +842,12 @@
       "ratio": [
         4,
         3
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      }
     },
     {
       "from": "c1",
@@ -529,7 +855,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -537,7 +868,13 @@
       "ratio": [
         4,
         3
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "New JAL accounts must wait 7 days before redeeming"
     },
     {
       "from": "c1",
@@ -545,7 +882,12 @@
       "ratio": [
         5,
         3
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 2,
+        "unit": "hours"
+      }
     },
     {
       "from": "c1",
@@ -553,7 +895,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      }
     },
     {
       "from": "c1",
@@ -561,7 +908,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -569,7 +921,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "c1",
@@ -577,7 +934,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -585,7 +947,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -593,7 +960,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -601,7 +973,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "c1",
@@ -609,7 +986,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "c1",
@@ -625,7 +1007,13 @@
       "ratio": [
         2,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 2,
+        "unit": "days"
+      },
+      "timeNote": "Rarely takes up to 2 weeks"
     },
     {
       "from": "bilt",
@@ -633,7 +1021,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -641,7 +1034,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -649,7 +1047,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -657,7 +1060,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -665,7 +1073,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -673,7 +1086,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -681,7 +1099,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -689,7 +1112,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -697,7 +1125,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "bilt",
@@ -705,7 +1138,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -713,7 +1151,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -721,7 +1164,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -729,7 +1177,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -737,7 +1190,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -746,7 +1204,12 @@
         1,
         1
       ],
-      "note": "Can take up to 72 hours to post"
+      "note": "Can take up to 72 hours to post",
+      "time": {
+        "min": 12,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "bilt",
@@ -754,7 +1217,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "bilt",
@@ -762,7 +1230,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -770,7 +1243,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -778,7 +1256,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -786,7 +1269,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -794,7 +1282,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -802,7 +1295,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -810,7 +1308,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -818,7 +1321,12 @@
       "ratio": [
         3,
         2
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "bilt",
@@ -834,7 +1342,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -842,7 +1356,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -850,7 +1370,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -858,7 +1384,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -866,7 +1398,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -874,7 +1412,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -882,7 +1426,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -890,7 +1440,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -898,7 +1454,13 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "wf",
@@ -906,7 +1468,13 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "timeNote": "Wells Fargo says to allow up to 72 hours"
     },
     {
       "from": "citi",
@@ -923,7 +1491,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -931,7 +1504,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -939,7 +1517,13 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      },
+      "increment": 1000
     },
     {
       "from": "rove",
@@ -955,7 +1539,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -963,7 +1552,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -971,7 +1565,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -987,7 +1586,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 1,
+        "unit": "days"
+      }
     },
     {
       "from": "rove",
@@ -995,7 +1599,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 1,
+        "unit": "days"
+      }
     },
     {
       "from": "rove",
@@ -1003,7 +1612,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -1019,7 +1633,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "rove",
@@ -1027,7 +1646,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 0,
+        "unit": "minutes"
+      }
     },
     {
       "from": "rove",
@@ -1043,7 +1667,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "rove",
@@ -1051,7 +1680,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 0,
+        "max": 24,
+        "unit": "hours"
+      }
     },
     {
       "from": "rove",
@@ -1075,7 +1709,12 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 1,
+        "unit": "days"
+      }
     },
     {
       "from": "rove",
@@ -1083,7 +1722,13 @@
       "ratio": [
         3,
         2
-      ]
+      ],
+      "time": {
+        "min": 1,
+        "max": 1,
+        "unit": "days"
+      },
+      "increment": 150
     }
   ]
 }

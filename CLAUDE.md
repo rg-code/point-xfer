@@ -17,18 +17,21 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 
 ## Layout
 
-- `index.html` app shell. Loads D3 7.9.0 from cdnjs and B612 from Google Fonts. Contains a small pre-paint script that applies the saved theme.
-- `assets/app.js` single IIFE, vanilla JS. Sections: data loading and indexing, URL state, controls, bonus strip, route view (D3 rail), compare view (D3 matrix), detail sheet (calculator), partner search, theme toggle. URL params: `view`, `from`, `type`, `bonus`, `partner` (open detail sheet, so partners are linkable).
-- `assets/styles.css` design tokens at the top, mobile-first, `@media (min-width: 720px)` and `1000px` breakpoints, dark mode.
+- `index.html` app shell. Loads D3 7.9.0 from cdnjs and B612 from Google Fonts. Contains a small pre-paint script that applies the saved theme. Footer is just the verified date and report link; this is a personal tool, so no disclaimers.
+- `assets/app.js` single IIFE, vanilla JS. Sections: data loading and indexing, URL state, controls, bonus strip, route view (D3 rail), compare view (D3 matrix), detail sheet (calculator), partner search, theme toggle. The detail sheet shows per card: ratio, live bonus with ranked sources, transfer time and minimum, go/wait verdict, bonus history chart. URL params: `view`, `from`, `type`, `bonus`, `partner` (open detail sheet, so partners are linkable).
+- `assets/advice.js` go/wait engine. Plain script (no import/export) that sets `globalThis.transferAdvice`, so the browser and node tests share it. Estimates the chance of a bonus within 90 days from the gaps between past bonuses, smoothed toward the route's average rate (average rate alone with fewer than 3 comparable gaps). Chance × typical bonus = value of waiting. Live bonus: Go if it beats the value of waiting or the typical size. No live bonus: Wait only if waiting is worth ≥ 10% and the chance is ≥ 40%, otherwise Go. Targeted offers (`targeted: true`) are drawn faded and ignored by the math. The window starts at the later of `historySince` and the route's `added` date. `tests/insights.test.mjs` pins the behaviour; run a survey over all routes after changing constants.
+- `assets/styles.css` design tokens at the top, mobile-first, `@media (min-width: 720px)` and `1000px` breakpoints (controls use the two-row layout from 720 to 1079px), dark mode.
 - `data/programs.json` currencies (dropdown order = column order in Compare), alliance groups, partners.
-- `data/transfers.json` every route. `ratio` is `[points sent, points received]`; `[5, 4]` means 1,000 → 800. Optional `note` and `variants` (card-dependent ratios, see chase → hyatt). Bump `verifiedOn` when you re-check the list.
+- `data/transfers.json` every route. `ratio` is `[points sent, points received]`; `[5, 4]` means 1,000 → 800. Optional `note` and `variants` (card-dependent ratios, see chase → hyatt), `time` (`{ min, max, unit }`, `max: 0` = instant) and `timeNote`, `min` / `increment` / `minNote` when a route differs from the currency's `minTransfer` / `increment` in `programs.json`, and `added` (ISO date) for routes launched after the archive's `since`. Notes are short user-facing caveats, not research annotations. Bump `verifiedOn` when you re-check the list.
 - `data/promotions.json` written by the tracker. Don't hand-edit; edit `promotions.manual.json` and run `npm run track:offline`.
 - `data/promotions.manual.json` `add` (hand-entered bonuses, always win while active) and `suppress` (promo ids to hide false positives, e.g. `citi-turkish-25`).
+- `data/promotions.archive.json` hand-researched past bonuses from `since` onward (`records`: from, to, bonus, start, end, sources, confidence, optional `targeted`, `note`). Built mainly from Frequent Miler's past-bonus table checked against each article and AwardWallet; Bilt Rent Day tiers from Bilt's terms PDFs; `bonus` is the base tier. Merged into `history` by the tracker; curated records beat overlapping tracker records. Rerun `npm run track:offline` after editing.
 - `data/sources.json` RSS feeds the tracker reads.
-- `scripts/lib/parse.mjs` feed parsing and bonus extraction: alias tables for currencies and partners, bonus %, end-date parsing.
+- `scripts/lib/parse.mjs` feed parsing and bonus extraction: alias tables for currencies and partners, bonus %, end-date parsing, official offer links from post bodies.
+- `scripts/lib/sources.mjs` official domains per program and `rankSources`: official page, then AwardWallet, then Frequent Miler, then the rest. Add a domain here when adding a program.
 - `scripts/track-promos.mjs` tracker entry point and `merge()` logic (exported for tests).
 - `scripts/build-preview.mjs` builds the single-file preview.
-- `tests/tracker.test.mjs` all tests.
+- `tests/tracker.test.mjs` parser, merge and dataset tests. `tests/insights.test.mjs` source ranking, archive merge, advice engine, time/minimum and archive data checks.
 - `.github/workflows/track-promos.yml` cron every 6 hours: test, track, commit if changed, open an issue for new bonuses.
 - `.github/workflows/pages.yml` deploy on push and on tracker completion.
 
@@ -39,14 +42,15 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 3. Every (currency, partner) pair must exist in `transfers.json`, otherwise it's dropped. This is the main false-positive filter, so adding a route also teaches the tracker about it.
 4. End date from "through Sept. 30", "until October 15", "ends 9/30". One-day offers ("today only", "Rent Day") end on the publish date. No date found → kept 30 days (`assumedEnd`).
 5. `[Expired]` headlines close out a matching bonus. Manual entries are not closed by feed results.
-6. Writes only when data changes, so the Action doesn't make noise commits.
+6. Sources are sorted official → AwardWallet → Frequent Miler → others. Official links found in a post body are added as sources. When sources disagree on an end date, the better-ranked one wins (`endSource`).
+7. Writes only when data changes, so the Action doesn't make noise commits.
 
 When adding a partner or currency, add aliases in `parse.mjs` and a test with a realistic headline. Watch for collisions: "American Express" vs American Airlines, "Rove" vs "Rover", "Miles & More" vs "Miles&Smiles", case-sensitive `ANA`, `BA`, `EVA`, `TAP`, `SAS`, `JAL`.
 
 ## Design rules
 
 - Subject vernacular is airline route maps: each currency is a trunk line, partners are stops. Branch stroke weight = partner points per 1,000 sent (log scale, `weight` in app.js). Compare view dot area = same value (sqrt scale, `dotR`).
-- One accent: taxiway yellow `--bonus` marks live bonuses only. Don't use it for anything else.
+- One accent: taxiway yellow `--bonus` marks live bonuses only. Don't use it for anything else. Past bonuses in the history chart use `--route`; the Go verdict is ink-filled, Wait is outlined.
 - Typeface is B612 (Airbus cockpit font) at 400/700 only. Type scale uses the `--step-*` tokens.
 - Tokens live in `:root`; dark values are duplicated in `[data-theme="dark"]` and the `prefers-color-scheme` block. Change both.
 - Mobile first. Tap targets ≥ 44px, the currency picker is a native `<select>` (18px font so iOS doesn't zoom), controls are sticky, detail view is a `<dialog>` bottom sheet with swipe-to-close.
@@ -74,7 +78,5 @@ Concept inspired by Wings of the Points (uscreditcardguide.github.io), which is 
 ## Ideas not yet built
 
 - "My cards" filter in Compare that dims currencies you don't hold (URL param, no storage required).
-- Bonus history chart per route from `promotions.json` `history`.
-- Transfer time and minimum per route in the detail sheet.
 - Optional LLM extraction in the tracker when `ANTHROPIC_API_KEY` is set, with the regex parser as fallback.
 - Hotel-to-airline routes (Marriott, Accor) as an optional layer.

@@ -8,11 +8,23 @@
       "end": "2026-10-15",
       "sources": [
         {
+          "title": "Chase Just Launched a 70% Transfer Bonus to Marriott Bonvoy",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/marriott-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 70% transfer bonus from Chase Ultimate Rewards to Marriott Bonvoy",
+          "url": "https://frequentmiler.com/70-percent-transfer-bonus-chase-ultimate-rewards-marriott-bonvoy/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Credit card transfer bonuses (September)",
           "url": "https://thepointsguy.com/loyalty-programs/current-transfer-bonuses/",
           "feed": "The Points Guy"
         }
-      ]
+      ],
+      "start": "2026-09-15",
+      "note": "Marriott can take up to 7 days to post the bonus points."
     },
     {
       "from": "chase",
@@ -22,11 +34,22 @@
       "note": "30% if you also hold the Chase Aeroplan card.",
       "sources": [
         {
+          "title": "20% Transfer Bonus From Chase Ultimate Rewards to Aeroplan (Stack to Get a 30% Bonus)",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/aeroplan-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get 20% bonus when transferring Chase Ultimate Rewards to Air Canada Aeroplan (stack with 10% cardholder bonus)",
+          "url": "https://frequentmiler.com/get-20-bonus-when-transferring-chase-ultimate-rewards-to-air-canada-aeroplan-stack-with-10-cardholder-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "September credit card transfer bonuses",
           "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
           "feed": "Upgraded Points"
         }
-      ]
+      ],
+      "start": "2026-08-12"
     },
     {
       "from": "c1",
@@ -35,11 +58,22 @@
       "end": "2026-09-30",
       "sources": [
         {
+          "title": "Capital One Launches a Limited-Time 30% Transfer Bonus to Japan Airlines (JAL) Mileage Bank",
+          "url": "https://awardwallet.com/news/capital-one-rewards/japan-airlines-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% bonus when transferring Capital One miles to Japan Airlines (not quite 1:1)",
+          "url": "https://frequentmiler.com/capital-one-miles-jal-japan-airlines-30-percent-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "September credit card transfer bonuses",
           "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
           "feed": "Upgraded Points"
         }
-      ]
+      ],
+      "start": "2026-09-01"
     },
     {
       "from": "amex",
@@ -48,11 +82,22 @@
       "end": "2026-09-27",
       "sources": [
         {
+          "title": "30% Transfer Bonus From Amex Membership Rewards to Avios",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/avios-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% transfer bonus to Avios programs from Amex Membership Rewards",
+          "url": "https://frequentmiler.com/30-percent-transfer-bonus-american-express-membership-rewards-avios-british-airways-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Current transfer bonuses",
           "url": "https://www.point.me/insights/current-transfer-bonuses/",
           "feed": "point.me"
         }
-      ]
+      ],
+      "start": "2026-08-03"
     },
     {
       "from": "amex",
@@ -61,11 +106,22 @@
       "end": "2026-09-27",
       "sources": [
         {
+          "title": "30% Transfer Bonus From Amex Membership Rewards to Avios",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/avios-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% transfer bonus to Avios programs from Amex Membership Rewards",
+          "url": "https://frequentmiler.com/30-percent-transfer-bonus-american-express-membership-rewards-avios-british-airways-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Amex transfer partners",
           "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
           "feed": "AwardTravelFinder"
         }
-      ]
+      ],
+      "start": "2026-08-03"
     },
     {
       "from": "amex",
@@ -74,11 +130,22 @@
       "end": "2026-09-27",
       "sources": [
         {
+          "title": "30% Transfer Bonus From Amex Membership Rewards to Avios",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/avios-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% transfer bonus to Avios programs from Amex Membership Rewards",
+          "url": "https://frequentmiler.com/30-percent-transfer-bonus-american-express-membership-rewards-avios-british-airways-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Amex transfer partners",
           "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
           "feed": "AwardTravelFinder"
         }
-      ]
+      ],
+      "start": "2026-08-03"
     },
     {
       "from": "amex",
@@ -87,11 +154,28 @@
       "end": "2026-10-14",
       "sources": [
         {
+          "title": "Amex Launches 30% Transfer Bonus to Hilton Honors",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/hilton-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% transfer bonus from Amex Membership Rewards to Hilton Honors",
+          "url": "https://frequentmiler.com/amex-membership-rewards-hilton-honors-30-percent-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Amex to Hilton transfers now come with a 20% or 30% bonus (but it's a bad deal)",
+          "url": "https://travelingformiles.com/amex-hilton-transfer-bonus/",
+          "feed": "Traveling for Miles"
+        },
+        {
           "title": "Amex transfer partners",
           "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
           "feed": "AwardTravelFinder"
         }
-      ]
+      ],
+      "start": "2026-09-01",
+      "note": "Targeted: check your Amex account. Some accounts see 20%."
     },
     {
       "from": "rove",
@@ -101,25 +185,47 @@
       "note": "Launch bonus for the new Copa partnership.",
       "sources": [
         {
-          "title": "Rove Miles now transfer to Copa ConnectMiles",
+          "title": "Rove Miles Now Transfer to Copa Airlines ConnectMiles with a 40% Launch Bonus",
           "url": "https://www.rove.com/blog/rove-miles-now-transfer-to-copa-airlines-connectmiles-with-a-40-launch-bonus",
           "feed": "Rove"
+        },
+        {
+          "title": "Rove Transfer Bonuses: Get 40% More Copa ConnectMiles",
+          "url": "https://awardwallet.com/news/rove-miles/rove-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Rove has added Copa Airlines as transfer partner, launching with 40% transfer bonus",
+          "url": "https://frequentmiler.com/rove-copa-airlines-transfer-partner-bonus/",
+          "feed": "Frequent Miler"
         }
-      ]
+      ],
+      "start": "2026-09-01"
     },
     {
       "from": "citi",
       "to": "jal",
       "bonus": 30,
       "end": "2026-10-24",
-      "note": "Launch bonus. No-annual-fee cards get 1,000 \u2192 910.",
+      "note": "Launch bonus. No-annual-fee cards get 1,000 → 910.",
       "sources": [
+        {
+          "title": "Citi Adds Japan Airlines Mileage Bank as Transfer Partner — Plus a Limited-Time 30% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/japan-airlines-transfer-partner/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Citi adds Japan Airlines as a 1:1 partner, launches 30% transfer bonus",
+          "url": "https://frequentmiler.com/citi-adds-japan-airlines-as-a-11-partner-launches-30-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
         {
           "title": "Citi adds Japan Airlines as a transfer partner",
           "url": "https://thepointsguy.com/news/citi-japan-airlines-transfer-partner/",
           "feed": "The Points Guy"
         }
-      ]
+      ],
+      "start": "2026-09-20"
     },
     {
       "from": "citi",
@@ -128,11 +234,22 @@
       "end": "2026-10-24",
       "sources": [
         {
+          "title": "25% Transfer Bonus From Citi to LifeMiles",
+          "url": "https://awardwallet.com/news/avianca-lifemiles/lifemiles-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "25% transfer bonus to Avianca LifeMiles from Citi ThankYou Rewards",
+          "url": "https://frequentmiler.com/25-transfer-bonus-to-avianca-lifemiles-from-citi-thankyou-rewards-2/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Current credit card transfer bonuses",
           "url": "https://www.pointsyeah.com/insider/deals/current-credit-card-transfer-bonuses",
           "feed": "PointsYeah"
         }
-      ]
+      ],
+      "start": "2026-09-20"
     }
   ],
   "suppress": []

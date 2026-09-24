@@ -12,6 +12,7 @@ import { readFile, writeFile, appendFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { parseFeed, extractPromotions, promoId } from './lib/parse.mjs';
+import { rankSources, sourceRank } from './lib/sources.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = (f) => path.join(ROOT, 'data', f);
@@ -21,7 +22,7 @@ const DRY = args.has('--dry-run');
 
 const LOOKBACK_DAYS = 45;       // ignore feed items older than this
 const UNKNOWN_END_DAYS = 30;    // keep a bonus with no stated end date this long after first seen
-const HISTORY_LIMIT = 400;
+const HISTORY_LIMIT = 2000;
 
 const readJSON = async (f, fallback) => {
   try { return JSON.parse(await readFile(f, 'utf8')); } catch { return fallback; }
@@ -59,7 +60,35 @@ export function isActive(p, day = today()) {
   return !end || end >= day;
 }
 
-export function merge({ existing, candidates, manual, day = today() }) {
+// The blog post plus any issuer/partner offer pages it links to.
+const sourcesOf = (c) => [
+  { title: c.title, url: c.url, feed: c.source },
+  ...(c.official || []).map((url) => ({ title: 'Offer page', url, feed: new URL(url).hostname.replace(/^www\./, '') })),
+];
+
+const span = (h) => {
+  const s = h.start || h.firstSeen || h.end;
+  return [s, h.end || h.assumedEnd || s];
+};
+
+/** One record per bonus period: curated (archive, manual) records win over overlapping tracker ones. */
+export function dedupeHistory(list) {
+  const pri = (h) => (h.archived || h.manual ? 0 : 1);
+  const taken = new Map();
+  const kept = [];
+  for (const h of [...list].sort((a, b) => pri(a) - pri(b))) {
+    const key = `${h.from}>${h.to}`;
+    const [s, e] = span(h);
+    const spans = taken.get(key) || [];
+    if (spans.some(([s2, e2]) => s <= e2 && s2 <= e)) continue;
+    spans.push([s, e]);
+    taken.set(key, spans);
+    kept.push(h);
+  }
+  return kept;
+}
+
+export function merge({ existing, candidates, manual, archive = {}, day = today() }) {
   const byPair = new Map(); // one live promo per from>to route
   const history = [...(existing.history || [])];
   const newlyFound = [];
@@ -79,8 +108,13 @@ export function merge({ existing, candidates, manual, day = today() }) {
       continue;
     }
     if (cur && cur.bonus === c.bonus) {
-      if (c.end && !cur.end) { cur.end = c.end; delete cur.assumedEnd; }
-      if (!cur.sources?.some((s) => s.url === c.url)) (cur.sources ||= []).push({ title: c.title, url: c.url, feed: c.source });
+      if (c.end && !cur.end) { cur.end = c.end; cur.endSource = c.url; delete cur.assumedEnd; }
+      // A better-ranked source (official, then AwardWallet, then Frequent Miler) settles end-date disagreements.
+      else if (c.end && c.end !== cur.end && !cur.manual && sourceRank(c.url) < sourceRank(cur.endSource || cur.sources?.[0]?.url)) {
+        cur.end = c.end;
+        cur.endSource = c.url;
+      }
+      cur.sources = [...(cur.sources || []), ...sourcesOf(c)];
       continue;
     }
     if (cur && cur.firstSeen > seen) continue; // an older article about a previous bonus
@@ -95,7 +129,8 @@ export function merge({ existing, candidates, manual, day = today() }) {
       end: c.end,
       ...(c.end ? {} : { assumedEnd: addDays(seen, UNKNOWN_END_DAYS) }),
       firstSeen: seen,
-      sources: [{ title: c.title, url: c.url, feed: c.source }],
+      ...(c.end ? { endSource: c.url } : {}),
+      sources: sourcesOf(c),
     };
     byPair.set(key, promo);
     newlyFound.push(promo);
@@ -116,6 +151,12 @@ export function merge({ existing, candidates, manual, day = today() }) {
   }
   const suppressed = new Set(manual.suppress || []);
 
+  // Hand-researched past bonuses. Anything still running is covered by the live list.
+  for (const a of archive.records || []) {
+    if ((a.end || a.start) >= day) continue;
+    history.push({ id: promoId(a), ...a, archived: true });
+  }
+
   const promotions = [];
   for (const p of byPair.values()) {
     if (suppressed.has(p.id)) continue;
@@ -123,21 +164,22 @@ export function merge({ existing, candidates, manual, day = today() }) {
     else history.push(p);
   }
 
-  // De-duplicate history by id, keep most recent.
-  const hist = [...new Map(history.map((h) => [h.id + (h.end || ''), h])).values()]
-    .sort((a, b) => (b.end || '').localeCompare(a.end || ''))
+  const hist = dedupeHistory(history)
+    .sort((a, b) => (b.end || b.start || '').localeCompare(a.end || a.start || ''))
     .slice(0, HISTORY_LIMIT);
+  for (const p of [...promotions, ...hist]) if (p.sources) p.sources = rankSources(p.sources);
 
   promotions.sort((a, b) => (a.end || a.assumedEnd || '9999').localeCompare(b.end || b.assumedEnd || '9999'));
   return { promotions, history: hist, newlyFound: newlyFound.filter((n) => promotions.some((p) => p.id === n.id)) };
 }
 
 async function main() {
-  const [transfers, programs, existing, manual, sources] = await Promise.all([
+  const [transfers, programs, existing, manual, archive, sources] = await Promise.all([
     readJSON(DATA('transfers.json'), { transfers: [] }),
     readJSON(DATA('programs.json'), { currencies: [], partners: [] }),
     readJSON(DATA('promotions.json'), { promotions: [], history: [] }),
     readJSON(DATA('promotions.manual.json'), { add: [], suppress: [] }),
+    readJSON(DATA('promotions.archive.json'), { records: [] }),
     readJSON(DATA('sources.json'), { feeds: [] }),
   ]);
   const validPairs = new Set(transfers.transfers.map((t) => `${t.from}>${t.to}`));
@@ -152,10 +194,11 @@ async function main() {
     console.log(`Found ${candidates.length} bonus mentions across ${items.length} items`);
   }
 
-  const { promotions, history, newlyFound } = merge({ existing, candidates, manual });
+  const { promotions, history, newlyFound } = merge({ existing, candidates, manual, archive });
 
-  const next = { updatedAt: existing.updatedAt, promotions, history };
-  const changed = JSON.stringify({ p: existing.promotions, h: existing.history }) !== JSON.stringify({ p: promotions, h: history });
+  const next = { updatedAt: existing.updatedAt, historySince: archive.since || null, promotions, history };
+  const changed = JSON.stringify({ s: existing.historySince, p: existing.promotions, h: existing.history })
+    !== JSON.stringify({ s: next.historySince, p: promotions, h: history });
   if (changed) next.updatedAt = new Date().toISOString();
 
   const names = Object.fromEntries([...programs.currencies, ...programs.partners].map((p) => [p.id, p.name]));

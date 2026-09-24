@@ -4,32 +4,37 @@
       "id": "amex",
       "name": "Amex Membership Rewards",
       "short": "Amex",
-      "minTransfer": 1000
+      "minTransfer": 1000,
+      "increment": 1000
     },
     {
       "id": "chase",
       "name": "Chase Ultimate Rewards",
       "short": "Chase",
-      "minTransfer": 1000
+      "minTransfer": 1000,
+      "increment": 1000
     },
     {
       "id": "citi",
       "name": "Citi ThankYou Points",
       "short": "Citi",
       "minTransfer": 1000,
+      "increment": 1000,
       "note": "Ratios shown are for Strata Premier, Strata Elite and Prestige. No-annual-fee ThankYou cards transfer at reduced ratios (roughly 10:7) and can't reach AAdvantage."
     },
     {
       "id": "c1",
       "name": "Capital One Miles",
       "short": "Cap One",
-      "minTransfer": 1000
+      "minTransfer": 1000,
+      "increment": 100
     },
     {
       "id": "bilt",
       "name": "Bilt Points",
       "short": "Bilt",
-      "minTransfer": 1000,
+      "minTransfer": 2000,
+      "increment": 1000,
       "note": "Blue status members must transfer at least 2,000 points."
     },
     {
@@ -37,6 +42,7 @@
       "name": "Wells Fargo Rewards",
       "short": "WF",
       "minTransfer": 1,
+      "increment": 1,
       "note": "Autograph and Autograph Journey cards only. No minimum transfer."
     },
     {
@@ -44,6 +50,7 @@
       "name": "Rove Miles",
       "short": "Rove",
       "minTransfer": 2000,
+      "increment": 100,
       "note": "Free to join, no credit card needed. Earned through Rove's shopping portal and travel bookings. Minimum transfer 2,000 miles, then 100-mile increments."
     }
   ],

@@ -1,6 +1,8 @@
 // Turns RSS/Atom feed text into structured transfer-bonus candidates.
 // No dependencies, so the GitHub Action runs with a bare `node` install.
 
+import { isOfficial } from './sources.mjs';
+
 export const CURRENCY_ALIASES = {
   amex: [/\bamex\b/i, /american express/i, /membership rewards/i],
   chase: [/\bchase\b/i, /ultimate rewards/i],
@@ -90,7 +92,7 @@ function tag(block, name) {
   return m ? m[1] : '';
 }
 
-/** Parse RSS 2.0 or Atom XML into { title, link, published, summary } items. */
+/** Parse RSS 2.0 or Atom XML into { title, link, published, summary, links } items. */
 export function parseFeed(xml) {
   const items = [];
   const blocks = xml.match(/<item\b[\s\S]*?<\/item>/gi) || xml.match(/<entry\b[\s\S]*?<\/entry>/gi) || [];
@@ -106,6 +108,8 @@ export function parseFeed(xml) {
       link,
       published: published ? new Date(published).toISOString() : null,
       summary: stripTags(tag(b, 'description') || tag(b, 'summary') || tag(b, 'content')).slice(0, 1200),
+      // Links inside the post body, used to find the issuer's own offer page.
+      links: [...new Set([...decodeEntities(b).matchAll(/href=["'](https?:\/\/[^"']+)["']/gi)].map((m) => m[1]))].slice(0, 80),
     });
   }
   return items;
@@ -203,7 +207,8 @@ export function extractPromotions(item, validPairs) {
   for (const from of sources) {
     for (const to of targets) {
       if (!validPairs.has(`${from}>${to}`)) continue;
-      out.push({ from, to, bonus, end, expired, title, url: item.link, published: item.published });
+      const official = (item.links || []).filter((u) => isOfficial(u, [from, to]));
+      out.push({ from, to, bonus, end, expired, title, url: item.link, published: item.published, official });
     }
   }
   return out;

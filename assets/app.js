@@ -29,6 +29,12 @@
   function index(data) {
     const day = localToday();
     const routes = new Map(data.transfers.transfers.map((t) => [`${t.from}>${t.to}`, t]));
+    const history = new Map();
+    for (const h of data.promotions.history || []) {
+      const k = `${h.from}>${h.to}`;
+      if (!history.has(k)) history.set(k, []);
+      history.get(k).push(h);
+    }
     const live = (data.promotions.promotions || []).filter((p) => {
       const end = p.end || p.assumedEnd;
       return routes.has(`${p.from}>${p.to}`) && (!p.start || p.start <= day) && (!end || end >= day);
@@ -39,6 +45,8 @@
       routes,
       live,
       promo: new Map(live.map((p) => [`${p.from}>${p.to}`, p])),
+      history,
+      historySince: data.promotions.historySince || null,
       partners: new Map(data.programs.partners.map((p) => [p.id, p])),
       currencies: new Map(data.programs.currencies.map((c) => [c.id, c])),
       groups: data.programs.groups,
@@ -358,6 +366,68 @@
 
   let sheetAmount = 10000;
 
+  function timeText(t) {
+    if (!t) return '';
+    const { min, max, unit } = t;
+    if (max === 0) return 'Arrives instantly';
+    const u = max === 1 ? unit.replace(/s$/, '') : unit;
+    return min === 0 ? `Arrives within ${max} ${u}` : `Arrives in ${min === max ? max : `${min}–${max}`} ${u}`;
+  }
+
+  const minimumOf = (t, c) => ({ min: t.min ?? c.minTransfer, step: t.increment ?? c.increment ?? c.minTransfer });
+
+  function minimumText({ min, step }) {
+    if (min <= 1 && step <= 1) return 'No minimum';
+    if (step <= 1) return `Minimum ${num.format(min)}`;
+    return `Minimum ${num.format(min)}, ${step === min ? 'in' : 'then'} ${num.format(step)}-point steps`;
+  }
+
+  function sourcesHTML(sources = []) {
+    const top = sources.slice(0, 3);
+    if (!top.length) return '';
+    const label = (s) => s.feed || s.url.replace(/^https?:\/\/(www\.)?([^/]+).*/, '$2');
+    return `. ${top.length > 1 ? 'Sources' : 'Source'}: ${top.map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(label(s))}</a>`).join(', ')}`;
+  }
+
+  // Bonus history as bars on a timeline from historySince to today: past bonuses in the route colour,
+  // the live one in the bonus accent, time before the route existed shaded. Every card shares the same
+  // timeline so rows compare at a glance. Percent x units, so nothing needs measuring.
+  function historyChart(key, live, routeSince) {
+    const start = Date.parse(`${D.historySince}T00:00:00Z`);
+    const span = Date.parse(`${D.day}T00:00:00Z`) + 864e5 - start;
+    const x = (iso) => Math.max(0, Math.min(1, (Date.parse(`${iso.slice(0, 10)}T00:00:00Z`) - start) / span)) * 100;
+    const oneDay = (100 * 864e5) / span;
+    const bars = (D.history.get(key) || [])
+      .map((h) => ({ s: h.start || h.firstSeen || h.end, e: h.end || h.assumedEnd || h.start || h.firstSeen, bonus: h.bonus, targeted: h.targeted }))
+      .filter((b) => b.s && b.e >= D.historySince);
+    if (live) bars.push({ s: live.start || live.firstSeen || D.day, e: D.day, bonus: live.bonus, live: true });
+    const top = Math.max(50, ...bars.map((b) => b.bonus));
+    const H = 34;
+    const years = [];
+    for (let y = +D.historySince.slice(0, 4) + 1; y <= +D.day.slice(0, 4); y++) years.push(x(`${y}-01-01`));
+    return `<svg class="r-hist" aria-hidden="true" height="${H + 18}">
+      ${years.map((yx, i) => `<line class="hist-tick" x1="${yx}%" x2="${yx}%" y1="0" y2="${H + 4}"/><text x="${yx}%" y="${H + 16}" dx="3">${+D.historySince.slice(0, 4) + 1 + i}</text>`).join('')}
+      ${routeSince > D.historySince ? `<rect class="hist-before" x="0" width="${x(routeSince)}%" y="0" height="${H}"/>` : ''}
+      <line class="hist-axis" x1="0" x2="100%" y1="${H}" y2="${H}"/>
+      ${bars.map((b) => {
+        const h = Math.max(3, (b.bonus / top) * (H - 4));
+        return `<rect class="hist-bar${b.live ? ' is-live' : ''}${b.targeted ? ' is-targeted' : ''}" x="${x(b.s)}%" width="${Math.max(0.6, x(b.e) - x(b.s) + oneDay)}%" y="${H - h}" height="${h}" rx="1"><title>+${b.bonus}%, ${esc(b.s)} to ${esc(b.e)}${b.targeted ? ', targeted' : ''}</title></rect>`;
+      }).join('')}
+    </svg>`;
+  }
+
+  function adviceHTML(o) {
+    if (!D.historySince || !window.transferAdvice) return '';
+    const key = `${o.c.id}>${o.t.to}`;
+    // A route launched after the archive starts is only judged on its own lifetime.
+    const since = o.t.added && o.t.added > D.historySince ? o.t.added : D.historySince;
+    const a = window.transferAdvice.advise({ history: D.history.get(key) || [], live: o.promo || null, since, day: D.day });
+    return `
+      <span class="r-advice"><span class="verdict is-${a.verdict}">${a.verdict === 'go' ? 'Go' : 'Wait'}</span><span>${esc(a.reason)}</span></span>
+      ${historyChart(key, o.promo, since)}
+      <span class="r-record">${esc(a.record)}</span>`;
+  }
+
   function openSheet(partnerId, fromId) {
     const p = D.partners.get(partnerId);
     const group = D.groups.find((g) => g.id === p.group);
@@ -372,6 +442,8 @@
     const notes = [];
     if (p.note) notes.push(esc(p.note));
     for (const o of options) {
+      if (o.t.timeNote) notes.push(`${esc(o.c.short)}: ${esc(o.t.timeNote)}`);
+      if (o.t.minNote) notes.push(`${esc(o.c.short)}: ${esc(o.t.minNote)}`);
       if (o.t.variants) o.t.variants.forEach((v) => notes.push(`${esc(o.c.short)}: ${esc(v.label)} transfer at ${ratioText(v.ratio)}.`));
       if (o.t.note) notes.push(`${esc(o.c.short)}: ${esc(o.t.note)}.`);
       if (o.promo?.note) notes.push(`${esc(o.c.short)} bonus: ${esc(o.promo.note)}`);
@@ -398,8 +470,10 @@
               <span class="r-name">${esc(o.c.name)}</span>
               <span class="r-out" data-out></span>
               <span class="r-meta">
-                Ratio ${o.t.variants ? `${[...new Set(o.t.variants.map((v) => ratioText(v.ratio)))].join(' or ')} depending on card` : ratioText(o.t.ratio)}${o.promo ? `. <b>+${o.promo.bonus}%</b> ${endText(o.promo)}, normally <span data-was></span>${o.promo.sources?.[0] ? `. <a href="${esc(o.promo.sources[0].url)}" target="_blank" rel="noopener">Source</a>` : ''}` : ''}
+                Ratio ${o.t.variants ? `${[...new Set(o.t.variants.map((v) => ratioText(v.ratio)))].join(' or ')} depending on card` : ratioText(o.t.ratio)}${o.promo ? `. <b>+${o.promo.bonus}%</b> ${endText(o.promo)}, normally <span data-was></span>${sourcesHTML(o.promo.sources)}` : ''}
               </span>
+              <span class="r-facts">${[timeText(o.t.time), minimumText(minimumOf(o.t, o.c))].filter(Boolean).join('. ')}.<span data-below hidden></span></span>
+              ${adviceHTML(o)}
             </li>`).join('')}
         </ul>
         ${missing.length ? `<p class="reach-none">Not a partner of ${missing.map((c) => esc(c.short)).join(', ')}.</p>` : ''}
@@ -414,6 +488,9 @@
         $('[data-out]', li).textContent = num.format(received(o.t, o.promo, sheetAmount));
         const was = $('[data-was]', li);
         if (was) was.textContent = num.format(received(o.t, null, sheetAmount));
+        const below = $('[data-below]', li);
+        below.hidden = sheetAmount >= minimumOf(o.t, o.c).min;
+        below.textContent = ` ${num.format(sheetAmount)} is below the minimum.`;
       });
     };
     input.addEventListener('input', update);

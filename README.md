@@ -1,6 +1,6 @@
 # point-xfer
 
-A mobile-first map of where credit card points can go. Pick a card currency from the dropdown to see every airline and hotel partner drawn as a route line, or switch to **Compare cards** to see all seven currencies side by side. Tap the search button (or press `/`) to jump straight to any airline or hotel program and see every card that transfers to it. Live transfer bonuses are tracked automatically by a GitHub Action and highlighted in yellow.
+A mobile-first map of where credit card points can go. Pick a card currency from the dropdown to see every airline and hotel partner drawn as a route line, or switch to **Compare cards** to see all seven currencies side by side. Tap the search button (or press `/`) to jump straight to any airline or hotel program and see every card that transfers to it. Live transfer bonuses are tracked automatically by a GitHub Action and highlighted in yellow. Each partner's detail sheet shows transfer time and minimums, a chart of past bonuses for every card, and a go or wait call on transferring now.
 
 Covers Amex Membership Rewards, Chase Ultimate Rewards, Citi ThankYou, Capital One Miles, Bilt, Wells Fargo Rewards and Rove Miles (a free, card-free currency): 44 partner programs, 133 routes.
 
@@ -29,9 +29,11 @@ After that the tracker runs every 6 hours. Each run that changes the bonus list 
 
 ## How bonus tracking works
 
-`scripts/track-promos.mjs` reads the RSS feeds in `data/sources.json` (Doctor of Credit, Frequent Miler, One Mile at a Time, The Points Guy, Upgraded Points, View from the Wing). For each headline it looks for a bonus percentage, a card currency, and one or more partners, then checks the route against `data/transfers.json`. A headline claiming "Chase 25% bonus to Delta" is discarded because Chase doesn't transfer to Delta, which removes most false positives.
+`scripts/track-promos.mjs` reads the RSS feeds in `data/sources.json` (AwardWallet, Frequent Miler, Doctor of Credit, One Mile at a Time, The Points Guy, Upgraded Points, View from the Wing). For each headline it looks for a bonus percentage, a card currency, and one or more partners, then checks the route against `data/transfers.json`. A headline claiming "Chase 25% bonus to Delta" is discarded because Chase doesn't transfer to Delta, which removes most false positives.
 
 End dates come from phrases like "through Sept. 30", "until October 15" or "ends 9/30". One-day offers such as Bilt Rent Day end on their publish date. If no end date is found, the bonus is kept for 30 days after it was first seen and the site shows "end date not listed." Headlines marked `[Expired]` close out a bonus early. The site also filters by date in the browser, so an expired bonus disappears on time even if the Action hasn't run.
+
+Sources are ranked: the issuer's or partner's own offer page first (picked up from links inside blog posts), then AwardWallet, then Frequent Miler, then everything else. The detail sheet lists them in that order, and when two sources disagree on an end date the better-ranked one wins.
 
 A feed that fails (timeouts, bot blocking) is logged and skipped; the run still succeeds. The script has no dependencies and only commits when the data actually changes.
 
@@ -44,25 +46,32 @@ A feed that fails (timeouts, bot blocking) is logged and skipped; the run still 
 
 Run `npm run track:offline` after editing to rebuild `promotions.json` without touching the network.
 
+### Bonus history and go or wait
+
+`data/promotions.archive.json` holds hand-researched past bonuses back to its `since` date. The tracker folds them into the `history` in `promotions.json`, preferring them over overlapping records it found itself. `assets/advice.js` then looks at each route's history: how often bonuses come, how big they usually are, and how long it has been since the last one. From that it estimates the chance of a bonus in the next 90 days and the extra points waiting is likely to earn. The call is **Go** when a live bonus beats that, or when waiting isn't worth much, and **Wait** when a bonus is likely (40% or better) and worth at least 10% on average. Targeted offers show faded in the chart and don't count. Routes launched after the archive starts (`added` in `transfers.json`) are judged on their own lifetime.
+
 ## Updating transfer ratios
 
-Partners change a few times a year. Edit `data/transfers.json`, where `ratio` is `[points sent, points received]`: `[5, 4]` means 1,000 points become 800. For card-dependent ratios, add `variants` (see Chase to Hyatt), and for caveats add a `note`. New partners go in `data/programs.json`. `npm test` fails if a route points at an unknown program, a ratio is invalid, a route is duplicated, or a partner has no route. Update `verifiedOn` when you've checked the list.
+Partners change a few times a year. Edit `data/transfers.json`, where `ratio` is `[points sent, points received]`: `[5, 4]` means 1,000 points become 800. For card-dependent ratios, add `variants` (see Chase to Hyatt), and for caveats add a `note`. Transfer time is `time: { min, max, unit }` (`unit` is minutes, hours or days; `max: 0` means instant) with an optional `timeNote`. Minimums default to the currency's `minTransfer` and `increment` in `programs.json`; override per route with `min`, `increment` and `minNote`. New partners go in `data/programs.json`. `npm test` fails if a route points at an unknown program, a ratio is invalid, a route is duplicated, or a partner has no route. Update `verifiedOn` when you've checked the list.
 
 ## Project layout
 
 ```
 index.html                 app shell
-assets/app.js              state, D3 route rail, comparison matrix, detail sheet
+assets/app.js              state, D3 route rail, comparison matrix, detail sheet, search
+assets/advice.js           go or wait advice from a route's bonus history
 assets/styles.css          design tokens, mobile-first layout, dark mode
 data/programs.json         currencies, alliance groups, partners
 data/transfers.json        every route and ratio
 data/promotions.json       live and past bonuses (written by the tracker)
 data/promotions.manual.json  hand overrides
+data/promotions.archive.json researched past bonuses (history backfill)
 data/sources.json          feeds the tracker reads
 scripts/track-promos.mjs   tracker entry point
 scripts/lib/parse.mjs      feed parsing and bonus extraction
+scripts/lib/sources.mjs    official domains and source ranking
 scripts/build-preview.mjs  single-file build
-tests/tracker.test.mjs     node:test suite
+tests/*.test.mjs           node:test suites (tracker, insights)
 .github/workflows/         track-promos.yml (cron), pages.yml (deploy)
 ```
 
