@@ -64,6 +64,7 @@ When adding a partner or currency, add aliases in `parse.mjs` and a test with a 
 - The rail is drawn from measured DOM row positions. Anything that changes row height after render (fonts, wrapping) needs `drawRail(false)`. Redraw on resize only fires on width changes, deliberately, so the intro animation isn't cancelled.
 - `history.replaceState` is wrapped in try/catch for sandboxed previews.
 - Commits made by `GITHUB_TOKEN` don't trigger `push` workflows. `pages.yml` listens for `workflow_run` of "Track transfer bonuses"; if you rename that workflow, update the reference.
+- The site is served at rohitkgupta.com/point-xfer/ through Cloudflare, which caches JS/CSS for 4 hours. `pages.yml` stamps `?v=<sha>` onto the CSS/JS links in the deployed `index.html`; any new script or stylesheet must be added to that `sed` pattern, or it will go stale after deploys. HTML and JSON aren't edge-cached.
 - GitHub Pages on a private repo needs a paid plan. Scheduled workflows pause after 60 days of repo inactivity.
 - Browsers compute "live" bonuses using the visitor's local date, so an expired bonus disappears on time even if the Action hasn't run.
 
