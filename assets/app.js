@@ -63,7 +63,7 @@
 
   // ---------- State ----------
 
-  const state = { view: 'routes', from: 'chase', type: 'all', bonusOnly: false };
+  const state = { view: 'routes', from: 'chase', type: 'all', bonusOnly: false, partner: null };
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -71,6 +71,7 @@
     if (q.get('from') && D.currencies.has(q.get('from'))) state.from = q.get('from');
     if (['airline', 'hotel'].includes(q.get('type'))) state.type = q.get('type');
     state.bonusOnly = q.get('bonus') === '1';
+    if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
   }
 
   function writeURL() {
@@ -79,6 +80,7 @@
     if (state.view === 'routes') q.set('from', state.from);
     if (state.type !== 'all') q.set('type', state.type);
     if (state.bonusOnly) q.set('bonus', '1');
+    if (state.partner) q.set('partner', state.partner);
     const s = q.toString();
     try { history.replaceState(null, '', s ? `?${s}` : location.pathname); } catch { /* sandboxed previews */ }
   }
@@ -422,6 +424,8 @@
     $('.close', dlg).addEventListener('click', () => dlg.close());
     enableSwipeToClose(dlg);
     dlg.showModal();
+    state.partner = p.id;
+    writeURL();
   }
 
   function enableSwipeToClose(dlg) {
@@ -445,6 +449,106 @@
     });
   }
 
+  // ---------- Partner search ----------
+
+  const words = (s = '') => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+
+  // Every query word must start a word in the partner's name, id or note, so "miles more",
+  // "klm", "avios" and "alaska" all find something. Name matches rank above note matches.
+  function searchPartners(query) {
+    const q = words(query);
+    const hits = [];
+    for (const p of D.programs.partners) {
+      const name = words(p.name);
+      const extra = [p.id, ...words(p.note)];
+      let score = q.join('') === p.id ? 4 : 0;
+      for (const w of q) {
+        if (name.some((n) => n.startsWith(w))) score += 2;
+        else if (extra.some((n) => n.startsWith(w))) score += 1;
+        else { score = -1; break; }
+      }
+      if (score < 0) continue;
+      if (q.length && name[0].startsWith(q[0])) score += 1;
+      hits.push({ p, score });
+    }
+    return hits.sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name)).map((h) => h.p);
+  }
+
+  function setupFinder() {
+    const dlg = $('#finder');
+    const input = $('#finder-input');
+    const list = $('#finder-list');
+    const empty = $('#finder-empty');
+    let results = [];
+    let active = 0;
+
+    const optionHTML = (p, i) => {
+      const group = D.groups.find((g) => g.id === p.group);
+      const from = D.programs.currencies.filter((c) => D.routes.has(`${c.id}>${p.id}`)).map((c) => esc(c.short));
+      const bonus = Math.max(0, ...D.live.filter((x) => x.to === p.id).map((x) => x.bonus));
+      return `<li role="option" id="finder-opt-${i}" data-partner="${p.id}" aria-selected="${i === active}">
+        <span class="f-name">${esc(p.name)}${bonus ? `<span class="badge">+${bonus}%</span>` : ''}</span>
+        <span class="f-sub">${esc(group.label)}. From ${from.join(', ')}</span>
+      </li>`;
+    };
+
+    const setActive = (i) => {
+      if (!results.length) return;
+      active = (i + results.length) % results.length;
+      $$('[role="option"]', list).forEach((li, j) => li.setAttribute('aria-selected', j === active));
+      input.setAttribute('aria-activedescendant', `finder-opt-${active}`);
+      $(`#finder-opt-${active}`).scrollIntoView({ block: 'nearest' });
+    };
+
+    const update = () => {
+      results = searchPartners(input.value);
+      active = 0;
+      list.innerHTML = results.map(optionHTML).join('');
+      empty.textContent = results.length ? '' : `No partner matches "${input.value.trim()}".`;
+      empty.hidden = !!results.length;
+      if (results.length) input.setAttribute('aria-activedescendant', 'finder-opt-0');
+      else input.removeAttribute('aria-activedescendant');
+      list.scrollTop = 0;
+    };
+
+    const choose = (id) => {
+      dlg.close();
+      openSheet(id, state.view === 'routes' ? state.from : null);
+    };
+
+    const open = () => {
+      input.value = '';
+      update();
+      dlg.showModal();
+      input.focus();
+    };
+
+    input.addEventListener('input', update);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(active + (e.key === 'ArrowDown' ? 1 : -1));
+      } else if (e.key === 'Enter' && results.length) {
+        e.preventDefault();
+        choose(results[active].id);
+      }
+    });
+    list.addEventListener('click', (e) => {
+      const li = e.target.closest('[role="option"]');
+      if (li) choose(li.dataset.partner);
+    });
+    $('.finder-cancel', dlg).addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    $('#finder-open').addEventListener('click', open);
+
+    // "/" opens search from anywhere, as on most sites with a search box.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (document.querySelector('dialog[open]') || e.target.closest('input, select, textarea')) return;
+      e.preventDefault();
+      open();
+    });
+  }
 
   // ---------- Theme ----------
 
@@ -519,13 +623,17 @@
     }
     readURL();
     setupControls();
+    setupFinder();
     setupReportLink();
     renderStatus();
     // Wait briefly for B612 so row heights are final before the rail animates.
     if (document.fonts) await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]);
     render({ animate: true });
 
-    $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') e.target.close(); });
+    const sheet = $('#sheet');
+    sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
+    sheet.addEventListener('close', () => { state.partner = null; writeURL(); });
+    if (state.partner) openSheet(state.partner, state.view === 'routes' ? state.from : null);
 
     // Redraw the rail only when the width actually changes (row heights follow width).
     let raf = 0;

@@ -128,6 +128,18 @@ button { touch-action: manipulation; cursor: pointer; }
   gap: 10px;
 }
 
+.view-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.search-btn {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.search-btn svg, .finder-field svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
 .segmented {
   display: grid;
   grid-auto-flow: column;
@@ -286,7 +298,7 @@ button { touch-action: manipulation; cursor: pointer; }
 .stop-sub { grid-column: 1; font-size: var(--step--1); color: var(--muted); }
 .stop-rate { grid-row: 1 / span 2; grid-column: 2; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .stop-rate .was { display: block; font-size: var(--step--1); color: var(--muted); text-decoration: line-through; }
-.stop-rate .badge {
+.stop-rate .badge, .f-name .badge {
   display: inline-block;
   margin-left: 6px;
   background: var(--bonus);
@@ -415,6 +427,60 @@ dialog.sheet::backdrop { background: color-mix(in srgb, #0a1220 45%, transparent
 .sheet .notes li + li { margin-top: 4px; }
 .sheet a { color: inherit; }
 
+/* ---------- Partner search ---------- */
+
+/* Pinned near the top so the on-screen keyboard never covers results. */
+dialog.finder {
+  width: min(560px, calc(100% - 24px));
+  max-width: none;
+  max-height: min(600px, calc(100dvh - 24px - env(safe-area-inset-top)));
+  margin: calc(12px + env(safe-area-inset-top)) auto auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 8px 40px color-mix(in srgb, #000 30%, transparent);
+  overflow: hidden;
+}
+dialog.finder[open] { display: flex; flex-direction: column; }
+dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparent); }
+.finder-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 16px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+}
+.finder-field input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--step-1); /* 18px avoids iOS zoom-on-focus */
+}
+.finder-field input:focus-visible { outline: none; }
+.finder-field input::placeholder { color: var(--muted); }
+.finder-cancel {
+  border: 0;
+  background: transparent;
+  min-height: 44px;
+  padding: 0 10px;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--muted);
+}
+#finder-list { list-style: none; margin: 0; padding: 6px; overflow-y: auto; overscroll-behavior: contain; }
+#finder-list [role="option"] { display: grid; gap: 2px; min-height: 44px; padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+#finder-list [role="option"][aria-selected="true"] { background: var(--haze); }
+@media (hover: hover) { #finder-list [role="option"]:hover { background: var(--haze); } }
+.f-name { font-weight: 700; }
+.f-sub { font-size: var(--step--1); color: var(--muted); }
+.finder-empty { margin: 0; padding: 16px 20px; color: var(--muted); font-size: var(--step--1); }
+
 /* ---------- Footer ---------- */
 
 .site-foot {
@@ -431,7 +497,7 @@ dialog.sheet::backdrop { background: color-mix(in srgb, #0a1220 45%, transparent
 
 @media (min-width: 720px) {
   :root { --rail: 88px; }
-  .controls-inner { grid-template-columns: 280px minmax(0, 1fr) auto; align-items: center; }
+  .controls-inner { grid-template-columns: 332px minmax(0, 1fr) auto; align-items: center; }
   .filters { flex-wrap: nowrap; }
   .tickets { flex-wrap: wrap; overflow: visible; }
   .matrix { --col: 64px; }
@@ -454,7 +520,7 @@ dialog.sheet::backdrop { background: color-mix(in srgb, #0a1220 45%, transparent
   .ticket { width: 100%; min-width: 0; }
   #view { max-width: 760px; }
 }
-@media (min-width: 720px) and (max-width: 899px) {
+@media (min-width: 720px) and (max-width: 1079px) {
   .controls-inner { grid-template-columns: 1fr 1fr; }
   .controls-inner .filters { grid-column: 1 / -1; }
 }

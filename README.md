@@ -1,6 +1,6 @@
 # point-xfer
 
-A mobile-first map of where credit card points can go. Pick a card currency from the dropdown to see every airline and hotel partner drawn as a route line, or switch to **Compare cards** to see all seven currencies side by side. Live transfer bonuses are tracked automatically by a GitHub Action and highlighted in yellow.
+A mobile-first map of where credit card points can go. Pick a card currency from the dropdown to see every airline and hotel partner drawn as a route line, or switch to **Compare cards** to see all seven currencies side by side. Tap the search button (or press `/`) to jump straight to any airline or hotel program and see every card that transfers to it. Live transfer bonuses are tracked automatically by a GitHub Action and highlighted in yellow.
 
 Covers Amex Membership Rewards, Chase Ultimate Rewards, Citi ThankYou, Capital One Miles, Bilt, Wells Fargo Rewards and Rove Miles (a free, card-free currency): 44 partner programs, 133 routes.
 

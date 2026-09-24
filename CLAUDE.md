@@ -18,7 +18,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 ## Layout
 
 - `index.html` app shell. Loads D3 7.9.0 from cdnjs and B612 from Google Fonts. Contains a small pre-paint script that applies the saved theme.
-- `assets/app.js` single IIFE, vanilla JS. Sections: data loading and indexing, URL state, controls, bonus strip, route view (D3 rail), compare view (D3 matrix), detail sheet (calculator), theme toggle.
+- `assets/app.js` single IIFE, vanilla JS. Sections: data loading and indexing, URL state, controls, bonus strip, route view (D3 rail), compare view (D3 matrix), detail sheet (calculator), partner search, theme toggle. URL params: `view`, `from`, `type`, `bonus`, `partner` (open detail sheet, so partners are linkable).
 - `assets/styles.css` design tokens at the top, mobile-first, `@media (min-width: 720px)` and `1000px` breakpoints, dark mode.
 - `data/programs.json` currencies (dropdown order = column order in Compare), alliance groups, partners.
 - `data/transfers.json` every route. `ratio` is `[points sent, points received]`; `[5, 4]` means 1,000 → 800. Optional `note` and `variants` (card-dependent ratios, see chase → hyatt). Bump `verifiedOn` when you re-check the list.
@@ -50,6 +50,7 @@ When adding a partner or currency, add aliases in `parse.mjs` and a test with a 
 - Typeface is B612 (Airbus cockpit font) at 400/700 only. Type scale uses the `--step-*` tokens.
 - Tokens live in `:root`; dark values are duplicated in `[data-theme="dark"]` and the `prefers-color-scheme` block. Change both.
 - Mobile first. Tap targets ≥ 44px, the currency picker is a native `<select>` (18px font so iOS doesn't zoom), controls are sticky, detail view is a `<dialog>` bottom sheet with swipe-to-close.
+- Partner search is a top-pinned `<dialog>` (so the on-screen keyboard doesn't cover results) opened from the button beside the view tabs or `/`. It's an ARIA combobox matching word prefixes in partner name, id and `note`, so notes double as search keywords ("Avios", "Alaska"). Picking a result opens the detail sheet.
 - One orchestrated animation (rail draws on currency change). Respect `prefers-reduced-motion`.
 - Prose UI copy: sentence case, no middle-dot separators, no eyebrow labels.
 
@@ -72,7 +73,6 @@ Concept inspired by Wings of the Points (uscreditcardguide.github.io), which is 
 
 ## Ideas not yet built
 
-- Search box to jump to a partner across all currencies.
 - "My cards" filter in Compare that dims currencies you don't hold (URL param, no storage required).
 - Bonus history chart per route from `promotions.json` `history`.
 - Transfer time and minimum per route in the detail sheet.
