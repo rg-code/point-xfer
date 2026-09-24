@@ -1,0 +1,345 @@
+{
+  "currencies": [
+    {
+      "id": "amex",
+      "name": "Amex Membership Rewards",
+      "short": "Amex",
+      "minTransfer": 1000
+    },
+    {
+      "id": "chase",
+      "name": "Chase Ultimate Rewards",
+      "short": "Chase",
+      "minTransfer": 1000
+    },
+    {
+      "id": "citi",
+      "name": "Citi ThankYou Points",
+      "short": "Citi",
+      "minTransfer": 1000,
+      "note": "Ratios shown are for Strata Premier, Strata Elite and Prestige. No-annual-fee ThankYou cards transfer at reduced ratios (roughly 10:7) and can't reach AAdvantage."
+    },
+    {
+      "id": "c1",
+      "name": "Capital One Miles",
+      "short": "Cap One",
+      "minTransfer": 1000
+    },
+    {
+      "id": "bilt",
+      "name": "Bilt Points",
+      "short": "Bilt",
+      "minTransfer": 1000,
+      "note": "Blue status members must transfer at least 2,000 points."
+    },
+    {
+      "id": "wf",
+      "name": "Wells Fargo Rewards",
+      "short": "WF",
+      "minTransfer": 1,
+      "note": "Autograph and Autograph Journey cards only. No minimum transfer."
+    },
+    {
+      "id": "rove",
+      "name": "Rove Miles",
+      "short": "Rove",
+      "minTransfer": 2000,
+      "note": "Free to join, no credit card needed. Earned through Rove's shopping portal and travel bookings. Minimum transfer 2,000 miles, then 100-mile increments."
+    }
+  ],
+  "groups": [
+    {
+      "id": "star",
+      "label": "Star Alliance"
+    },
+    {
+      "id": "oneworld",
+      "label": "oneworld"
+    },
+    {
+      "id": "skyteam",
+      "label": "SkyTeam"
+    },
+    {
+      "id": "none",
+      "label": "Other airlines"
+    },
+    {
+      "id": "hotel",
+      "label": "Hotels"
+    }
+  ],
+  "partners": [
+    {
+      "id": "aeroplan",
+      "name": "Air Canada Aeroplan",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "ana",
+      "name": "ANA Mileage Club",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "lifemiles",
+      "name": "Avianca LifeMiles",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "eva",
+      "name": "EVA Air Infinity MileageLands",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore KrisFlyer",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "tap",
+      "name": "TAP Miles&Go",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "thai",
+      "name": "Thai Royal Orchid Plus",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "turkish",
+      "name": "Turkish Miles&Smiles",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "united",
+      "name": "United MileagePlus",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "airindia",
+      "name": "Air India Maharaja Club",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "copa",
+      "name": "Copa ConnectMiles",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "milesmore",
+      "name": "Lufthansa Miles & More",
+      "type": "airline",
+      "group": "star"
+    },
+    {
+      "id": "aerlingus",
+      "name": "Aer Lingus AerClub",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Avios, shareable with British Airways, Iberia and Qatar"
+    },
+    {
+      "id": "american",
+      "name": "American AAdvantage",
+      "type": "airline",
+      "group": "oneworld"
+    },
+    {
+      "id": "atmos",
+      "name": "Atmos Rewards",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Alaska Airlines and Hawaiian Airlines"
+    },
+    {
+      "id": "ba",
+      "name": "British Airways Club",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Avios, shareable with Aer Lingus, Iberia and Qatar"
+    },
+    {
+      "id": "cathay",
+      "name": "Cathay Pacific Asia Miles",
+      "type": "airline",
+      "group": "oneworld"
+    },
+    {
+      "id": "finnair",
+      "name": "Finnair Plus",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Avios"
+    },
+    {
+      "id": "iberia",
+      "name": "Iberia Club",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Avios, shareable with British Airways, Aer Lingus and Qatar"
+    },
+    {
+      "id": "jal",
+      "name": "JAL Mileage Bank",
+      "type": "airline",
+      "group": "oneworld"
+    },
+    {
+      "id": "qantas",
+      "name": "Qantas Frequent Flyer",
+      "type": "airline",
+      "group": "oneworld"
+    },
+    {
+      "id": "qatar",
+      "name": "Qatar Airways Privilege Club",
+      "type": "airline",
+      "group": "oneworld",
+      "note": "Avios, shareable with British Airways"
+    },
+    {
+      "id": "aeromexico",
+      "name": "Aeromexico Rewards",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "flyingblue",
+      "name": "Air France-KLM Flying Blue",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "delta",
+      "name": "Delta SkyMiles",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "virgin",
+      "name": "Virgin Atlantic Flying Club",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "sas",
+      "name": "SAS EuroBonus",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "vietnam",
+      "name": "Vietnam Airlines Lotusmiles",
+      "type": "airline",
+      "group": "skyteam"
+    },
+    {
+      "id": "emirates",
+      "name": "Emirates Skywards",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "etihad",
+      "name": "Etihad Guest",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "jetblue",
+      "name": "JetBlue TrueBlue",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "southwest",
+      "name": "Southwest Rapid Rewards",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "virginred",
+      "name": "Virgin Red",
+      "type": "airline",
+      "group": "none",
+      "note": "Moves 1:1 into Virgin Atlantic Flying Club"
+    },
+    {
+      "id": "frontier",
+      "name": "Frontier Miles",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "hainan",
+      "name": "Hainan Airlines Fortune Wings Club",
+      "type": "airline",
+      "group": "none"
+    },
+    {
+      "id": "accor",
+      "name": "Accor Live Limitless",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "choice",
+      "name": "Choice Privileges",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "hilton",
+      "name": "Hilton Honors",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "iprefer",
+      "name": "I Prefer Hotel Rewards",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "ihg",
+      "name": "IHG One Rewards",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "leaders",
+      "name": "Leaders Club (LHW)",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "marriott",
+      "name": "Marriott Bonvoy",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "hyatt",
+      "name": "World of Hyatt",
+      "type": "hotel",
+      "group": "hotel"
+    },
+    {
+      "id": "wyndham",
+      "name": "Wyndham Rewards",
+      "type": "hotel",
+      "group": "hotel"
+    }
+  ]
+}

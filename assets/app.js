@@ -1,0 +1,543 @@
+(() => {
+  'use strict';
+
+  const $ = (sel, el = document) => el.querySelector(sel);
+  const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
+  const num = new Intl.NumberFormat('en-US');
+  const shortDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const longDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const esc = (s = '') => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function localToday() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  // ---------- Data ----------
+
+  async function loadData() {
+    if (window.__TRANSFER_DATA__) return window.__TRANSFER_DATA__;
+    const get = (f) => fetch(`data/${f}`, { cache: 'no-cache' }).then((r) => {
+      if (!r.ok) throw new Error(`Couldn't load data/${f} (HTTP ${r.status})`);
+      return r.json();
+    });
+    const [programs, transfers, promotions] = await Promise.all([get('programs.json'), get('transfers.json'), get('promotions.json')]);
+    return { programs, transfers, promotions };
+  }
+
+  function index(data) {
+    const day = localToday();
+    const routes = new Map(data.transfers.transfers.map((t) => [`${t.from}>${t.to}`, t]));
+    const live = (data.promotions.promotions || []).filter((p) => {
+      const end = p.end || p.assumedEnd;
+      return routes.has(`${p.from}>${p.to}`) && (!p.start || p.start <= day) && (!end || end >= day);
+    });
+    return {
+      ...data,
+      day,
+      routes,
+      live,
+      promo: new Map(live.map((p) => [`${p.from}>${p.to}`, p])),
+      partners: new Map(data.programs.partners.map((p) => [p.id, p])),
+      currencies: new Map(data.programs.currencies.map((c) => [c.id, c])),
+      groups: data.programs.groups,
+    };
+  }
+
+  let D; // indexed data
+
+  const received = (t, promo, amount = 1000) => Math.floor((amount * t.ratio[1]) / t.ratio[0] * (1 + (promo ? promo.bonus : 0) / 100));
+
+  function ratioText([a, b]) {
+    if (a > b) return `${a}:${b}`;
+    const r = Math.round((b / a) * 100) / 100;
+    return `1:${r}`;
+  }
+
+  function endText(p) {
+    if (!p.end) return 'end date not listed';
+    if (p.end === D.day) return 'last day today';
+    return `until ${shortDate.format(new Date(`${p.end}T00:00:00Z`))}`;
+  }
+
+  // ---------- State ----------
+
+  const state = { view: 'routes', from: 'chase', type: 'all', bonusOnly: false };
+
+  function readURL() {
+    const q = new URLSearchParams(location.search);
+    if (q.get('view') === 'compare') state.view = 'compare';
+    if (q.get('from') && D.currencies.has(q.get('from'))) state.from = q.get('from');
+    if (['airline', 'hotel'].includes(q.get('type'))) state.type = q.get('type');
+    state.bonusOnly = q.get('bonus') === '1';
+  }
+
+  function writeURL() {
+    const q = new URLSearchParams();
+    if (state.view !== 'routes') q.set('view', state.view);
+    if (state.view === 'routes') q.set('from', state.from);
+    if (state.type !== 'all') q.set('type', state.type);
+    if (state.bonusOnly) q.set('bonus', '1');
+    const s = q.toString();
+    try { history.replaceState(null, '', s ? `?${s}` : location.pathname); } catch { /* sandboxed previews */ }
+  }
+
+  // ---------- Controls ----------
+
+  function setupControls() {
+    const select = $('#from');
+    select.innerHTML = D.programs.currencies.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    select.value = state.from;
+    select.addEventListener('change', () => { state.from = select.value; render({ animate: true }); });
+
+    const tabs = $$('[role="tab"]');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => { state.view = tab.dataset.view; render({ animate: true }); });
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        const next = tabs[(tabs.indexOf(tab) + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        next.click();
+      });
+    });
+
+    $$('.chip[data-type]').forEach((chip) => chip.addEventListener('click', () => { state.type = chip.dataset.type; render(); }));
+    $('#bonus-only').addEventListener('click', () => { state.bonusOnly = !state.bonusOnly; render(); });
+
+    // Border under the control bar once it sticks, and expose its height for the matrix header.
+    const controls = $('#controls');
+    new IntersectionObserver(([e]) => controls.classList.toggle('is-stuck', !e.isIntersecting)).observe($('.masthead'));
+    new ResizeObserver(() => document.documentElement.style.setProperty('--controls-h', `${controls.offsetHeight}px`)).observe(controls);
+  }
+
+  function syncControls() {
+    $$('[role="tab"]').forEach((t) => {
+      const on = t.dataset.view === state.view;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+    });
+    $('#view').setAttribute('aria-labelledby', `tab-${state.view}`);
+    $('#from-wrap').hidden = state.view !== 'routes';
+    $('#from').value = state.from;
+    $$('.chip[data-type]').forEach((c) => c.setAttribute('aria-pressed', c.dataset.type === state.type));
+    $('#bonus-only').setAttribute('aria-checked', state.bonusOnly);
+  }
+
+  // ---------- Filtering ----------
+
+  function groupedPartners(filterFn) {
+    const out = [];
+    for (const g of D.groups) {
+      const items = D.programs.partners
+        .filter((p) => p.group === g.id && filterFn(p))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      if (items.length) out.push({ group: g, items });
+    }
+    return out;
+  }
+
+  const typeOK = (p) => state.type === 'all' || p.type === state.type;
+
+  // ---------- Bonus strip ----------
+
+  function renderBonuses() {
+    const el = $('#bonuses');
+    const cur = D.currencies.get(state.from);
+    const list = D.live
+      .filter((p) => state.view === 'compare' || p.from === state.from)
+      .filter((p) => typeOK(D.partners.get(p.to)))
+      .sort((a, b) => (a.end || a.assumedEnd || '9').localeCompare(b.end || b.assumedEnd || '9'));
+
+    if (!list.length) {
+      const scope = state.view === 'compare' ? '' : ` from ${esc(cur.name)}`;
+      el.innerHTML = `<h2>Live bonuses</h2><p class="empty">No live transfer bonuses${scope} right now. The list is checked every 6 hours.</p>`;
+      return;
+    }
+    el.innerHTML = `
+      <h2>${list.length} live bonus${list.length > 1 ? 'es' : ''}</h2>
+      <ul class="tickets">
+        ${list.map((p) => `
+          <li><button class="ticket" data-partner="${p.to}" data-from="${p.from}">
+            <span class="t-route">From ${esc(D.currencies.get(p.from).short)}</span>
+            <span class="t-name">${esc(D.partners.get(p.to).name)}</span>
+            <span class="t-deal"><b>+${p.bonus}%</b> ${endText(p)}</span>
+          </button></li>`).join('')}
+      </ul>`;
+    $$('.ticket', el).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, b.dataset.from)));
+  }
+
+  // ---------- Route view ----------
+
+  const weight = d3.scaleLog().domain([200, 4000]).range([1.25, 7.5]).clamp(true);
+
+  function stopSubline(t, promo, partner) {
+    if (promo) return endText(promo);
+    if (t.variants) return 'Ratio depends on your card';
+    return t.note || partner.note || '';
+  }
+
+  function renderRoutes(animate) {
+    const cur = D.currencies.get(state.from);
+    const reachable = (p) => D.routes.has(`${cur.id}>${p.id}`);
+    const all = D.programs.partners.filter(reachable);
+    const groups = groupedPartners((p) => reachable(p) && typeOK(p) && (!state.bonusOnly || D.promo.has(`${cur.id}>${p.id}`)));
+    const shown = groups.reduce((n, g) => n + g.items.length, 0);
+
+    const view = $('#view');
+    const countText = shown === all.length ? `${all.length} partners` : `${shown} of ${all.length} partners`;
+
+    if (!shown) {
+      view.innerHTML = `
+        <div class="route-head"><h2>${esc(cur.name)}</h2><span class="count">${countText}</span></div>
+        <div class="empty-state">
+          <p>${state.bonusOnly ? `No ${state.type === 'all' ? '' : `${state.type} `}partners have a live bonus from ${esc(cur.short)} right now.` : `${esc(cur.short)} has no ${state.type} partners.`}</p>
+          <button class="chip" id="reset-filters">Show all partners</button>
+        </div>`;
+      $('#reset-filters').addEventListener('click', () => { state.type = 'all'; state.bonusOnly = false; render(); });
+      return;
+    }
+
+    view.innerHTML = `
+      <div class="route-head"><h2>${esc(cur.name)}</h2><span class="count">${countText}</span></div>
+      ${cur.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
+      <div class="routes">
+        <svg class="rail" aria-hidden="true"></svg>
+        <ol class="route-list">
+          ${groups.map(({ group, items }) => `
+            <li class="group-label" aria-hidden="true">${esc(group.label)}</li>
+            ${items.map((p) => {
+              const t = D.routes.get(`${cur.id}>${p.id}`);
+              const promo = D.promo.get(`${cur.id}>${p.id}`);
+              const out = received(t, promo);
+              const sub = stopSubline(t, promo, p);
+              const label = `${p.name}, ${group.label}. 1,000 ${cur.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.`;
+              return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}" aria-label="${esc(label)}">
+                <span class="stop-name">${esc(p.name)}</span>
+                ${sub ? `<span class="stop-sub">${esc(sub)}</span>` : ''}
+                <span class="stop-rate">1,000 → <strong>${num.format(out)}</strong>${promo ? `<span class="badge">+${promo.bonus}%</span><span class="was">${num.format(received(t))}</span>` : ''}</span>
+              </button></li>`;
+            }).join('')}
+          `).join('')}
+        </ol>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span class="legend-title">Line weight shows points received per 1,000 sent</span>
+        <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(500)}" stroke-linecap="round"/></svg>500</span>
+        <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(1000)}" stroke-linecap="round"/></svg>1,000</span>
+        <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(2000)}" stroke-linecap="round"/></svg>2,000</span>
+        <span><svg width="36" height="10"><line class="swatch-bonus" x1="2" y1="5" x2="34" y2="5" stroke-width="4" stroke-linecap="round"/></svg>Live bonus</span>
+      </div>`;
+
+    $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur.id)));
+    drawRail(animate && !reduceMotion.matches);
+  }
+
+  function drawRail(animate) {
+    const wrap = $('.routes');
+    if (!wrap) return;
+    const svg = d3.select(wrap).select('svg.rail');
+    const box = wrap.getBoundingClientRect();
+    const W = svg.node().clientWidth;
+    const trunkX = W < 60 ? 12 : 20;
+    const r = W < 60 ? 10 : 16;
+    const endX = W - 7;
+
+    const stops = $$('.stop', wrap).map((el) => {
+      const b = el.getBoundingClientRect();
+      return { id: el.dataset.partner, y: b.top - box.top + b.height / 2, w: weight(+el.dataset.weight), bonus: el.dataset.bonus === '1' };
+    });
+    if (!stops.length) return;
+    const firstLabel = $('.group-label', wrap).getBoundingClientRect();
+    const originY = firstLabel.top - box.top + firstLabel.height / 2;
+    const lastY = stops[stops.length - 1].y;
+
+    svg.selectAll('*').remove();
+
+    // Branches first so the trunk sits on top; bonus routes drawn last so they aren't hidden.
+    const ordered = [...stops].sort((a, b) => a.bonus - b.bonus);
+    const branch = svg.append('g').selectAll('path').data(ordered, (d) => d.id).join('path')
+      .attr('class', (d) => `branch${d.bonus ? ' is-bonus' : ''}`)
+      .attr('stroke-width', (d) => (d.bonus ? Math.max(d.w, 3.5) : d.w))
+      .attr('d', (d) => `M${trunkX},${d.y - r} Q${trunkX},${d.y} ${trunkX + r},${d.y} H${endX}`);
+
+    const trunk = svg.append('path').attr('class', 'trunk').attr('d', `M${trunkX},${originY} V${lastY - r}`);
+    svg.append('circle').attr('class', 'origin-ring').attr('cx', trunkX).attr('cy', originY).attr('r', 6.5);
+    svg.append('circle').attr('class', 'origin').attr('cx', trunkX).attr('cy', originY).attr('r', 2.5);
+
+    const dots = svg.append('g').selectAll('circle').data(stops, (d) => d.id).join('circle')
+      .attr('class', (d) => `stop-dot${d.bonus ? ' is-bonus' : ''}`)
+      .attr('cx', endX).attr('cy', (d) => d.y).attr('r', 4.5);
+
+    if (!animate) return;
+
+    // One orchestrated moment: the trunk draws down, branches peel off in order.
+    const trunkLen = trunk.node().getTotalLength();
+    trunk.attr('stroke-dasharray', trunkLen).attr('stroke-dashoffset', trunkLen)
+      .transition().duration(420).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0);
+
+    branch.each(function (d) {
+      const len = this.getTotalLength();
+      const delay = 120 + (d.y / Math.max(lastY, 1)) * 420;
+      d3.select(this).attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+        .transition().delay(delay).duration(320).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
+    });
+    dots.attr('opacity', 0).transition().delay((d) => 360 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', 1);
+  }
+
+  // ---------- Compare view ----------
+
+  const dotR = d3.scaleSqrt().domain([0, 4000]).range([0, 13]);
+
+  function renderCompare() {
+    const cols = D.programs.currencies;
+    const anyBonus = (p) => cols.some((c) => D.promo.has(`${c.id}>${p.id}`));
+    const groups = groupedPartners((p) => typeOK(p) && (!state.bonusOnly || anyBonus(p)));
+    const view = $('#view');
+
+    if (!groups.length) {
+      view.innerHTML = `<div class="empty-state"><p>No ${state.type === 'all' ? '' : `${state.type} `}partners have a live bonus right now.</p><button class="chip" id="reset-filters">Show all partners</button></div>`;
+      $('#reset-filters').addEventListener('click', () => { state.type = 'all'; state.bonusOnly = false; render(); });
+      return;
+    }
+
+    view.innerHTML = `
+      <div class="matrix" style="--cols:${cols.length}">
+        <div class="m-head" aria-hidden="true">
+          <span class="m-name">Partner</span>
+          <div class="m-cols">${cols.map((c) => `<span>${esc(c.short)}</span>`).join('')}</div>
+        </div>
+        <div class="m-body"></div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span class="legend-title">Dot size shows points received per 1,000 sent. Tap a row for exact numbers.</span>
+        ${[500, 1000, 2000].map((v) => `<span><svg width="${Math.ceil(dotR(v) * 2 + 2)}" height="28"><circle class="dot" cx="${dotR(v) + 1}" cy="14" r="${dotR(v)}"/></svg>${num.format(v)}</span>`).join('')}
+        <span><svg width="16" height="28"><circle class="dot is-bonus" cx="8" cy="14" r="6.5"/></svg>Live bonus</span>
+      </div>`;
+
+    const body = d3.select(view).select('.m-body');
+    for (const { group, items } of groups) {
+      body.append('div').attr('class', 'group-label').attr('aria-hidden', 'true').text(group.label);
+      const rows = body.selectAll(null).data(items).join('button')
+        .attr('class', 'm-row')
+        .attr('aria-label', (p) => `${p.name}: ${cols.map((c) => {
+          const t = D.routes.get(`${c.id}>${p.id}`);
+          if (!t) return `${c.short} no`;
+          const promo = D.promo.get(`${c.id}>${p.id}`);
+          return `${c.short} ${num.format(received(t, promo))}${promo ? ` with bonus` : ''}`;
+        }).join(', ')}`)
+        .on('click', (_, p) => openSheet(p.id, null));
+
+      rows.append('span').attr('class', 'm-name').text((p) => p.name);
+      const svg = rows.append('svg').attr('class', 'm-dots').attr('width', '100%').attr('height', 28).attr('aria-hidden', 'true');
+
+      svg.each(function (p) {
+        const cells = cols.map((c, i) => {
+          const t = D.routes.get(`${c.id}>${p.id}`);
+          const promo = D.promo.get(`${c.id}>${p.id}`);
+          return { i, t, promo, v: t ? received(t, promo) : 0 };
+        });
+        const s = d3.select(this);
+        const cx = (d) => `${((d.i + 0.5) / cols.length) * 100}%`;
+        s.selectAll('circle').data(cells.filter((d) => d.t)).join('circle')
+          .attr('class', (d) => `cell-dot${d.promo ? ' is-bonus' : ''}`)
+          .attr('cx', cx).attr('cy', 14).attr('r', (d) => Math.max(2.5, dotR(d.v)));
+        // A short hairline marks "no route" so empty cells read as a deliberate absence.
+        s.selectAll('line').data(cells.filter((d) => !d.t)).join('line')
+          .attr('class', 'cell-none')
+          .attr('x1', cx).attr('x2', cx).attr('y1', 11).attr('y2', 17)
+          .attr('transform', 'translate(0,0)');
+      });
+    }
+  }
+
+  // ---------- Detail sheet ----------
+
+  let sheetAmount = 10000;
+
+  function openSheet(partnerId, fromId) {
+    const p = D.partners.get(partnerId);
+    const group = D.groups.find((g) => g.id === p.group);
+    const dlg = $('#sheet');
+    const options = D.programs.currencies
+      .map((c) => ({ c, t: D.routes.get(`${c.id}>${p.id}`), promo: D.promo.get(`${c.id}>${p.id}`) }))
+      .filter((o) => o.t);
+    const missing = D.programs.currencies.filter((c) => !D.routes.has(`${c.id}>${p.id}`));
+
+    options.sort((a, b) => (b.c.id === fromId) - (a.c.id === fromId) || received(b.t, b.promo) - received(a.t, a.promo));
+
+    const notes = [];
+    if (p.note) notes.push(esc(p.note));
+    for (const o of options) {
+      if (o.t.variants) o.t.variants.forEach((v) => notes.push(`${esc(o.c.short)}: ${esc(v.label)} transfer at ${ratioText(v.ratio)}.`));
+      if (o.t.note) notes.push(`${esc(o.c.short)}: ${esc(o.t.note)}.`);
+      if (o.promo?.note) notes.push(`${esc(o.c.short)} bonus: ${esc(o.promo.note)}`);
+      if (o.c.note && (o.c.id === 'citi' || o.c.id === fromId)) notes.push(`${esc(o.c.short)}: ${esc(o.c.note)}`);
+    }
+
+    dlg.innerHTML = `
+      <div class="sheet-inner">
+        <div class="grabber" aria-hidden="true"></div>
+        <div class="sheet-top">
+          <div>
+            <h2 id="sheet-title">${esc(p.name)}</h2>
+            <p class="kicker">${p.type === 'hotel' ? 'Hotel program' : `${esc(group.label)}${p.group === 'none' ? '' : ' airline'}`}</p>
+          </div>
+          <button class="close" aria-label="Close">×</button>
+        </div>
+        <div class="calc">
+          <label for="amount">Points to transfer</label>
+          <input id="amount" inputmode="numeric" autocomplete="off" value="${num.format(sheetAmount)}">
+        </div>
+        <ul class="reach">
+          ${options.map((o) => `
+            <li class="${o.c.id === fromId ? 'is-current' : ''}" data-cur="${o.c.id}">
+              <span class="r-name">${esc(o.c.name)}</span>
+              <span class="r-out" data-out></span>
+              <span class="r-meta">
+                Ratio ${o.t.variants ? `${[...new Set(o.t.variants.map((v) => ratioText(v.ratio)))].join(' or ')} depending on card` : ratioText(o.t.ratio)}${o.promo ? `. <b>+${o.promo.bonus}%</b> ${endText(o.promo)}, normally <span data-was></span>${o.promo.sources?.[0] ? `. <a href="${esc(o.promo.sources[0].url)}" target="_blank" rel="noopener">Source</a>` : ''}` : ''}
+              </span>
+            </li>`).join('')}
+        </ul>
+        ${missing.length ? `<p class="reach-none">Not a partner of ${missing.map((c) => esc(c.short)).join(', ')}.</p>` : ''}
+        ${notes.length ? `<ul class="notes">${notes.map((n) => `<li>${n}</li>`).join('')}</ul>` : ''}
+      </div>`;
+
+    const input = $('#amount', dlg);
+    const update = () => {
+      sheetAmount = Math.min(10_000_000, parseInt(input.value.replace(/[^\d]/g, ''), 10) || 0);
+      $$('.reach li', dlg).forEach((li) => {
+        const o = options.find((x) => x.c.id === li.dataset.cur);
+        $('[data-out]', li).textContent = num.format(received(o.t, o.promo, sheetAmount));
+        const was = $('[data-was]', li);
+        if (was) was.textContent = num.format(received(o.t, null, sheetAmount));
+      });
+    };
+    input.addEventListener('input', update);
+    input.addEventListener('blur', () => { input.value = num.format(sheetAmount); });
+    input.addEventListener('focus', () => input.select());
+    update();
+
+    $('.close', dlg).addEventListener('click', () => dlg.close());
+    enableSwipeToClose(dlg);
+    dlg.showModal();
+  }
+
+  function enableSwipeToClose(dlg) {
+    const handle = $('.sheet-top', dlg).parentElement;
+    let startY = null;
+    handle.addEventListener('touchstart', (e) => {
+      if (dlg.scrollTop > 0 || e.target.closest('input, a, button')) return;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    handle.addEventListener('touchmove', (e) => {
+      if (startY == null) return;
+      const dy = Math.max(0, e.touches[0].clientY - startY);
+      dlg.style.transform = `translateY(${dy}px)`;
+    }, { passive: true });
+    handle.addEventListener('touchend', (e) => {
+      if (startY == null) return;
+      const dy = e.changedTouches[0].clientY - startY;
+      startY = null;
+      dlg.style.transform = '';
+      if (dy > 90) dlg.close();
+    });
+  }
+
+
+  // ---------- Theme ----------
+
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const canStore = !window.__NO_STORAGE__;
+
+  function effectiveTheme() {
+    return document.documentElement.dataset.theme || (systemDark.matches ? 'dark' : 'light');
+  }
+
+  function syncTheme() {
+    const eff = effectiveTheme();
+    const root = document.documentElement;
+    root.dataset.effective = eff;
+    const btn = $('#theme-toggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(eff === 'light'));
+      btn.setAttribute('aria-label', eff === 'light' ? 'Light mode on. Switch to dark mode' : 'Dark mode on. Switch to light mode');
+      $('.t-label', btn).textContent = eff === 'light' ? 'Light' : 'Dark';
+    }
+    const bg = getComputedStyle(root).getPropertyValue('--haze').trim();
+    $$('meta[name="theme-color"]').forEach((m) => { m.setAttribute('content', bg); m.removeAttribute('media'); });
+  }
+
+  function setupTheme() {
+    syncTheme();
+    $('#theme-toggle').addEventListener('click', () => {
+      const next = effectiveTheme() === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      if (canStore) { try { localStorage.setItem('theme', next); } catch { /* private mode */ } }
+      syncTheme();
+    });
+    // Follow the OS setting until the person makes a choice.
+    systemDark.addEventListener('change', () => { if (!document.documentElement.dataset.theme) syncTheme(); });
+  }
+
+  // ---------- Render ----------
+
+  function render({ animate = false } = {}) {
+    syncControls();
+    renderBonuses();
+    if (state.view === 'routes') renderRoutes(animate);
+    else renderCompare();
+    writeURL();
+  }
+
+  // On GitHub Pages (user.github.io/repo/), point "Report a mistake" at that repo's issues.
+  function setupReportLink() {
+    const link = $('#report-link');
+    const m = location.hostname.match(/^([a-z0-9-]+)\.github\.io$/i);
+    const repo = location.pathname.split('/').filter(Boolean)[0];
+    if (!link || !m || !repo) return;
+    link.href = `https://github.com/${m[1]}/${repo}/issues/new?labels=data-fix`;
+    link.hidden = false;
+  }
+
+  function renderStatus() {
+    const up = D.promotions.updatedAt;
+    $('#status').textContent = up
+      ? `Bonus list updated ${shortDate.format(new Date(up))}`
+      : 'Bonus list not yet updated';
+    $('#verified').textContent = `Transfer ratios last verified ${longDate.format(new Date(`${D.transfers.verifiedOn}T00:00:00Z`))}.`;
+  }
+
+  async function start() {
+    setupTheme();
+    try {
+      D = index(await loadData());
+    } catch (err) {
+      $('#status').textContent = `${err.message}. If you opened index.html from disk, serve the folder instead (for example, npx serve).`;
+      return;
+    }
+    readURL();
+    setupControls();
+    setupReportLink();
+    renderStatus();
+    // Wait briefly for B612 so row heights are final before the rail animates.
+    if (document.fonts) await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]);
+    render({ animate: true });
+
+    $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') e.target.close(); });
+
+    // Redraw the rail only when the width actually changes (row heights follow width).
+    let raf = 0;
+    let lastW = document.body.clientWidth;
+    new ResizeObserver(() => {
+      const w = document.body.clientWidth;
+      if (w === lastW) return;
+      lastW = w;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => state.view === 'routes' && drawRail(false));
+    }).observe(document.body);
+  }
+
+  start();
+})();

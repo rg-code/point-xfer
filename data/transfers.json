@@ -1,0 +1,1089 @@
+{
+  "verifiedOn": "2026-09-23",
+  "note": "ratio is [points sent, points received]. Verify with the issuer before transferring; transfers are irreversible.",
+  "transfers": [
+    {
+      "from": "amex",
+      "to": "aerlingus",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "aeromexico",
+      "ratio": [
+        5,
+        8
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "aeroplan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "ana",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "lifemiles",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "ba",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "cathay",
+      "ratio": [
+        5,
+        4
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "delta",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "emirates",
+      "ratio": [
+        5,
+        4
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "iberia",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "jetblue",
+      "ratio": [
+        5,
+        4
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "qantas",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "qatar",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "singapore",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "choice",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "hilton",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "marriott",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "leaders",
+      "ratio": [
+        4,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "aerlingus",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "aeroplan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "ba",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "iberia",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "jetblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "singapore",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "southwest",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "united",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "hyatt",
+      "ratio": [
+        1,
+        1
+      ],
+      "variants": [
+        {
+          "label": "Sapphire Reserve and Sapphire Reserve for Business",
+          "ratio": [
+            1,
+            1
+          ]
+        },
+        {
+          "label": "Sapphire Preferred and Ink Business Preferred (from Oct 1, 2026)",
+          "ratio": [
+            4,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "ihg",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "marriott",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "wyndham",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "aerlingus",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "american",
+      "ratio": [
+        1,
+        1
+      ],
+      "note": "Requires Strata Premier, Strata Elite or Prestige"
+    },
+    {
+      "from": "citi",
+      "to": "lifemiles",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "cathay",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "emirates",
+      "ratio": [
+        5,
+        4
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "etihad",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "eva",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "jetblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "qantas",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "qatar",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "singapore",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "thai",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "turkish",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "accor",
+      "ratio": [
+        2,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "choice",
+      "ratio": [
+        2,
+        3
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "leaders",
+      "ratio": [
+        5,
+        1
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "iprefer",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "wyndham",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "aeromexico",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "aeroplan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "lifemiles",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "ba",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "cathay",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "emirates",
+      "ratio": [
+        4,
+        3
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "etihad",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "eva",
+      "ratio": [
+        4,
+        3
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "finnair",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "jal",
+      "ratio": [
+        4,
+        3
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "jetblue",
+      "ratio": [
+        5,
+        3
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "qantas",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "qatar",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "singapore",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "tap",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "turkish",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "virginred",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "choice",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "wyndham",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "iprefer",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "accor",
+      "ratio": [
+        2,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "atmos",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "lifemiles",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "united",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "virginred",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "emirates",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "ba",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "cathay",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "turkish",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "aerlingus",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "iberia",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "aeroplan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "tap",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "southwest",
+      "ratio": [
+        1,
+        1
+      ],
+      "note": "Can take up to 72 hours to post"
+    },
+    {
+      "from": "bilt",
+      "to": "jal",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "qatar",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "etihad",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "hilton",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "marriott",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "hyatt",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "ihg",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "wyndham",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "accor",
+      "ratio": [
+        3,
+        2
+      ]
+    },
+    {
+      "from": "bilt",
+      "to": "iprefer",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "aerlingus",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "lifemiles",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "ba",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "cathay",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "iberia",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "jetblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "choice",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "wf",
+      "to": "wyndham",
+      "ratio": [
+        1,
+        2
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "jal",
+      "ratio": [
+        1,
+        1
+      ],
+      "note": "No-annual-fee ThankYou cards transfer at 1:0.7"
+    },
+    {
+      "from": "rove",
+      "to": "aeromexico",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "aeroplan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "cathay",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "copa",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "etihad",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "finnair",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "flyingblue",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "frontier",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "hainan",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "airindia",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "milesmore",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "qantas",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "qatar",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "jal",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "sas",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "thai",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "turkish",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "virginred",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "virgin",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "vietnam",
+      "ratio": [
+        1,
+        1
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "accor",
+      "ratio": [
+        3,
+        2
+      ]
+    }
+  ]
+}

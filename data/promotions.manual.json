@@ -1,0 +1,139 @@
+{
+  "note": "Hand-curated overrides. Entries in `add` always win over feed results while active. Put a promo id in `suppress` to hide a false positive.",
+  "add": [
+    {
+      "from": "chase",
+      "to": "marriott",
+      "bonus": 70,
+      "end": "2026-10-15",
+      "sources": [
+        {
+          "title": "Credit card transfer bonuses (September)",
+          "url": "https://thepointsguy.com/loyalty-programs/current-transfer-bonuses/",
+          "feed": "The Points Guy"
+        }
+      ]
+    },
+    {
+      "from": "chase",
+      "to": "aeroplan",
+      "bonus": 20,
+      "end": "2026-09-30",
+      "note": "30% if you also hold the Chase Aeroplan card.",
+      "sources": [
+        {
+          "title": "September credit card transfer bonuses",
+          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
+          "feed": "Upgraded Points"
+        }
+      ]
+    },
+    {
+      "from": "c1",
+      "to": "jal",
+      "bonus": 30,
+      "end": "2026-09-30",
+      "sources": [
+        {
+          "title": "September credit card transfer bonuses",
+          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
+          "feed": "Upgraded Points"
+        }
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "ba",
+      "bonus": 30,
+      "end": "2026-09-27",
+      "sources": [
+        {
+          "title": "Current transfer bonuses",
+          "url": "https://www.point.me/insights/current-transfer-bonuses/",
+          "feed": "point.me"
+        }
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "iberia",
+      "bonus": 30,
+      "end": "2026-09-27",
+      "sources": [
+        {
+          "title": "Amex transfer partners",
+          "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
+          "feed": "AwardTravelFinder"
+        }
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "aerlingus",
+      "bonus": 30,
+      "end": "2026-09-27",
+      "sources": [
+        {
+          "title": "Amex transfer partners",
+          "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
+          "feed": "AwardTravelFinder"
+        }
+      ]
+    },
+    {
+      "from": "amex",
+      "to": "hilton",
+      "bonus": 30,
+      "end": "2026-10-14",
+      "sources": [
+        {
+          "title": "Amex transfer partners",
+          "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
+          "feed": "AwardTravelFinder"
+        }
+      ]
+    },
+    {
+      "from": "rove",
+      "to": "copa",
+      "bonus": 40,
+      "end": "2026-09-30",
+      "note": "Launch bonus for the new Copa partnership.",
+      "sources": [
+        {
+          "title": "Rove Miles now transfer to Copa ConnectMiles",
+          "url": "https://www.rove.com/blog/rove-miles-now-transfer-to-copa-airlines-connectmiles-with-a-40-launch-bonus",
+          "feed": "Rove"
+        }
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "jal",
+      "bonus": 30,
+      "end": "2026-10-24",
+      "note": "Launch bonus. No-annual-fee cards get 1,000 \u2192 910.",
+      "sources": [
+        {
+          "title": "Citi adds Japan Airlines as a transfer partner",
+          "url": "https://thepointsguy.com/news/citi-japan-airlines-transfer-partner/",
+          "feed": "The Points Guy"
+        }
+      ]
+    },
+    {
+      "from": "citi",
+      "to": "lifemiles",
+      "bonus": 25,
+      "end": "2026-10-24",
+      "sources": [
+        {
+          "title": "Current credit card transfer bonuses",
+          "url": "https://www.pointsyeah.com/insider/deals/current-credit-card-transfer-bonuses",
+          "feed": "PointsYeah"
+        }
+      ]
+    }
+  ],
+  "suppress": []
+}

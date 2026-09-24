@@ -1,0 +1,11 @@
+{
+  "note": "RSS/Atom feeds the tracker reads. Add or remove freely; failures are logged and skipped.",
+  "feeds": [
+    { "name": "Doctor of Credit",   "url": "https://www.doctorofcredit.com/feed/" },
+    { "name": "Frequent Miler",     "url": "https://frequentmiler.com/feed/" },
+    { "name": "One Mile at a Time", "url": "https://onemileatatime.com/feed/" },
+    { "name": "The Points Guy",     "url": "https://thepointsguy.com/feed/" },
+    { "name": "Upgraded Points",    "url": "https://upgradedpoints.com/feed/" },
+    { "name": "View from the Wing", "url": "https://viewfromthewing.com/feed/" }
+  ]
+}

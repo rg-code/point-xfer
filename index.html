@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Transfer map: where your points can go</title>
+  <meta name="description" content="See every airline and hotel partner for Amex, Chase, Citi, Capital One, Bilt, Wells Fargo and Rove points, with live transfer bonuses.">
+  <meta name="theme-color" content="#eef2f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1a28" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script>
+    // Apply a saved theme before first paint.
+    (function () {
+      var t = null;
+      try { if (!window.__NO_STORAGE__) t = localStorage.getItem('theme'); } catch (e) {}
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div>
+      <h1>Transfer map</h1>
+      <p id="status">Loading partners</p>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+      <span class="t-label">Light</span>
+    </button>
+  </header>
+
+  <div class="controls" id="controls">
+    <div class="controls-inner">
+      <div class="segmented" role="tablist" aria-label="View">
+        <button role="tab" id="tab-routes" aria-controls="view" aria-selected="true" data-view="routes">By card</button>
+        <button role="tab" id="tab-compare" aria-controls="view" aria-selected="false" data-view="compare">Compare cards</button>
+      </div>
+      <div class="select-wrap" id="from-wrap">
+        <label for="from" class="visually-hidden">Points currency</label>
+        <select id="from"></select>
+      </div>
+      <div class="filters" role="group" aria-label="Filter partners">
+        <button class="chip" data-type="all" aria-pressed="true">All</button>
+        <button class="chip" data-type="airline" aria-pressed="false">Airlines</button>
+        <button class="chip" data-type="hotel" aria-pressed="false">Hotels</button>
+        <button class="chip bonus-toggle" id="bonus-only" role="switch" aria-checked="false">Bonuses only</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="layout">
+    <section class="bonuses" id="bonuses" aria-live="polite"></section>
+    <div id="view" role="tabpanel"></div>
+  </main>
+
+  <footer class="site-foot">
+    <p id="verified"></p>
+    <p>Transfers can't be undone. Confirm the ratio and award space with your card issuer and the partner before moving points.</p>
+    <p>Bonuses are gathered automatically from public blog feeds and may lag or miss offers. <a href="#" id="report-link" hidden>Report a mistake</a></p>
+  </footer>
+
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title"></dialog>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

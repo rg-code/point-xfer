@@ -1,0 +1,11 @@
+{
+  "name": "Transfer map",
+  "short_name": "Transfers",
+  "description": "Where your card points can go, with live transfer bonuses.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2f6",
+  "theme_color": "#eef2f6",
+  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

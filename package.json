@@ -1,0 +1,16 @@
+{
+  "name": "point-xfer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mobile-first map of credit card point transfer partners with automatically tracked transfer bonuses.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "track": "node scripts/track-promos.mjs",
+    "track:dry": "node scripts/track-promos.mjs --dry-run",
+    "track:offline": "node scripts/track-promos.mjs --offline",
+    "preview": "node scripts/build-preview.mjs",
+    "serve": "npx --yes serve ."
+  }
+}
