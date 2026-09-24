@@ -189,7 +189,8 @@
         "min": 12,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2023-07-27"
     },
     {
       "from": "amex",
@@ -263,7 +264,8 @@
         4,
         1
       ],
-      "timeNote": "Amex says to allow up to 72 hours"
+      "timeNote": "Amex says to allow up to 72 hours",
+      "added": "2026-07-28"
     },
     {
       "from": "chase",
@@ -464,7 +466,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2026-02-25"
     },
     {
       "from": "citi",
@@ -506,7 +509,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Citi says usually within 24 hours, up to 5 business days"
+      "timeNote": "Citi says usually within 24 hours, up to 5 business days",
+      "added": "2025-07-27"
     },
     {
       "from": "citi",
@@ -677,7 +681,8 @@
         "max": 2,
         "unit": "days"
       },
-      "timeNote": "Reports vary from instant to 2 days"
+      "timeNote": "Reports vary from instant to 2 days",
+      "added": "2023-05-15"
     },
     {
       "from": "citi",
@@ -703,7 +708,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2023-10-16"
     },
     {
       "from": "citi",
@@ -716,7 +722,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2024-10-21"
     },
     {
       "from": "citi",
@@ -874,7 +881,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "New JAL accounts must wait 7 days before redeeming"
+      "timeNote": "New JAL accounts must wait 7 days before redeeming",
+      "added": "2025-09-23"
     },
     {
       "from": "c1",
@@ -887,7 +895,8 @@
         "min": 0,
         "max": 2,
         "unit": "hours"
-      }
+      },
+      "added": "2025-02-18"
     },
     {
       "from": "c1",
@@ -913,7 +922,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-09-23"
     },
     {
       "from": "c1",
@@ -999,7 +1009,8 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "added": "2025-09-23"
     },
     {
       "from": "c1",
@@ -1039,7 +1050,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2023-12-15"
     },
     {
       "from": "bilt",
@@ -1195,7 +1207,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2024-10-10"
     },
     {
       "from": "bilt",
@@ -1209,7 +1222,8 @@
         "min": 12,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2025-04-24"
     },
     {
       "from": "bilt",
@@ -1222,7 +1236,8 @@
         "min": 0,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2025-05-13"
     },
     {
       "from": "bilt",
@@ -1235,7 +1250,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-05-22"
     },
     {
       "from": "bilt",
@@ -1248,7 +1264,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-10-06"
     },
     {
       "from": "bilt",
@@ -1261,7 +1278,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2024-05-08"
     },
     {
       "from": "bilt",
@@ -1274,7 +1292,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2023-11-08"
     },
     {
       "from": "bilt",
@@ -1313,7 +1332,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2026-03-25"
     },
     {
       "from": "bilt",
@@ -1326,7 +1346,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2024-10-10"
     },
     {
       "from": "bilt",
@@ -1334,7 +1355,8 @@
       "ratio": [
         1,
         2
-      ]
+      ],
+      "added": "2026-06-22"
     },
     {
       "from": "wf",
@@ -1348,7 +1370,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1362,7 +1385,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1376,7 +1400,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1390,7 +1415,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1404,7 +1430,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2026-04-28"
     },
     {
       "from": "wf",
@@ -1418,7 +1445,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1432,7 +1460,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2025-10-27"
     },
     {
       "from": "wf",
@@ -1446,7 +1475,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-09-25"
     },
     {
       "from": "wf",
@@ -1460,7 +1490,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2024-04-04"
     },
     {
       "from": "wf",
@@ -1474,7 +1505,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "timeNote": "Wells Fargo says to allow up to 72 hours"
+      "timeNote": "Wells Fargo says to allow up to 72 hours",
+      "added": "2026-04-15"
     },
     {
       "from": "citi",
@@ -1483,7 +1515,8 @@
         1,
         1
       ],
-      "note": "No-annual-fee ThankYou cards transfer at 1:0.7"
+      "note": "No-annual-fee ThankYou cards transfer at 1:0.7",
+      "added": "2026-09-20"
     },
     {
       "from": "rove",
@@ -1496,7 +1529,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1509,7 +1543,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2026-05-07"
     },
     {
       "from": "rove",
@@ -1523,7 +1558,8 @@
         "max": 0,
         "unit": "minutes"
       },
-      "increment": 1000
+      "increment": 1000,
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1531,7 +1567,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-09-01"
     },
     {
       "from": "rove",
@@ -1544,7 +1581,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1557,7 +1595,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1570,7 +1609,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1578,7 +1618,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-07-01"
     },
     {
       "from": "rove",
@@ -1591,7 +1632,8 @@
         "min": 1,
         "max": 1,
         "unit": "days"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1604,7 +1646,8 @@
         "min": 1,
         "max": 1,
         "unit": "days"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1617,7 +1660,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2025-11-03"
     },
     {
       "from": "rove",
@@ -1625,7 +1669,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-07-15"
     },
     {
       "from": "rove",
@@ -1638,7 +1683,8 @@
         "min": 0,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1651,7 +1697,8 @@
         "min": 0,
         "max": 0,
         "unit": "minutes"
-      }
+      },
+      "added": "2026-03-02"
     },
     {
       "from": "rove",
@@ -1659,7 +1706,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-03-09"
     },
     {
       "from": "rove",
@@ -1672,7 +1720,8 @@
         "min": 0,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1685,7 +1734,8 @@
         "min": 0,
         "max": 24,
         "unit": "hours"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1693,7 +1743,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-04-07"
     },
     {
       "from": "rove",
@@ -1701,7 +1752,8 @@
       "ratio": [
         1,
         1
-      ]
+      ],
+      "added": "2026-04-07"
     },
     {
       "from": "rove",
@@ -1714,7 +1766,8 @@
         "min": 1,
         "max": 1,
         "unit": "days"
-      }
+      },
+      "added": "2025-04-28"
     },
     {
       "from": "rove",
@@ -1728,7 +1781,8 @@
         "max": 1,
         "unit": "days"
       },
-      "increment": 150
+      "increment": 150,
+      "added": "2025-04-28"
     }
   ]
 }

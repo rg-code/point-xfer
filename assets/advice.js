@@ -83,6 +83,7 @@
 
     if (live) {
       const b = live.bonus;
+      if (!n && today - from <= 60) return { verdict: 'go', reason: `+${b}% launch bonus on a new route. Nothing to wait for.`, stats, record };
       if (!n) return { verdict: 'go', reason: `Rare chance: +${b}% is the first bonus on record for this route since ${when}.`, stats, record };
       if (b >= waitValue || b >= typical) {
         let how = 'beats what waiting is likely to earn';

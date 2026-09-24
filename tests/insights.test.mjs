@@ -92,8 +92,10 @@ test('no live bonus on a route with frequent bonuses: wait', () => {
 
 test('history text names the month when the window starts at a route launch', () => {
   const a = advise({ history: [], live: { bonus: 30 }, since: '2026-09-20', day: '2026-09-24' });
-  assert.match(a.reason, /since Sep 2026/);
+  assert.match(a.reason, /launch bonus/);
   assert.equal(a.record, 'No past bonuses since Sep 2026.');
+  const b = advise({ history: [], live: { bonus: 30 }, since: '2025-04-28', day: '2026-09-24' });
+  assert.match(b.reason, /first bonus on record for this route since Apr 2025/);
 });
 
 test('a bonus that just ended makes another one soon less likely', () => {
