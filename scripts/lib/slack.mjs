@@ -17,10 +17,6 @@ export const LINES = [
   'Somewhere a beach is missing {name}. This new bonus might help.',
   '{name}, same points, more miles. A new bonus just dropped.',
   'Seatbelts on, {name}. A new transfer bonus is taking off.',
-  'Clear your calendar, {name}. A new bonus just dropped.',
-  '{name}, this one has your name on it. New transfer bonus below.',
-  'Put the kettle on, {name}. There is a new bonus to look at.',
-  'Stop window shopping for flights, {name}. A new bonus is live.',
 ];
 
 // Openers only for one person.
