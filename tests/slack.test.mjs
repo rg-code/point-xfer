@@ -1,12 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PEOPLE, LINES, PERSONAL, opener, slackMessage } from '../scripts/lib/slack.mjs';
+import { PEOPLE, LINES, PERSONAL, LIVE_LINES, opener, slackMessage, slackMessages } from '../scripts/lib/slack.mjs';
 
 // Deterministic "random": returns the given values in turn.
 const seq = (...vals) => { let i = 0; return () => vals[i++ % vals.length]; };
 
 test('every opener is addressed to someone on the list', () => {
-  for (const l of LINES) assert.ok(l.includes('{name}'), l);
+  for (const l of [...LINES, ...LIVE_LINES]) assert.ok(l.includes('{name}'), l);
   for (const [who, lines] of Object.entries(PERSONAL)) {
     assert.ok(PEOPLE.includes(who), who);
     for (const l of lines) assert.ok(l.includes(who), l);
@@ -50,8 +50,20 @@ test('message lists each bonus with dates, source and map link, escaped for Slac
   ], names, { rand: seq(0) });
   const [first, ...rows] = m.text.split('\n');
   assert.equal(first, LINES[0].replaceAll('{name}', PEOPLE[0]));
-  assert.equal(rows[0], '• *Chase Ultimate Rewards → Marriott Bonvoy: +70%* through 2026-10-15 (<https://frequentmiler.com/x|Frequent Miler>) <https://milesmaximizer.com/?partner=marriott|map>');
-  assert.match(rows[1], /\+200%\* on 2026-10-01 <https:\/\/milesmaximizer\.com\/\?partner=hilton\|map>$/);
+  assert.equal(rows[0], '• *Chase Ultimate Rewards → Marriott Bonvoy: +70%* through Oct 15 (<https://frequentmiler.com/x|Frequent Miler>) <https://milesmaximizer.com/?partner=marriott|map>');
+  assert.match(rows[1], /\+200%\* on Oct 1 only <https:\/\/milesmaximizer\.com\/\?partner=hilton\|map>$/);
   assert.match(rows[2], /Miles &amp; More: \+25%\* \(no end date yet\)/);
   assert.equal(m.unfurl_links, false);
+});
+
+test('go-live post uses its own openers and says "today only"', () => {
+  const names = { bilt: 'Bilt Points', hilton: 'Hilton Honors' };
+  const rentDay = { from: 'bilt', to: 'hilton', bonus: 200, start: '2026-10-01', end: '2026-10-01', sources: [] };
+  const posts = slackMessages({ found: [], live: [rentDay] }, names, { rand: seq(0) });
+  assert.equal(posts.length, 1);
+  const [first, row] = posts[0].text.split('\n');
+  assert.equal(first, LIVE_LINES[0].replaceAll('{name}', PEOPLE[0]));
+  assert.match(row, /\+200%\* today only/);
+  assert.equal(slackMessages({ found: [rentDay], live: [rentDay] }, names).length, 2, 'announcement, then go-live');
+  assert.equal(slackMessages({}, names).length, 0);
 });

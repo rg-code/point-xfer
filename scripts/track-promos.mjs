@@ -5,15 +5,16 @@
 //   node scripts/track-promos.mjs --offline  skip network; re-merge manual entries and prune
 //   node scripts/track-promos.mjs --dry-run  print the result without writing
 //
-// When run inside GitHub Actions it also writes `new_count` to $GITHUB_OUTPUT and a
-// Markdown summary of newly found bonuses to $RUNNER_TEMP/new-promos.md for the issue step.
+// When run inside GitHub Actions it also writes `new_count` and `slack_count` to $GITHUB_OUTPUT,
+// a Markdown summary of newly found bonuses to $RUNNER_TEMP/new-promos.md for the issue step, and
+// the Slack posts (announcements, and announced bonuses going live) to $RUNNER_TEMP/slack-messages.json.
 
 import { readFile, writeFile, appendFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { parseFeed, extractPromotions, promoId } from './lib/parse.mjs';
 import { rankSources, sourceRank } from './lib/sources.mjs';
-import { slackMessage } from './lib/slack.mjs';
+import { slackMessages } from './lib/slack.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = (f) => path.join(ROOT, 'data', f);
@@ -89,7 +90,8 @@ export function dedupeHistory(list) {
   return kept;
 }
 
-export function merge({ existing, candidates, manual, archive = {}, day = today() }) {
+/** `day` decides what's live (UTC); `liveDay` decides when to post that an announced bonus went live. */
+export function merge({ existing, candidates, manual, archive = {}, day = today(), liveDay = day }) {
   const byPair = new Map(); // one live promo per from>to route
   const history = [...(existing.history || [])];
   const newlyFound = [];
@@ -179,8 +181,23 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
   for (const p of [...promotions, ...hist]) if (p.sources) p.sources = rankSources(p.sources);
 
   promotions.sort((a, b) => (a.end || a.assumedEnd || '9999').localeCompare(b.end || b.assumedEnd || '9999'));
-  return { promotions, history: hist, newlyFound: newlyFound.filter((n) => promotions.some((p) => p.id === n.id)) };
+  const found = newlyFound.filter((n) => promotions.some((p) => p.id === n.id));
+
+  // A bonus announced before its start date gets a second post on the first run once it's live.
+  // One post only if it was announced on the day, or first found already running. `livePosted`
+  // is saved so the post goes out once, even if runs are missed. Manual entries aren't announced.
+  const goingLive = [];
+  for (const p of promotions) {
+    if (p.manual || !p.start || p.livePosted || !isActive(p, liveDay)) continue;
+    p.livePosted = true;
+    if (p.firstSeen < p.start && !found.some((n) => n.id === p.id)) goingLive.push(p);
+  }
+  return { promotions, history: hist, newlyFound: found, goingLive };
 }
+
+/** Today in US Eastern time, where Rent Day and most US offers change over. */
+export const easternToday = (now = new Date()) =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(now);
 
 async function main() {
   const [transfers, programs, existing, manual, archive, sources] = await Promise.all([
@@ -203,7 +220,7 @@ async function main() {
     console.log(`Found ${candidates.length} bonus mentions across ${items.length} items`);
   }
 
-  const { promotions, history, newlyFound } = merge({ existing, candidates, manual, archive });
+  const { promotions, history, newlyFound, goingLive } = merge({ existing, candidates, manual, archive, liveDay: easternToday() });
 
   const next = { updatedAt: existing.updatedAt, historySince: archive.since || null, promotions, history };
   const changed = JSON.stringify({ s: existing.historySince, p: existing.promotions, h: existing.history })
@@ -212,7 +229,8 @@ async function main() {
 
   const names = Object.fromEntries([...programs.currencies, ...programs.partners].map((p) => [p.id, p.name]));
   console.log(`\nActive bonuses (${promotions.length}):`);
-  for (const p of promotions) console.log(`  ${names[p.from]} → ${names[p.to]}  +${p.bonus}%  ${p.end ? `ends ${p.end}` : `no end date (assumed ${p.assumedEnd})`}`);
+  for (const p of promotions) console.log(`  ${names[p.from]} → ${names[p.to]}  +${p.bonus}%  ${p.start ? `starts ${p.start}, ` : ''}${p.end ? `ends ${p.end}` : `no end date (assumed ${p.assumedEnd})`}`);
+  if (goingLive.length) console.log(`Going live (second Slack post): ${goingLive.map((p) => p.id).join(', ')}`);
 
   if (DRY) return;
   if (changed) {
@@ -223,7 +241,11 @@ async function main() {
   }
 
   if (process.env.GITHUB_OUTPUT) {
-    await appendFile(process.env.GITHUB_OUTPUT, `new_count=${newlyFound.length}\n`);
+    const slack = slackMessages({ found: newlyFound, live: goingLive }, names);
+    await appendFile(process.env.GITHUB_OUTPUT, `new_count=${newlyFound.length}\nslack_count=${slack.length}\n`);
+    if (slack.length && process.env.RUNNER_TEMP) {
+      await writeFile(path.join(process.env.RUNNER_TEMP, 'slack-messages.json'), JSON.stringify(slack));
+    }
     if (newlyFound.length && process.env.RUNNER_TEMP) {
       const lines = newlyFound.map((p) => {
         const src = p.sources?.[0];
@@ -231,7 +253,6 @@ async function main() {
       });
       const body = `The tracker found ${newlyFound.length} new transfer bonus${newlyFound.length > 1 ? 'es' : ''}:\n\n${lines.join('\n')}\n\nIf any of these are wrong, add the id to \`suppress\` in \`data/promotions.manual.json\`.\n\nIds: ${newlyFound.map((p) => `\`${p.id}\``).join(', ')}`;
       await writeFile(path.join(process.env.RUNNER_TEMP, 'new-promos.md'), body);
-      await writeFile(path.join(process.env.RUNNER_TEMP, 'new-promos.slack.json'), JSON.stringify(slackMessage(newlyFound, names)));
     }
   }
 }

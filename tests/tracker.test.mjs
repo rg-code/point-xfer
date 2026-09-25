@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parseFeed, extractPromotions, extractBonus, extractEndDate } from '../scripts/lib/parse.mjs';
-import { merge, isActive } from '../scripts/track-promos.mjs';
+import { merge, isActive, easternToday } from '../scripts/track-promos.mjs';
 
 const programs = JSON.parse(readFileSync(new URL('../data/programs.json', import.meta.url)));
 const { transfers } = JSON.parse(readFileSync(new URL('../data/transfers.json', import.meta.url)));
@@ -71,6 +71,40 @@ test('a Rent Day post dates a bonus already stored as open-ended', () => {
   const [p] = merge({ existing: { promotions: [stored] }, candidates: [c], manual: {}, day: '2026-09-26' }).promotions;
   assert.deepEqual([p.start, p.end, p.assumedEnd], ['2026-10-01', '2026-10-01', undefined]);
   assert.ok(!isActive(p, '2026-09-26'), 'hidden until Rent Day');
+});
+
+test('a bonus announced ahead gets one go-live post, on the Eastern date, exactly once', () => {
+  const preview = { from: 'bilt', to: 'hilton', bonus: 200, start: '2026-10-01', end: '2026-10-01', published: '2026-09-25T13:33:17Z', title: 't', url: 'https://viewfromthewing.com/x', source: 'View from the Wing' };
+  const run = (existing, day, liveDay = day) => merge({ existing, candidates: [preview], manual: {}, day, liveDay });
+  const r1 = run({}, '2026-09-25');
+  assert.deepEqual([r1.newlyFound.length, r1.goingLive.length], [1, 0], 'announced');
+  const r2 = run(r1, '2026-10-01', '2026-09-30');
+  assert.equal(r2.goingLive.length, 0, '02:17 UTC is still Sept 30 in New York');
+  const r3 = run(r2, '2026-10-01');
+  assert.deepEqual(r3.goingLive.map((p) => p.id), ['bilt-hilton-200'], 'live post');
+  assert.equal(r3.promotions[0].livePosted, true);
+  const r4 = run(r3, '2026-10-01');
+  assert.equal(r4.goingLive.length, 0, 'not posted twice');
+});
+
+test('one post only when announced on the day, found late, or already over', () => {
+  const onDay = { from: 'bilt', to: 'hilton', bonus: 200, start: '2026-10-01', end: '2026-10-01', published: '2026-10-01T13:00:00Z', title: 't', url: 'u', source: 's' };
+  const a = merge({ existing: {}, candidates: [onDay], manual: {}, day: '2026-10-01' });
+  assert.deepEqual([a.newlyFound.length, a.goingLive.length], [1, 0], 'announced the day it starts');
+  assert.equal(merge({ existing: a, candidates: [onDay], manual: {}, day: '2026-10-01' }).goingLive.length, 0);
+
+  const late = { ...onDay, published: '2026-09-30T13:00:00Z' };
+  const b = merge({ existing: {}, candidates: [late], manual: {}, day: '2026-10-01' });
+  assert.deepEqual([b.newlyFound.length, b.goingLive.length], [1, 0], 'preview first seen once already live');
+
+  const c1 = merge({ existing: {}, candidates: [late], manual: {}, day: '2026-09-30' });
+  const c2 = merge({ existing: c1, candidates: [], manual: {}, day: '2026-10-02' });
+  assert.equal(c2.goingLive.length, 0, 'runs missed until after it ended');
+});
+
+test('easternToday switches at midnight New York time', () => {
+  assert.equal(easternToday(new Date('2026-10-01T02:17:00Z')), '2026-09-30');
+  assert.equal(easternToday(new Date('2026-10-01T04:17:00Z')), '2026-10-01');
 });
 
 test('an upcoming Rent Day stays live-listed, is reported once, and ignores last month at the same %', () => {
