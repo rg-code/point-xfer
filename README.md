@@ -37,6 +37,12 @@ Sources are ranked: the issuer's or partner's own offer page first (picked up fr
 
 A feed that fails (timeouts, bot blocking) is logged and skipped; the run still succeeds. The script has no dependencies and only commits when the data actually changes.
 
+### Slack
+
+Each run that finds new bonuses also posts them to Slack as you. The post opens with a one-liner to someone picked at random ("Hold my beer, DanC. A new bonus was spotted."), then lists each bonus with its dates, source and a link to it on the map. Edit the names and lines in `scripts/lib/slack.mjs`.
+
+It needs a Slack app with the **User Token Scope** `chat:write`, installed by you, with the user token stored as the repo secret `SLACK_USER_TOKEN` and the channel ID as the repo variable `SLACK_CHANNEL_ID`. Without them the step is skipped. A failed post shows as a warning in the Actions log and never blocks the deploy. To stop posting, delete the secret or revoke the token in the Slack app's **OAuth & Permissions** page.
+
 ### Fixing mistakes by hand
 
 `data/promotions.manual.json` has two lists:

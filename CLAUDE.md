@@ -31,9 +31,10 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 - `scripts/lib/parse.mjs` feed parsing and bonus extraction: alias tables for currencies and partners, bonus %, end-date parsing, official offer links from post bodies.
 - `scripts/lib/sources.mjs` official domains per program and `rankSources`: official page, then AwardWallet, then Frequent Miler and Doctor of Credit (tied), then the rest. Add a domain here when adding a program.
 - `scripts/track-promos.mjs` tracker entry point and `merge()` logic (exported for tests).
+- `scripts/lib/slack.mjs` Slack message for new bonuses: an opener addressed to a random name from `PEOPLE` (general `LINES` with `{name}`, plus `PERSONAL` lines for one person only), then one line per bonus. Posted as Rohit by `track-promos.yml` with the `SLACK_USER_TOKEN` secret (user token, scope `chat:write`) to the `SLACK_CHANNEL_ID` variable. Names are plain text, not @mentions, so nobody is pinged. Keep openers harmless; `tests/slack.test.mjs` checks every line names someone on the list.
 - `scripts/build-preview.mjs` builds the single-file preview.
 - `tests/tracker.test.mjs` parser, merge and dataset tests. `tests/insights.test.mjs` source ranking, archive merge, advice engine, time/minimum and archive data checks.
-- `.github/workflows/track-promos.yml` cron every 2 hours: test, track, commit if changed, open an issue for new bonuses.
+- `.github/workflows/track-promos.yml` cron every 2 hours: test, track, commit if changed, post new bonuses to Slack (skipped if not configured, never fails the run), open an issue for new bonuses.
 - `.github/workflows/pages.yml` deploy on push and on tracker completion.
 
 ## How the tracker decides what's a bonus

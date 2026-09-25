@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { parseFeed, extractPromotions, promoId } from './lib/parse.mjs';
 import { rankSources, sourceRank } from './lib/sources.mjs';
+import { slackMessage } from './lib/slack.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = (f) => path.join(ROOT, 'data', f);
@@ -230,6 +231,7 @@ async function main() {
       });
       const body = `The tracker found ${newlyFound.length} new transfer bonus${newlyFound.length > 1 ? 'es' : ''}:\n\n${lines.join('\n')}\n\nIf any of these are wrong, add the id to \`suppress\` in \`data/promotions.manual.json\`.\n\nIds: ${newlyFound.map((p) => `\`${p.id}\``).join(', ')}`;
       await writeFile(path.join(process.env.RUNNER_TEMP, 'new-promos.md'), body);
+      await writeFile(path.join(process.env.RUNNER_TEMP, 'new-promos.slack.json'), JSON.stringify(slackMessage(newlyFound, names)));
     }
   }
 }
