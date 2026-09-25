@@ -1,0 +1,41 @@
+name: Slack check
+
+# Manual test that the stored Slack token still works. Posts a short message to your own Slack DM
+# by default ("me"), or to the bonus channel. Run it after replacing SLACK_USER_TOKEN.
+on:
+  workflow_dispatch:
+    inputs:
+      where:
+        description: Where to post the test message
+        type: choice
+        options: [me, channel]
+        default: me
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the token and post a test message
+        env:
+          SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
+          SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_ID }}
+          WHERE: ${{ inputs.where }}
+        run: |
+          [ -n "$SLACK_USER_TOKEN" ] || { echo "::error::SLACK_USER_TOKEN is not set"; exit 1; }
+          auth=$(curl -sS https://slack.com/api/auth.test -H "Authorization: Bearer $SLACK_USER_TOKEN")
+          jq -e .ok > /dev/null <<< "$auth" || { echo "::error::Slack rejected the token: $(jq -r .error <<< "$auth")"; exit 1; }
+          echo "Token OK: $(jq -r '.user + " in " + .team' <<< "$auth")"
+
+          if [ "$WHERE" = channel ]; then target="$SLACK_CHANNEL"; else target=$(jq -r .user_id <<< "$auth"); fi
+          [ -n "$target" ] || { echo "::error::SLACK_CHANNEL_ID is not set"; exit 1; }
+          body=$(jq -n --arg ch "$target" '{channel: $ch, unfurl_links: false,
+            text: "Slack check from point-xfer: the stored token works. <https://milesmaximizer.com|milesmaximizer.com>"}')
+          resp=$(curl -sS https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_USER_TOKEN" \
+            -H 'Content-type: application/json; charset=utf-8' \
+            --data "$body")
+          jq -e .ok > /dev/null <<< "$resp" || { echo "::error::Slack post failed: $(jq -r .error <<< "$resp")"; exit 1; }
+          echo "Posted the test message ($WHERE)."

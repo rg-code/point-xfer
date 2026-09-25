@@ -43,7 +43,7 @@ A feed that fails (timeouts, bot blocking) is logged and skipped; the run still 
 
 Each run that finds new bonuses also posts them to Slack as you. The post opens with a one-liner to someone picked at random ("Hold my beer, DanC. A new bonus was spotted."), then lists each bonus with its dates and a link to it on milesmaximizer.com (no blog links; those stay on the site and in the GitHub issue). A bonus announced ahead of its start date, like a Bilt Rent Day preview, gets a second post on the morning it goes live (the first run after midnight Eastern). Bonuses that are live when first found get one post. Edit the names and lines in `scripts/lib/slack.mjs`.
 
-It needs a Slack app with the **User Token Scope** `chat:write`, installed by you, with the user token stored as the repo secret `SLACK_USER_TOKEN` and the channel ID as the repo variable `SLACK_CHANNEL_ID`. Without them the step is skipped. A failed post shows as a warning in the Actions log and never blocks the deploy. To stop posting, delete the secret or revoke the token in the Slack app's **OAuth & Permissions** page.
+It needs a Slack app with the **User Token Scope** `chat:write`, installed by you, with the user token stored as the repo secret `SLACK_USER_TOKEN` and the channel ID as the repo variable `SLACK_CHANNEL_ID`. Without them the step is skipped. A failed post shows as a warning in the Actions log and never blocks the deploy. To stop posting, delete the secret or revoke the token in the Slack app's **OAuth & Permissions** page. To test the stored token, run **Actions → Slack check** (posts to your own DM by default).
 
 ### Fixing mistakes by hand
 
