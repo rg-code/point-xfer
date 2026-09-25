@@ -33,7 +33,7 @@ After that the tracker runs every 6 hours. Each run that changes the bonus list 
 
 End dates come from phrases like "through Sept. 30", "until October 15" or "ends 9/30". One-day offers such as Bilt Rent Day end on their publish date. If no end date is found, the bonus is kept for 30 days after it was first seen and the site shows "end date not listed." Headlines marked `[Expired]` close out a bonus early. The site also filters by date in the browser, so an expired bonus disappears on time even if the Action hasn't run.
 
-Sources are ranked: the issuer's or partner's own offer page first (picked up from links inside blog posts), then AwardWallet, then Frequent Miler, then everything else. The detail sheet lists them in that order, and when two sources disagree on an end date the better-ranked one wins.
+Sources are ranked: the issuer's or partner's own offer page first (picked up from links inside blog posts), then AwardWallet, then Frequent Miler and Doctor of Credit (tied), then everything else. The detail sheet lists them in that order, and when two sources disagree on an end date the better-ranked one wins; between tied sources, the newest post wins.
 
 A feed that fails (timeouts, bot blocking) is logged and skipped; the run still succeeds. The script has no dependencies and only commits when the data actually changes.
 

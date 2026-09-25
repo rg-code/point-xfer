@@ -1,5 +1,5 @@
 {
-  "note": "RSS/Atom feeds the tracker reads. Add or remove freely; failures are logged and skipped. Source priority for a bonus is the issuer's own page (linked from posts), then AwardWallet, then Frequent Miler, then the rest (scripts/lib/sources.mjs).",
+  "note": "RSS/Atom feeds the tracker reads. Add or remove freely; failures are logged and skipped. Source priority for a bonus is the issuer's own page (linked from posts), then AwardWallet, then Frequent Miler and Doctor of Credit (tied), then the rest (scripts/lib/sources.mjs).",
   "feeds": [
     { "name": "AwardWallet",        "url": "https://awardwallet.com/blog/feed/" },
     { "name": "Frequent Miler",     "url": "https://frequentmiler.com/feed/" },

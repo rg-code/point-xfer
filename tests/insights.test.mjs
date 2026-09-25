@@ -13,16 +13,26 @@ const valid = new Set(transfers.map((t) => `${t.from}>${t.to}`));
 
 // ---------- Source priority ----------
 
-test('sources rank official, then AwardWallet, then Frequent Miler, then others', () => {
+test('sources rank official, then AwardWallet, then Frequent Miler and Doctor of Credit, then others', () => {
   const ranked = rankSources([
     { url: 'https://thepointsguy.com/a' },
+    { url: 'https://www.doctorofcredit.com/d' },
     { url: 'https://frequentmiler.com/b' },
     { url: 'https://awardwallet.com/blog/c' },
     { url: 'https://global.americanexpress.com/offer' },
     { url: 'https://frequentmiler.com/b' },
   ]);
-  assert.deepEqual(ranked.map((s) => sourceRank(s.url)), [0, 1, 2, 3]);
-  assert.equal(ranked.length, 4, 'duplicate URL dropped');
+  assert.deepEqual(ranked.map((s) => sourceRank(s.url)), [0, 1, 2, 2, 3]);
+  assert.equal(ranked[2].url, 'https://www.doctorofcredit.com/d', 'ties keep feed order');
+  assert.equal(ranked.length, 5, 'duplicate URL dropped');
+});
+
+test('a tied source does not override the other on the end date', () => {
+  const fm = { from: 'amex', to: 'ba', bonus: 30, end: '2026-09-27', published: '2026-09-02T00:00:00Z', title: 'fm', url: 'https://frequentmiler.com/x', source: 'Frequent Miler' };
+  const doc = { ...fm, end: '2026-09-30', published: '2026-09-01T00:00:00Z', title: 'doc', url: 'https://www.doctorofcredit.com/x', source: 'Doctor of Credit' };
+  const tpg = { ...fm, end: '2026-10-05', published: '2026-09-03T00:00:00Z', title: 'tpg', url: 'https://thepointsguy.com/x', source: 'The Points Guy' };
+  const [p] = merge({ existing: {}, candidates: [tpg, fm, doc], manual: {}, day: '2026-09-10' }).promotions;
+  assert.equal(p.end, '2026-09-27', 'Frequent Miler (newer of the tied pair) beats TPG and is not overridden by Doctor of Credit');
 });
 
 test('official detection matches subdomains but not lookalikes', () => {

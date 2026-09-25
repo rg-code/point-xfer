@@ -29,7 +29,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 - `data/promotions.archive.json` hand-researched past bonuses from `since` onward (`records`: from, to, bonus, start, end, sources, confidence, optional `targeted`, `note`). Built mainly from Frequent Miler's past-bonus table checked against each article and AwardWallet; Bilt Rent Day tiers from Bilt's terms PDFs; `bonus` is the base tier. Merged into `history` by the tracker; curated records beat overlapping tracker records. Rerun `npm run track:offline` after editing.
 - `data/sources.json` RSS feeds the tracker reads.
 - `scripts/lib/parse.mjs` feed parsing and bonus extraction: alias tables for currencies and partners, bonus %, end-date parsing, official offer links from post bodies.
-- `scripts/lib/sources.mjs` official domains per program and `rankSources`: official page, then AwardWallet, then Frequent Miler, then the rest. Add a domain here when adding a program.
+- `scripts/lib/sources.mjs` official domains per program and `rankSources`: official page, then AwardWallet, then Frequent Miler and Doctor of Credit (tied), then the rest. Add a domain here when adding a program.
 - `scripts/track-promos.mjs` tracker entry point and `merge()` logic (exported for tests).
 - `scripts/build-preview.mjs` builds the single-file preview.
 - `tests/tracker.test.mjs` parser, merge and dataset tests. `tests/insights.test.mjs` source ranking, archive merge, advice engine, time/minimum and archive data checks.
@@ -43,7 +43,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 3. Every (currency, partner) pair must exist in `transfers.json`, otherwise it's dropped. This is the main false-positive filter, so adding a route also teaches the tracker about it.
 4. End date from "through Sept. 30", "until October 15", "ends 9/30". One-day offers ("today only", "Rent Day") end on the publish date. No date found → kept 30 days (`assumedEnd`).
 5. `[Expired]` headlines close out a matching bonus. Manual entries are not closed by feed results.
-6. Sources are sorted official → AwardWallet → Frequent Miler → others. Official links found in a post body are added as sources. When sources disagree on an end date, the better-ranked one wins (`endSource`).
+6. Sources are sorted official → AwardWallet → Frequent Miler = Doctor of Credit → others. Official links found in a post body are added as sources. When sources disagree on an end date, the better-ranked one wins (`endSource`).
 7. Writes only when data changes, so the Action doesn't make noise commits.
 
 When adding a partner or currency, add aliases in `parse.mjs` and a test with a realistic headline. Watch for collisions: "American Express" vs American Airlines, "Rove" vs "Rover", "Miles & More" vs "Miles&Smiles", case-sensitive `ANA`, `BA`, `EVA`, `TAP`, `SAS`, `JAL`.

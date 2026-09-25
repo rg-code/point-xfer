@@ -109,7 +109,8 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
     }
     if (cur && cur.bonus === c.bonus) {
       if (c.end && !cur.end) { cur.end = c.end; cur.endSource = c.url; delete cur.assumedEnd; }
-      // A better-ranked source (official, then AwardWallet, then Frequent Miler) settles end-date disagreements.
+      // A better-ranked source (official, then AwardWallet, then Frequent Miler / Doctor of Credit) settles
+      // end-date disagreements. Tied sources keep the date already set, i.e. the newest post.
       else if (c.end && c.end !== cur.end && !cur.manual && sourceRank(c.url) < sourceRank(cur.endSource || cur.sources?.[0]?.url)) {
         cur.end = c.end;
         cur.endSource = c.url;

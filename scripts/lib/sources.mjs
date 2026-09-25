@@ -1,5 +1,5 @@
 // Source ranking for transfer bonuses: the issuer's or partner's own page first,
-// then AwardWallet, then Frequent Miler, then everyone else.
+// then AwardWallet, then Frequent Miler and Doctor of Credit (tied), then everyone else.
 
 // Official domains per program id. A URL counts as official when its hostname is
 // the domain or a subdomain of it.
@@ -58,7 +58,7 @@ export const OFFICIAL_DOMAINS = {
   wyndham: ['wyndhamhotels.com'],
 };
 
-const TIERS = [['awardwallet.com'], ['frequentmiler.com']];
+const TIERS = [['awardwallet.com'], ['frequentmiler.com', 'doctorofcredit.com']];
 
 function host(url) {
   try { return new URL(url).hostname.toLowerCase(); } catch { return ''; }
@@ -71,7 +71,7 @@ export function isOfficial(url, ids = Object.keys(OFFICIAL_DOMAINS)) {
   return !!h && ids.some((id) => (OFFICIAL_DOMAINS[id] || []).some((d) => onDomain(h, d)));
 }
 
-/** 0 = official, 1 = AwardWallet, 2 = Frequent Miler, 3 = anything else. */
+/** 0 = official, 1 = AwardWallet, 2 = Frequent Miler or Doctor of Credit, 3 = anything else. */
 export function sourceRank(url) {
   if (isOfficial(url)) return 0;
   const h = host(url);
