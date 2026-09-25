@@ -58,11 +58,9 @@ const when = (p, live) => {
  * bonus announced ahead of its start date.
  */
 export function slackMessage(bonuses, names, { site = 'https://milesmaximizer.com', rand = Math.random, live = false } = {}) {
-  const lines = bonuses.map((p) => {
-    const src = p.sources?.[0];
-    return `• *${esc(names[p.from] || p.from)} → ${esc(names[p.to] || p.to)}: +${p.bonus}%* ${when(p, live)}`
-      + `${src ? ` (<${src.url}|${esc(src.feed)}>)` : ''} <${site}/?partner=${p.to}|map>`;
-  });
+  // The only link is to the bonus on the map; blog sources stay on the site and in the GitHub issue.
+  const lines = bonuses.map((p) =>
+    `• *${esc(names[p.from] || p.from)} → ${esc(names[p.to] || p.to)}: +${p.bonus}%* ${when(p, live)} <${site}/?partner=${p.to}|map>`);
   const first = live ? opener(rand, LIVE_LINES, {}) : opener(rand);
   return { text: `${first}\n${lines.join('\n')}`, unfurl_links: false, unfurl_media: false };
 }

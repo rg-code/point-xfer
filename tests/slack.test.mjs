@@ -41,7 +41,7 @@ test('personal lines only go to their person', () => {
   }
 });
 
-test('message lists each bonus with dates, source and map link, escaped for Slack', () => {
+test('message lists each bonus with dates and a map link only, escaped for Slack', () => {
   const names = { chase: 'Chase Ultimate Rewards', marriott: 'Marriott Bonvoy', bilt: 'Bilt Points', hilton: 'Hilton Honors', amex: 'Amex', lufthansa: 'Miles & More' };
   const m = slackMessage([
     { from: 'chase', to: 'marriott', bonus: 70, end: '2026-10-15', sources: [{ url: 'https://frequentmiler.com/x', feed: 'Frequent Miler' }] },
@@ -50,7 +50,8 @@ test('message lists each bonus with dates, source and map link, escaped for Slac
   ], names, { rand: seq(0) });
   const [first, ...rows] = m.text.split('\n');
   assert.equal(first, LINES[0].replaceAll('{name}', PEOPLE[0]));
-  assert.equal(rows[0], '• *Chase Ultimate Rewards → Marriott Bonvoy: +70%* through Oct 15 (<https://frequentmiler.com/x|Frequent Miler>) <https://milesmaximizer.com/?partner=marriott|map>');
+  assert.equal(rows[0], '• *Chase Ultimate Rewards → Marriott Bonvoy: +70%* through Oct 15 <https://milesmaximizer.com/?partner=marriott|map>');
+  assert.ok(!m.text.includes('frequentmiler.com'), 'no blog links');
   assert.match(rows[1], /\+200%\* on Oct 1 only <https:\/\/milesmaximizer\.com\/\?partner=hilton\|map>$/);
   assert.match(rows[2], /Miles &amp; More: \+25%\* \(no end date yet\)/);
   assert.equal(m.unfurl_links, false);
