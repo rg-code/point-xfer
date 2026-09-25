@@ -3,7 +3,7 @@
 // before its start date (a Rent Day preview) gets a second post when it goes live.
 
 export const PEOPLE = ['Annie', 'Chantal', 'DanC', 'DanW', 'Dave', 'Elaine', 'Haider', 'Kevin', 'Kushal', 'Melissa',
-  'Lee', 'Michael', 'Paul', 'Rohit', 'Sandeep', 'Stu', 'PC', 'Zubin', 'Robin'];
+  'Lee', 'Michael', 'Paul', 'Sandeep', 'Stu', 'PC', 'Zubin', 'Robin'];
 
 // Openers that work for anyone; {name} is replaced.
 export const LINES = [
@@ -20,7 +20,6 @@ export const LINES = [
   'Clear your calendar, {name}. A new bonus just dropped.',
   '{name}, this one has your name on it. New transfer bonus below.',
   'Put the kettle on, {name}. There is a new bonus to look at.',
-  '{name}, your out-of-office reply is ready. Just add this bonus.',
   'Stop window shopping for flights, {name}. A new bonus is live.',
 ];
 
@@ -37,7 +36,6 @@ export const LIVE_LINES = [
   "{name}, remember that bonus? It's live now.",
   'Doors are open, {name}. This bonus is live.',
   'Wheels up, {name}. This bonus just went live.',
-  "It's go time, {name}. The bonus is on.",
 ];
 
 const pick = (list, rand) => list[Math.floor(rand() * list.length)];
