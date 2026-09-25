@@ -662,6 +662,69 @@
     systemDark.addEventListener('change', () => { if (!document.documentElement.dataset.theme) syncTheme(); });
   }
 
+  // ---------- Easter eggs ----------
+
+  // Typing one of these words anywhere outside a text field plays its egg.
+  const EGGS = { lee: () => dropImage('assets/eggs/lee.webp') };
+  let eggPlaying = false;
+
+  function setupEggs() {
+    const longest = Math.max(...Object.keys(EGGS).map((w) => w.length));
+    let typed = '';
+    document.addEventListener('keydown', (e) => {
+      if (e.key.length !== 1 || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target.closest('input, select, textarea')) return;
+      typed = (typed + e.key.toLowerCase()).slice(-longest);
+      const word = Object.keys(EGGS).find((w) => typed.endsWith(w));
+      if (word && !eggPlaying) { typed = ''; EGGS[word](); }
+    });
+  }
+
+  // Drops the image from above the viewport, bounces it on the bottom edge, then fades it out.
+  async function dropImage(src) {
+    eggPlaying = true;
+    const img = new Image();
+    img.src = src;
+    img.alt = '';
+    img.className = 'egg';
+    try {
+      await img.decode();
+      document.body.append(img);
+      if (img.showPopover) { img.popover = 'manual'; img.showPopover(); }
+      const h = img.offsetHeight;
+      const floor = window.innerHeight - h;
+      const at = (y, sx = 1, sy = 1) => `translate(-50%, ${y}px) scale(${sx}, ${sy})`;
+      let land;
+      if (reduceMotion.matches) {
+        land = img.animate({ transform: [at(floor), at(floor)], opacity: [0, 1] }, { duration: 300, fill: 'forwards' });
+      } else {
+        // Each rebound reaches a share of the drop height and, like a real bounce, lasts in
+        // proportion to its square root. Impacts squash slightly; the last 5% settles the squash.
+        const fall = 'cubic-bezier(.55, 0, 1, .45)';
+        const rise = 'cubic-bezier(0, .55, .45, 1)';
+        const hops = [0.3, 0.1, 0.03];
+        const total = (1 + hops.reduce((s, r) => s + 2 * Math.sqrt(r), 0)) / 0.95;   // in fall-times
+        const frames = [
+          { offset: 0, transform: at(-h), easing: fall },
+          { offset: 1 / total, transform: at(floor, 1.08, 0.88), easing: rise },
+        ];
+        let t = 1;
+        for (const r of hops) {
+          frames.push({ offset: (t + Math.sqrt(r)) / total, transform: at(floor - r * (floor + h)), easing: fall });
+          t += 2 * Math.sqrt(r);
+          frames.push({ offset: t / total, transform: at(floor, 1 + r / 3, 1 - r / 2.5), easing: rise });
+        }
+        frames.push({ offset: 1, transform: at(floor) });
+        const fallSeconds = Math.sqrt((2 * (floor + h)) / 4000);   // gravity of 4000 px/s²
+        land = img.animate(frames, { duration: fallSeconds * total * 1000, fill: 'forwards' });
+      }
+      await land.finished;
+      await img.animate({ opacity: [1, 0] }, { duration: 400, delay: 1200, fill: 'forwards' }).finished;
+    } catch { /* image failed to load or animation was cancelled */ }
+    img.remove();
+    eggPlaying = false;
+  }
+
   // ---------- Render ----------
 
   function render({ animate = false } = {}) {
@@ -701,6 +764,7 @@
     readURL();
     setupControls();
     setupFinder();
+    setupEggs();
     setupReportLink();
     renderStatus();
     // Wait briefly for B612 so row heights are final before the rail animates.

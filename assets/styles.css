@@ -516,6 +516,26 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 .site-foot p { max-width: 64ch; margin: 0 0 6px; }
 .site-foot a { color: inherit; }
 
+/* ---------- Easter eggs ---------- */
+
+/* Shown as a popover so it lands above an open sheet or search. Resets the popover UA styles;
+   app.js animates the transform, and until then it waits just above the viewport. */
+.egg {
+  position: fixed;
+  inset: 0 auto auto 50%;
+  width: min(45vw, 240px);
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  transform: translate(-50%, -100%);
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
 /* ---------- Larger screens ---------- */
 
 @media (min-width: 720px) {
