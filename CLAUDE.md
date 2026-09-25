@@ -33,7 +33,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 - `scripts/track-promos.mjs` tracker entry point and `merge()` logic (exported for tests).
 - `scripts/build-preview.mjs` builds the single-file preview.
 - `tests/tracker.test.mjs` parser, merge and dataset tests. `tests/insights.test.mjs` source ranking, archive merge, advice engine, time/minimum and archive data checks.
-- `.github/workflows/track-promos.yml` cron every 6 hours: test, track, commit if changed, open an issue for new bonuses.
+- `.github/workflows/track-promos.yml` cron every 2 hours: test, track, commit if changed, open an issue for new bonuses.
 - `.github/workflows/pages.yml` deploy on push and on tracker completion.
 
 ## How the tracker decides what's a bonus
@@ -41,7 +41,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 1. Headline must mention transfer/convert, contain a `NN% bonus`, and name a currency.
 2. Targets come from the part of the headline after " to " / " into " / "→".
 3. Every (currency, partner) pair must exist in `transfers.json`, otherwise it's dropped. This is the main false-positive filter, so adding a route also teaches the tracker about it.
-4. End date from "through Sept. 30", "until October 15", "ends 9/30". One-day offers ("today only", "Rent Day") end on the publish date. No date found → kept 30 days (`assumedEnd`).
+4. End date from "through Sept. 30", "until October 15", "ends 9/30". Rent Day ("Rent Day" anywhere, or a Bilt headline naming "<Month> 1") gets `start` = `end` = the nearest 1st of the month, so previews stay hidden until the day and last month's posts at the same % don't merge in; not-yet-started bonuses stay in `promotions` (browsers filter by `start`). Other one-day offers ("today only") end on the publish date. No date found → kept 30 days (`assumedEnd`).
 5. `[Expired]` headlines close out a matching bonus. Manual entries are not closed by feed results.
 6. Sources are sorted official → AwardWallet → Frequent Miler = Doctor of Credit → others. Official links found in a post body are added as sources. When sources disagree on an end date, the better-ranked one wins (`endSource`).
 7. Writes only when data changes, so the Action doesn't make noise commits.

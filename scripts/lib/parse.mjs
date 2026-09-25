@@ -172,6 +172,12 @@ export function extractEndDate(text, referenceISO) {
   return toISO(new Date(Date.UTC(year, month, day)));
 }
 
+/** The 1st of the month closest to an ISO timestamp: Sept 30 → Oct 1, Sept 5 → Sept 1 (UTC dates). */
+export function nearestFirstOfMonth(iso) {
+  const d = new Date(iso);
+  return toISO(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + (d.getUTCDate() > 15 ? 1 : 0), 1)));
+}
+
 export function isExpiredNotice(title) {
   return /\[(expired|dead)\]|\bexpired\b|\bends today\b|\blast day\b/i.test(title);
 }
@@ -200,15 +206,26 @@ export function extractPromotions(item, validPairs) {
   if (!targets.length && /avios/i.test(targetText)) targets = AVIOS_FALLBACK;
 
   let end = extractEndDate(body, item.published);
-  // Bilt Rent Day and flash offers run for a single day.
-  if (!end && item.published && /today only|one day only|for 24 hours|\brent day\b/i.test(body)) end = item.published.slice(0, 10);
+  let start = null;
+  // Bilt Rent Day is the 1st of the month. Blogs post previews days ahead and recaps after, so
+  // date it to the nearest 1st. Previews don't always say "Rent Day" ("Bilt Offers Up To 125%
+  // Amtrak Bonus October 1"), so a Bilt headline naming the 1st counts too. Other flash offers
+  // run on their publish date.
+  const rentDay = /\brent day\b/i.test(body)
+    || (sources.includes('bilt') && /\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+1(?:st)?\b/i.test(title));
+  if (item.published && rentDay) {
+    start = nearestFirstOfMonth(item.published);
+    if (!end || end < start) end = start;
+  } else if (!end && item.published && /today only|one day only|for 24 hours/i.test(body)) {
+    end = item.published.slice(0, 10);
+  }
   const expired = isExpiredNotice(title);
   const out = [];
   for (const from of sources) {
     for (const to of targets) {
       if (!validPairs.has(`${from}>${to}`)) continue;
       const official = (item.links || []).filter((u) => isOfficial(u, [from, to]));
-      out.push({ from, to, bonus, end, expired, title, url: item.link, published: item.published, official });
+      out.push({ from, to, bonus, start, end, expired, title, url: item.link, published: item.published, official });
     }
   }
   return out;

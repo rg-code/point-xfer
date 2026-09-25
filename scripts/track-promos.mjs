@@ -107,8 +107,11 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
       if (cur && cur.bonus === c.bonus && !cur.manual) cur.end = cur.end && cur.end < seen ? cur.end : seen;
       continue;
     }
-    if (cur && cur.bonus === c.bonus) {
-      if (c.end && !cur.end) { cur.end = c.end; cur.endSource = c.url; delete cur.assumedEnd; }
+    // Same bonus, unless both have start dates that differ (last month's Rent Day at the same %).
+    if (cur && cur.bonus === c.bonus && (!c.start || !cur.start || c.start === cur.start)) {
+      // A Rent Day post dates a bonus that was stored open-ended.
+      if (c.start && !cur.start && !cur.manual) { cur.start = c.start; cur.end = c.end; cur.endSource = c.url; delete cur.assumedEnd; }
+      else if (c.end && !cur.end) { cur.end = c.end; cur.endSource = c.url; delete cur.assumedEnd; }
       // A better-ranked source (official, then AwardWallet, then Frequent Miler / Doctor of Credit) settles
       // end-date disagreements. Tied sources keep the date already set, i.e. the newest post.
       else if (c.end && c.end !== cur.end && !cur.manual && sourceRank(c.url) < sourceRank(cur.endSource || cur.sources?.[0]?.url)) {
@@ -126,7 +129,7 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
       from: c.from,
       to: c.to,
       bonus: c.bonus,
-      start: null,
+      start: c.start || null,
       end: c.end,
       ...(c.end ? {} : { assumedEnd: addDays(seen, UNKNOWN_END_DAYS) }),
       firstSeen: seen,
@@ -137,9 +140,13 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
     newlyFound.push(promo);
   }
 
+  // Not started yet (a Rent Day preview, say): stays in the live list, which browsers filter by
+  // start date, so it isn't filed as a past bonus or reported as new again on every run.
+  const current = (p) => isActive(p, day) || (p.start && p.start > day);
+
   // Manual entries always win; suppressions remove false positives.
   for (const m of manual.add || []) {
-    if (!isActive(m, day)) { history.push({ id: m.id || promoId(m), ...m, manual: true }); continue; }
+    if (!current(m)) { history.push({ id: m.id || promoId(m), ...m, manual: true }); continue; }
     const key = `${m.from}>${m.to}`;
     const cur = byPair.get(key);
     byPair.set(key, {
@@ -161,7 +168,7 @@ export function merge({ existing, candidates, manual, archive = {}, day = today(
   const promotions = [];
   for (const p of byPair.values()) {
     if (suppressed.has(p.id)) continue;
-    if (isActive(p, day)) promotions.push(p);
+    if (current(p)) promotions.push(p);
     else history.push(p);
   }
 

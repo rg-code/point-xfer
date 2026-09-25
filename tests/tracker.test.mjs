@@ -43,8 +43,45 @@ test('American Express is not mistaken for American Airlines', () => {
 });
 
 test('one-day offers end on their publish date', () => {
-  const [p] = extractPromotions(item('Bilt Rent Day: up to 100% transfer bonus to World of Hyatt', 'Today only.', '2026-09-01T12:00:00Z'), valid);
-  assert.equal(p.end, '2026-09-01');
+  const [p] = extractPromotions(item('Flash sale: 50% transfer bonus from Chase to World of Hyatt', 'Today only.', '2026-09-12T15:00:00Z'), valid);
+  assert.deepEqual([p.start, p.end], [null, '2026-09-12']);
+});
+
+test('Rent Day is dated to the nearest 1st, including previews posted the evening before', () => {
+  const rentDay = (published) => extractPromotions(item('Bilt Rent Day: up to 100% transfer bonus to World of Hyatt', 'Today only.', published), valid)[0];
+  const on = (p) => [p.start, p.end];
+  assert.deepEqual(on(rentDay('2026-09-01T12:00:00Z')), ['2026-09-01', '2026-09-01'], 'morning of');
+  assert.deepEqual(on(rentDay('2026-09-30T22:00:00Z')), ['2026-10-01', '2026-10-01'], 'preview, 6pm ET the day before');
+  assert.deepEqual(on(rentDay('2026-09-05T15:00:00Z')), ['2026-09-01', '2026-09-01'], 'recap a few days later');
+  assert.deepEqual(on(rentDay('2026-12-31T20:00:00Z')), ['2027-01-01', '2027-01-01'], 'year rollover');
+});
+
+test('a Bilt preview naming the 1st counts as Rent Day without saying so', () => {
+  const [p] = extractPromotions(item('Bilt Offers Up To 125% Amtrak Bonus October 1—Plus Instant Hilton Diamond For Platinum Members',
+    "Platinum members can turn Bilt points into Amtrak points at 1:1, or make a small Hilton transfer for instant Diamond status. Hilton's bigger 200% transfer bonus still doesn't make its points a good speculative transfer.",
+    '2026-09-25T13:33:17Z'), valid);
+  assert.deepEqual([p.from, p.to, p.bonus, p.start, p.end], ['bilt', 'hilton', 200, '2026-10-01', '2026-10-01']);
+  const [q] = extractPromotions(item('Chase 30% transfer bonus to Hyatt through October 1'), valid);
+  assert.equal(q.start, null, 'only Bilt headlines get the Rent Day treatment');
+});
+
+test('a Rent Day post dates a bonus already stored as open-ended', () => {
+  const stored = { id: 'bilt-hilton-200', from: 'bilt', to: 'hilton', bonus: 200, start: null, end: null, assumedEnd: '2026-10-25', firstSeen: '2026-09-25', sources: [] };
+  const c = { from: 'bilt', to: 'hilton', bonus: 200, start: '2026-10-01', end: '2026-10-01', published: '2026-09-25T13:33:17Z', title: 't', url: 'https://viewfromthewing.com/x', source: 'View from the Wing' };
+  const [p] = merge({ existing: { promotions: [stored] }, candidates: [c], manual: {}, day: '2026-09-26' }).promotions;
+  assert.deepEqual([p.start, p.end, p.assumedEnd], ['2026-10-01', '2026-10-01', undefined]);
+  assert.ok(!isActive(p, '2026-09-26'), 'hidden until Rent Day');
+});
+
+test('an upcoming Rent Day stays live-listed, is reported once, and ignores last month at the same %', () => {
+  const preview = { from: 'bilt', to: 'hyatt', bonus: 100, start: '2026-10-01', end: '2026-10-01', published: '2026-09-30T22:00:00Z', title: 'preview', url: 'https://frequentmiler.com/oct', source: 'Frequent Miler' };
+  const lastMonth = { ...preview, start: '2026-09-01', end: '2026-09-01', published: '2026-09-01T12:00:00Z', title: 'sep', url: 'https://awardwallet.com/blog/sep', source: 'AwardWallet' };
+  const r1 = merge({ existing: {}, candidates: [preview, lastMonth], manual: {}, day: '2026-09-30' });
+  assert.deepEqual(r1.promotions.map((p) => [p.start, p.end]), [['2026-10-01', '2026-10-01']], 'not filed as history, end not overwritten by September');
+  assert.equal(r1.newlyFound.length, 1);
+  assert.ok(!isActive(r1.promotions[0], '2026-09-30') && isActive(r1.promotions[0], '2026-10-01'));
+  const r2 = merge({ existing: { promotions: r1.promotions, history: r1.history }, candidates: [preview, lastMonth], manual: {}, day: '2026-09-30' });
+  assert.equal(r2.newlyFound.length, 0, 'not reported again on the next run');
 });
 
 test('Rove headlines and Rove-only partners are recognized', () => {
