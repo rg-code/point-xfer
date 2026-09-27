@@ -749,10 +749,11 @@
   }
 
   function renderStatus() {
+    // updatedAt only moves when the list changes, not on every tracker run, so say "changed".
     const up = D.promotions.updatedAt;
     $('#status').textContent = up
-      ? `Bonus list updated ${shortDate.format(new Date(up))}`
-      : 'Bonus list not yet updated';
+      ? `Bonus list last changed ${shortDate.format(new Date(up))}`
+      : 'Bonus list not yet built';
     $('#verified').textContent = `Transfer ratios last verified ${longDate.format(new Date(`${D.transfers.verifiedOn}T00:00:00Z`))}.`;
     document.querySelectorAll('.site-foot .year').forEach((y) => { y.textContent = new Date().getFullYear(); });
   }
