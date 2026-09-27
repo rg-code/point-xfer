@@ -35,7 +35,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 - `scripts/build-preview.mjs` builds the single-file preview.
 - `tests/tracker.test.mjs` parser, merge and dataset tests. `tests/insights.test.mjs` source ranking, archive merge, advice engine, time/minimum and archive data checks.
 - `.github/workflows/track-promos.yml` cron every 2 hours: test, track, commit if changed, post new bonuses to Slack (skipped if not configured, never fails the run), open an issue for new bonuses.
-- `.github/workflows/pages.yml` deploy on push and on tracker completion. It also clones the public `rg-code/museum-reciprocal-finder` repo and publishes that app (its `index.html`, `manifest.webmanifest`, `sw.js`, `data/`) at `/museum_problem/`, so the museum finder refreshes on every deploy here. Its service worker is scoped to `/museum_problem/` only. Don't add a root-scoped service worker to this site, or it would intercept that path.
+- `.github/workflows/pages.yml` deploy on push and on tracker completion. It also clones the public `rg-code/museum-reciprocal-finder` repo and publishes that app (its `index.html`, `manifest.webmanifest`, `sw.js`, `data/`, `icons/`) at `/museum_problem/`, so the museum finder refreshes on every deploy here. Its service worker is scoped to `/museum_problem/` only. Don't add a root-scoped service worker to this site, or it would intercept that path.
 - `.github/workflows/slack-check.yml` manual: checks `SLACK_USER_TOKEN` with `auth.test` and posts a test message to your own DM (or the channel). Run it after replacing the token.
 
 ## How the tracker decides what's a bonus
