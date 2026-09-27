@@ -754,6 +754,7 @@
       ? `Bonus list updated ${shortDate.format(new Date(up))}`
       : 'Bonus list not yet updated';
     $('#verified').textContent = `Transfer ratios last verified ${longDate.format(new Date(`${D.transfers.verifiedOn}T00:00:00Z`))}.`;
+    document.querySelectorAll('.site-foot .year').forEach((y) => { y.textContent = new Date().getFullYear(); });
   }
 
   async function start() {

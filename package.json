@@ -2,6 +2,7 @@
   "name": "point-xfer",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Mobile-first map of credit card point transfer partners with automatically tracked transfer bonuses.",
   "engines": { "node": ">=20" },
