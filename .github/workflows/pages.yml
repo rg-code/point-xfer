@@ -60,8 +60,10 @@ jobs:
           cp "$RUNNER_TEMP"/museum/{index.html,manifest.webmanifest,sw.js} _site/museum_problem/
           cp -r "$RUNNER_TEMP/museum/data" _site/museum_problem/data
           cp -r "$RUNNER_TEMP/museum/icons" _site/museum_problem/icons
+          cp -r "$RUNNER_TEMP/museum/fonts" _site/museum_problem/fonts
           test -s _site/museum_problem/data/museums.json
           test -s _site/museum_problem/icons/icon-512.png   # the install prompt needs 192/512 icons
+          test -s _site/museum_problem/fonts/fraunces-600.woff2
 
       - uses: actions/configure-pages@v5
 
