@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-01T06:06:51.269Z",
+  "updatedAt": "2026-10-01T13:29:07.924Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -135,6 +135,165 @@
         }
       ],
       "manual": true
+    },
+    {
+      "id": "amex-flyingblue-25",
+      "from": "amex",
+      "to": "flyingblue",
+      "bonus": 25,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://upgradedpoints.com/news/amex-flying-blue-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Amex Launches 25% Transfer Bonus to Air France-KLM Flying Blue — Book Biz Class to Europe From 36k Amex Points",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/flying-blue-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "New 25% Transfer Bonus From Amex to Air France-KLM Flying Blue [Ends October 31]",
+          "url": "https://upgradedpoints.com/news/amex-flying-blue-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Air France-KLM Flying Blue With 25% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-flying-blue-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
+    },
+    {
+      "id": "rove-jal-50",
+      "from": "rove",
+      "to": "jal",
+      "bonus": 50,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://rove.com/r/bk?utm_campaign=the-points-guy&utm_content=404874&utm_medium=syndication&utm_source=The+Points+Guy",
+          "feed": "rove.com"
+        },
+        {
+          "title": "Rove transfer bonus bonanza: 50% to Japan Airlines, 40% to Flying Blue, & up to 35% to Qatar Airways",
+          "url": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Rove launches 3 huge October transfer bonuses, including a 50% bonus to Japan Airlines",
+          "url": "https://thepointsguy.com/news/rove-transfer-bonuses-jal-flying-blue-qatar/",
+          "feed": "The Points Guy"
+        }
+      ]
+    },
+    {
+      "id": "rove-flyingblue-50",
+      "from": "rove",
+      "to": "flyingblue",
+      "bonus": 50,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+      "sources": [
+        {
+          "title": "Rove transfer bonus bonanza: 50% to Japan Airlines, 40% to Flying Blue, & up to 35% to Qatar Airways",
+          "url": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+          "feed": "Frequent Miler"
+        }
+      ]
+    },
+    {
+      "id": "rove-qatar-50",
+      "from": "rove",
+      "to": "qatar",
+      "bonus": 50,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+      "sources": [
+        {
+          "title": "Rove Transfer Bonuses: Get 50% More JAL Miles, 40% More Flying Blue Miles, and up to 35% More Qatar Avios",
+          "url": "https://awardwallet.com/news/rove-miles/rove-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Rove transfer bonus bonanza: 50% to Japan Airlines, 40% to Flying Blue, & up to 35% to Qatar Airways",
+          "url": "https://frequentmiler.com/rove-transfer-bonus-bonanza-50-to-japan-airlines-40-to-flying-blue-up-to-35-to-qatar-airways/",
+          "feed": "Frequent Miler"
+        }
+      ]
+    },
+    {
+      "id": "c1-ba-20",
+      "from": "c1",
+      "to": "ba",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://upgradedpoints.com/news/capital-one-british-airways-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Transfer Capital One Miles to British Airways Club With a 20% Transfer Bonus",
+          "url": "https://awardwallet.com/news/capital-one-rewards/avios-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "New 20% Transfer Bonus From Capital One to British Airways [Through October 31]",
+          "url": "https://upgradedpoints.com/news/capital-one-british-airways-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Capital One Miles To British Airways Club Avios With 20% Bonus",
+          "url": "https://onemileatatime.com/deals/capital-one-british-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
+    },
+    {
+      "id": "amex-aeromexico-20",
+      "from": "amex",
+      "to": "aeromexico",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://upgradedpoints.com/news/amex-transfer-bonus-aeromexico/",
+      "sources": [
+        {
+          "title": "Get a 20% Bonus When You Transfer Amex Points to Aeromexico Rewards [Ends October 31]",
+          "url": "https://upgradedpoints.com/news/amex-transfer-bonus-aeromexico/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Aeromexico Rewards With 20% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-aeromexico-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
+    },
+    {
+      "id": "c1-flyingblue-20",
+      "from": "c1",
+      "to": "flyingblue",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Capital One Launches 20% Transfer Bonus Air France/KLM Flying Blue — Use for Delta, Europe, and Tahiti Awards",
+          "url": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/",
+          "feed": "AwardWallet"
+        }
+      ]
     }
   ],
   "history": [
