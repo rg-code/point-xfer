@@ -1,90 +1,7 @@
 {
-  "updatedAt": "2026-09-28T05:33:05.618Z",
+  "updatedAt": "2026-10-01T06:06:51.269Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "chase-aeroplan-20",
-      "start": "2026-08-12",
-      "firstSeen": "2026-09-23",
-      "from": "chase",
-      "to": "aeroplan",
-      "bonus": 20,
-      "end": "2026-09-30",
-      "note": "30% if you also hold the Chase Aeroplan card.",
-      "sources": [
-        {
-          "title": "20% Transfer Bonus From Chase Ultimate Rewards to Aeroplan (Stack to Get a 30% Bonus)",
-          "url": "https://awardwallet.com/news/chase-ultimate-rewards/aeroplan-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Get 20% bonus when transferring Chase Ultimate Rewards to Air Canada Aeroplan (stack with 10% cardholder bonus)",
-          "url": "https://frequentmiler.com/get-20-bonus-when-transferring-chase-ultimate-rewards-to-air-canada-aeroplan-stack-with-10-cardholder-bonus/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "September credit card transfer bonuses",
-          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
-          "feed": "Upgraded Points"
-        }
-      ],
-      "manual": true
-    },
-    {
-      "id": "c1-jal-30",
-      "start": "2026-09-01",
-      "firstSeen": "2026-09-23",
-      "from": "c1",
-      "to": "jal",
-      "bonus": 30,
-      "end": "2026-09-30",
-      "sources": [
-        {
-          "title": "Capital One Launches a Limited-Time 30% Transfer Bonus to Japan Airlines (JAL) Mileage Bank",
-          "url": "https://awardwallet.com/news/capital-one-rewards/japan-airlines-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Get a 30% bonus when transferring Capital One miles to Japan Airlines (not quite 1:1)",
-          "url": "https://frequentmiler.com/capital-one-miles-jal-japan-airlines-30-percent-transfer-bonus/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "September credit card transfer bonuses",
-          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
-          "feed": "Upgraded Points"
-        }
-      ],
-      "manual": true
-    },
-    {
-      "id": "rove-copa-40",
-      "start": "2026-09-01",
-      "firstSeen": "2026-09-23",
-      "from": "rove",
-      "to": "copa",
-      "bonus": 40,
-      "end": "2026-09-30",
-      "note": "Launch bonus for the new Copa partnership.",
-      "sources": [
-        {
-          "title": "Rove Miles Now Transfer to Copa Airlines ConnectMiles with a 40% Launch Bonus",
-          "url": "https://www.rove.com/blog/rove-miles-now-transfer-to-copa-airlines-connectmiles-with-a-40-launch-bonus",
-          "feed": "Rove"
-        },
-        {
-          "title": "Rove Transfer Bonuses: Get 40% More Copa ConnectMiles",
-          "url": "https://awardwallet.com/news/rove-miles/rove-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Rove has added Copa Airlines as transfer partner, launching with 40% transfer bonus",
-          "url": "https://frequentmiler.com/rove-copa-airlines-transfer-partner-bonus/",
-          "feed": "Frequent Miler"
-        }
-      ],
-      "manual": true
-    },
     {
       "id": "bilt-hilton-200",
       "from": "bilt",
@@ -100,7 +17,8 @@
           "feed": "View from the Wing"
         }
       ],
-      "endSource": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/"
+      "endSource": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/",
+      "livePosted": true
     },
     {
       "id": "amex-hilton-30",
@@ -220,6 +138,86 @@
     }
   ],
   "history": [
+    {
+      "id": "chase-aeroplan-20",
+      "from": "chase",
+      "to": "aeroplan",
+      "bonus": 20,
+      "end": "2026-09-30",
+      "note": "30% if you also hold the Chase Aeroplan card.",
+      "sources": [
+        {
+          "title": "20% Transfer Bonus From Chase Ultimate Rewards to Aeroplan (Stack to Get a 30% Bonus)",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/aeroplan-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get 20% bonus when transferring Chase Ultimate Rewards to Air Canada Aeroplan (stack with 10% cardholder bonus)",
+          "url": "https://frequentmiler.com/get-20-bonus-when-transferring-chase-ultimate-rewards-to-air-canada-aeroplan-stack-with-10-cardholder-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "September credit card transfer bonuses",
+          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
+          "feed": "Upgraded Points"
+        }
+      ],
+      "start": "2026-08-12",
+      "manual": true
+    },
+    {
+      "id": "c1-jal-30",
+      "from": "c1",
+      "to": "jal",
+      "bonus": 30,
+      "end": "2026-09-30",
+      "sources": [
+        {
+          "title": "Capital One Launches a Limited-Time 30% Transfer Bonus to Japan Airlines (JAL) Mileage Bank",
+          "url": "https://awardwallet.com/news/capital-one-rewards/japan-airlines-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% bonus when transferring Capital One miles to Japan Airlines (not quite 1:1)",
+          "url": "https://frequentmiler.com/capital-one-miles-jal-japan-airlines-30-percent-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "September credit card transfer bonuses",
+          "url": "https://upgradedpoints.com/news/current-credit-card-transfer-bonuses/",
+          "feed": "Upgraded Points"
+        }
+      ],
+      "start": "2026-09-01",
+      "manual": true
+    },
+    {
+      "id": "rove-copa-40",
+      "from": "rove",
+      "to": "copa",
+      "bonus": 40,
+      "end": "2026-09-30",
+      "note": "Launch bonus for the new Copa partnership.",
+      "sources": [
+        {
+          "title": "Rove Miles Now Transfer to Copa Airlines ConnectMiles with a 40% Launch Bonus",
+          "url": "https://www.rove.com/blog/rove-miles-now-transfer-to-copa-airlines-connectmiles-with-a-40-launch-bonus",
+          "feed": "Rove"
+        },
+        {
+          "title": "Rove Transfer Bonuses: Get 40% More Copa ConnectMiles",
+          "url": "https://awardwallet.com/news/rove-miles/rove-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Rove has added Copa Airlines as transfer partner, launching with 40% transfer bonus",
+          "url": "https://frequentmiler.com/rove-copa-airlines-transfer-partner-bonus/",
+          "feed": "Frequent Miler"
+        }
+      ],
+      "start": "2026-09-01",
+      "manual": true
+    },
     {
       "id": "amex-ba-30",
       "from": "amex",
