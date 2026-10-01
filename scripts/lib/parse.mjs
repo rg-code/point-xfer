@@ -133,6 +133,8 @@ export function extractBonus(text) {
   const re = /(?:up to\s+)?(\d{1,3})\s?%\s*(?:transfer\s+|point\s+|points\s+)?(?:bonus|more)/gi;
   let max = null;
   for (const m of text.matchAll(re)) {
+    // "will soon need 33% more points" is a devaluation, not "get 33% more points".
+    if (/\b(?:needs?|needed|requires?|required|costs?|pays?|takes?)\b[^.]{0,20}$/i.test(text.slice(Math.max(0, m.index - 30), m.index))) continue;
     const n = Number(m[1]);
     if (n >= 5 && n <= 200) max = Math.max(max ?? 0, n);
   }
@@ -178,6 +180,20 @@ export function nearestFirstOfMonth(iso) {
   return toISO(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + (d.getUTCDate() > 15 ? 1 : 0), 1)));
 }
 
+/**
+ * Devaluations and ratio changes mention transfers, partners and percentages too ("Another Hyatt
+ * transfer change is coming — this time from Bilt": "need 33% more points"). Strong signals count
+ * in the headline or the opening of the summary; softer words only in the headline, so a real
+ * bonus post that says "no longer" further down still counts.
+ */
+export function isDevaluation(item) {
+  const title = item.title || '';
+  const lead = `${title}. ${(item.summary || '').slice(0, 300)}`;
+  return /\bdevalu/i.test(`${lead} ${item.link || ''}`)
+    || /\b(?:ratio|transfer|exchange rate) (?:change|cut)s?\b|\bfrom \d+:\d+(?:\.\d+)? to \d+:\d+/i.test(lead)
+    || /\bcuts?\b|\breduc(?:e|es|ed|ing|tion)\b|\bno longer\b|\bworse\b/i.test(title);
+}
+
 export function isExpiredNotice(title) {
   return /\[(expired|dead)\]|\bexpired\b|\bends today\b|\blast day\b/i.test(title);
 }
@@ -190,6 +206,7 @@ export function extractPromotions(item, validPairs) {
   const title = item.title || '';
   const body = `${title}. ${item.summary || ''}`;
   if (!/transfer|convert/i.test(body)) return [];
+  if (isDevaluation(item)) return [];
 
   const bonus = extractBonus(title) ?? extractBonus((item.summary || '').slice(0, 300));
   if (!bonus) return [];

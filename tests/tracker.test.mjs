@@ -118,6 +118,28 @@ test('an upcoming Rent Day stays live-listed, is reported once, and ignores last
   assert.equal(r2.newlyFound.length, 0, 'not reported again on the next run');
 });
 
+test('devaluations and ratio changes are never bonuses', () => {
+  // The real TPG post that triggered a false "+33%" alert on Oct 1, 2026.
+  const tpg = { ...item('Another Hyatt transfer change is coming — this time from Bilt',
+    "Bilt members will soon need 33% more points to get the same number of World of Hyatt points. Here's what's changing on Jan. 1.",
+    '2026-10-01T13:00:17Z'), link: 'https://thepointsguy.com/news/bilt-hyatt-transfer-devaluation/' };
+  assert.deepEqual(extractPromotions(tpg, valid), []);
+  assert.deepEqual(extractPromotions({ ...tpg, link: 'https://example.com/x', title: 'Bilt news: Hyatt transfers' }, valid), [], '"need 33% more" alone is not a bonus');
+  for (const t of ['Bilt devalues World of Hyatt transfers', 'Citi cuts Choice Privileges transfer ratio', 'Chase Hyatt transfers go from 1:1 to 4:3 for Sapphire Preferred', 'Amex Hilton transfer ratio change: worse for members']) {
+    assert.deepEqual(extractPromotions(item(t, 'Transfers now need 25% more points.'), valid), [], t);
+  }
+  assert.equal(extractBonus('You will need 33% more points'), null);
+  assert.equal(extractBonus('It now costs 25% more points'), null);
+});
+
+test('real bonus phrasing still counts next to the devaluation guard', () => {
+  assert.equal(extractBonus('Get 100% more points when you transfer'), 100);
+  const [p] = extractPromotions(item('Bilt Rent Day: Get 100% more points when you transfer to Turkish', 'No longer need to wait for a bonus: transfer today.', '2026-10-01T13:00:00Z'), valid);
+  assert.deepEqual([p.from, p.to, p.bonus], ['bilt', 'turkish', 100], '"no longer" in the summary does not block a real bonus');
+  const [q] = extractPromotions(item('Amex 30% transfer bonus to Hilton', 'This reduces the points you need for a free night.'), valid);
+  assert.equal(q.bonus, 30, '"reduces" in the summary does not block a real bonus');
+});
+
 test('Rove headlines and Rove-only partners are recognized', () => {
   const [p] = extractPromotions(item('Rove Adds Copa Airlines ConnectMiles as 1:1 Transfer Partner, Plus 40% Transfer Bonus', 'Transfers completed by September 30, 2026 get the bonus.'), valid);
   assert.deepEqual([p.from, p.to, p.bonus, p.end], ['rove', 'copa', 40, '2026-09-30']);

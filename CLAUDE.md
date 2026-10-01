@@ -40,7 +40,7 @@ Node 20+ (CI uses 22). There is no package install step; keep it that way unless
 
 ## How the tracker decides what's a bonus
 
-1. Headline must mention transfer/convert, contain a `NN% bonus`, and name a currency.
+1. Headline must mention transfer/convert, contain a `NN% bonus`, and name a currency. Devaluations are never bonuses: `isDevaluation()` drops posts saying devalue, ratio/transfer change, "from 1:1 to 4:3" (headline or summary lead) or cut/reduce/no longer/worse (headline only), and "need/require/cost NN% more" is not read as a bonus. Added after TPG's "Bilt members will soon need 33% more points" post became a false `bilt-hyatt-33` (Oct 1, 2026, now in `suppress`).
 2. Targets come from the part of the headline after " to " / " into " / "→".
 3. Every (currency, partner) pair must exist in `transfers.json`, otherwise it's dropped. This is the main false-positive filter, so adding a route also teaches the tracker about it.
 4. End date from "through Sept. 30", "until October 15", "ends 9/30". Rent Day ("Rent Day" anywhere, or a Bilt headline naming "<Month> 1") gets `start` = `end` = the nearest 1st of the month, so previews stay hidden until the day and last month's posts at the same % don't merge in; not-yet-started bonuses stay in `promotions` (browsers filter by `start`). Other one-day offers ("today only") end on the publish date. No date found → kept 30 days (`assumedEnd`).
@@ -73,7 +73,7 @@ When adding a partner or currency, add aliases in `parse.mjs` and a test with a 
 
 ## Data sources
 
-Ratios were verified on 2026-09-23 against issuer pages and recent coverage (The Points Guy, Upgraded Points, One Mile at a Time, Frequent Miler, AwardWallet, Rove's own site). Recent changes worth remembering: Citi added JAL (Sep 20, 2026) and cut I Prefer to 1:2 and Choice to 1:1.5 (Apr 19, 2026); Citi dropped Aeromexico (Jan 2026); Amex dropped Etihad (Jun 30, 2026); Chase dropped Emirates and moved Hyatt to 4:3 on Sapphire Preferred / Ink Preferred. Transfers are irreversible, so accuracy beats coverage: when unsure, leave a route out and add a `note`.
+Ratios were verified on 2026-09-23 against issuer pages and recent coverage (The Points Guy, Upgraded Points, One Mile at a Time, Frequent Miler, AwardWallet, Rove's own site). Recent changes worth remembering: Bilt → Hyatt goes from 1:1 to 4:3 on Jan 1, 2027 (on or after that date set its `ratio` to `[4, 3]` and drop the note); Citi added JAL (Sep 20, 2026) and cut I Prefer to 1:2 and Choice to 1:1.5 (Apr 19, 2026); Citi dropped Aeromexico (Jan 2026); Amex dropped Etihad (Jun 30, 2026); Chase dropped Emirates and moved Hyatt to 4:3 on Sapphire Preferred / Ink Preferred. Transfers are irreversible, so accuracy beats coverage: when unsure, leave a route out and add a `note`.
 
 ## Inspiration and license
 

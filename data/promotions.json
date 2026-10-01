@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-01T19:36:42.454Z",
+  "updatedAt": "2026-10-01T22:31:14.365Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -297,28 +297,6 @@
           "title": "Capital One Launches 20% Transfer Bonus Air France/KLM Flying Blue — Use for Delta, Europe, and Tahiti Awards",
           "url": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/",
           "feed": "AwardWallet"
-        }
-      ]
-    },
-    {
-      "id": "bilt-hyatt-33",
-      "from": "bilt",
-      "to": "hyatt",
-      "bonus": 33,
-      "start": null,
-      "end": null,
-      "assumedEnd": "2026-10-31",
-      "firstSeen": "2026-10-01",
-      "sources": [
-        {
-          "title": "Offer page",
-          "url": "https://investors.hyatt.com/news/investor-news/news-details/2025/Hyatt-and-Chase-Expand-their-Collaboration-as-World-of-Hyatt-Loyalty-Program-Continues-Industry-Leading-Growth/default.aspx?utm_campaign=the-points-guy&utm_content=404386&utm_medium=syndication&utm_source=The+Points+Guy",
-          "feed": "investors.hyatt.com"
-        },
-        {
-          "title": "Another Hyatt transfer change is coming — this time from Bilt",
-          "url": "https://thepointsguy.com/news/bilt-hyatt-transfer-devaluation/",
-          "feed": "The Points Guy"
         }
       ]
     }
