@@ -89,3 +89,6 @@ tests/*.test.mjs           node:test suites (tracker, insights)
 - Scheduled runs can start late during busy periods on GitHub's side.
 - Commits made by the Action don't trigger `push` workflows, so `pages.yml` also listens for the tracker finishing (`workflow_run`). That's what keeps the live site current.
 - Transfers are irreversible. The ratios here were verified on the date in `transfers.json`, but always confirm with the issuer before moving points.
+
+## License
+© 2026 rg-code. Licensed under [CC BY-NC-ND 4.0](LICENSE): share unmodified copies non-commercially, with credit. Versions before 2026-10-01 were MIT.
