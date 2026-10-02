@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T19:23:34.791Z",
+  "updatedAt": "2026-10-02T23:50:45.973Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -62,6 +62,38 @@
       ],
       "note": "Marriott can take up to 7 days to post the bonus points.",
       "manual": true
+    },
+    {
+      "id": "c1-ba-20",
+      "from": "c1",
+      "to": "ba",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-10-21",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://frequentmiler.com/20-transfer-bonus-from-capital-one-miles-to-british-airways-avios/",
+      "sources": [
+        {
+          "title": "Transfer Capital One Miles to British Airways Club With a 20% Transfer Bonus",
+          "url": "https://awardwallet.com/news/capital-one-rewards/avios-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "20% transfer bonus from Capital One miles to British Airways Avios",
+          "url": "https://frequentmiler.com/20-transfer-bonus-from-capital-one-miles-to-british-airways-avios/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "New 20% Transfer Bonus From Capital One to British Airways [Through October 31]",
+          "url": "https://upgradedpoints.com/news/capital-one-british-airways-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Capital One Miles To British Airways Club Avios With 20% Bonus",
+          "url": "https://onemileatatime.com/deals/capital-one-british-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
     },
     {
       "id": "citi-jal-30",
@@ -264,33 +296,6 @@
       ]
     },
     {
-      "id": "c1-ba-20",
-      "from": "c1",
-      "to": "ba",
-      "bonus": 20,
-      "start": null,
-      "end": "2026-10-31",
-      "firstSeen": "2026-10-01",
-      "endSource": "https://upgradedpoints.com/news/capital-one-british-airways-transfer-bonus/",
-      "sources": [
-        {
-          "title": "Transfer Capital One Miles to British Airways Club With a 20% Transfer Bonus",
-          "url": "https://awardwallet.com/news/capital-one-rewards/avios-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "New 20% Transfer Bonus From Capital One to British Airways [Through October 31]",
-          "url": "https://upgradedpoints.com/news/capital-one-british-airways-transfer-bonus/",
-          "feed": "Upgraded Points"
-        },
-        {
-          "title": "Transfer Capital One Miles To British Airways Club Avios With 20% Bonus",
-          "url": "https://onemileatatime.com/deals/capital-one-british-airways-transfer-bonus/",
-          "feed": "One Mile at a Time"
-        }
-      ]
-    },
-    {
       "id": "c1-flyingblue-20",
       "from": "c1",
       "to": "flyingblue",
@@ -333,6 +338,23 @@
         }
       ],
       "endSource": "https://upgradedpoints.com/news/citi-qatar-airways-transfer-bonus/"
+    },
+    {
+      "id": "citi-aerlingus-35",
+      "from": "citi",
+      "to": "aerlingus",
+      "bonus": 35,
+      "start": null,
+      "end": "2026-10-31",
+      "firstSeen": "2026-10-02",
+      "endSource": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Citi ThankYou Points to Avios Up to 35% Transfer Bonus: Book Qsuites From 52k Avios, Cheap Partner Awards, and More",
+          "url": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
+          "feed": "AwardWallet"
+        }
+      ]
     }
   ],
   "history": [
