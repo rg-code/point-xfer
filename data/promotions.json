@@ -1,25 +1,7 @@
 {
-  "updatedAt": "2026-10-01T22:31:14.365Z",
+  "updatedAt": "2026-10-02T05:49:31.751Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "bilt-hilton-200",
-      "from": "bilt",
-      "to": "hilton",
-      "bonus": 200,
-      "start": "2026-10-01",
-      "end": "2026-10-01",
-      "firstSeen": "2026-09-25",
-      "sources": [
-        {
-          "title": "Bilt Offers Up To 125% Amtrak Bonus October 1—Plus Instant Hilton Diamond For Platinum Members",
-          "url": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/",
-          "feed": "View from the Wing"
-        }
-      ],
-      "endSource": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/",
-      "livePosted": true
-    },
     {
       "id": "amex-hilton-30",
       "start": "2026-09-01",
@@ -302,6 +284,24 @@
     }
   ],
   "history": [
+    {
+      "id": "bilt-hilton-200",
+      "from": "bilt",
+      "to": "hilton",
+      "bonus": 200,
+      "start": "2026-10-01",
+      "end": "2026-10-01",
+      "firstSeen": "2026-09-25",
+      "sources": [
+        {
+          "title": "Bilt Offers Up To 125% Amtrak Bonus October 1—Plus Instant Hilton Diamond For Platinum Members",
+          "url": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/",
+          "feed": "View from the Wing"
+        }
+      ],
+      "endSource": "https://viewfromthewing.com/bilt-offers-up-to-125-amtrak-bonus-october-1-plus-instant-hilton-diamond-for-platinum-members/",
+      "livePosted": true
+    },
     {
       "id": "chase-aeroplan-20",
       "from": "chase",
