@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T05:49:31.751Z",
+  "updatedAt": "2026-10-02T12:47:48.061Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -129,9 +129,19 @@
       "endSource": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
       "sources": [
         {
+          "title": "Offer page",
+          "url": "https://rewards.americanexpress.com/myca/loyalty/us/catalog/view/ptlanding/detail/5629f185e4b0b3d3bd79cc49?tier=MR",
+          "feed": "rewards.americanexpress.com"
+        },
+        {
           "title": "Amex 20% Transfer Bonus to Aeromexico: Fly Biz to Mexico City, Madrid, or Tokyo for Less",
           "url": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
           "feed": "AwardWallet"
+        },
+        {
+          "title": "American Express Transfer Bonus: 20% To AeroMexico",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-20-to-aeromexico-3/",
+          "feed": "Doctor of Credit"
         },
         {
           "title": "Get a 20% Bonus When You Transfer Amex Points to Aeromexico Rewards [Ends October 31]",
@@ -159,6 +169,11 @@
           "title": "Amex Launches 25% Transfer Bonus to Air France-KLM Flying Blue — Book Biz Class to Europe From 36k Amex Points",
           "url": "https://awardwallet.com/news/amex-membership-rewards/flying-blue-transfer-bonus/",
           "feed": "AwardWallet"
+        },
+        {
+          "title": "American Express Transfer Bonus: 25% To AirFrance/KLM FlyingBlue (1:1.25)",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-25-to-airfrance-klm-flyingblue-11-25-4/",
+          "feed": "Doctor of Credit"
         },
         {
           "title": "New 25% Transfer Bonus From Amex to Air France-KLM Flying Blue [Ends October 31]",
@@ -279,6 +294,28 @@
           "title": "Capital One Launches 20% Transfer Bonus Air France/KLM Flying Blue — Use for Delta, Europe, and Tahiti Awards",
           "url": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/",
           "feed": "AwardWallet"
+        }
+      ]
+    },
+    {
+      "id": "citi-qatar-35",
+      "from": "citi",
+      "to": "qatar",
+      "bonus": 35,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-11-01",
+      "firstSeen": "2026-10-02",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://www.qatarairways.com/en/Privilege-Club/offers/global-points-exchange-october-2026.html",
+          "feed": "qatarairways.com"
+        },
+        {
+          "title": "Qatar Airways Privilege Club 35% Bonus On Citi ThankYou Points Transfers",
+          "url": "https://onemileatatime.com/deals/qatar-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     }
