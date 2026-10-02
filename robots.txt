@@ -1,0 +1,5 @@
+# milesmaximizer.com (and /museum_problem/): personal tools, not for crawling or indexing.
+# This asks every crawler, search engines and AI crawlers alike, to stay out of the whole
+# site. Well-behaved crawlers follow it; it can't stop ones that ignore robots.txt.
+User-agent: *
+Disallow: /
