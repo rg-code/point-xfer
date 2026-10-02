@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T12:47:48.061Z",
+  "updatedAt": "2026-10-02T19:23:34.791Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -144,6 +144,11 @@
           "feed": "Doctor of Credit"
         },
         {
+          "title": "American Express Membership Rewards offering 20% transfer bonus to AeroMexico",
+          "url": "https://frequentmiler.com/american-express-membership-rewards-offering-20-transfer-bonus-to-aeromexico/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Get a 20% Bonus When You Transfer Amex Points to Aeromexico Rewards [Ends October 31]",
           "url": "https://upgradedpoints.com/news/amex-transfer-bonus-aeromexico/",
           "feed": "Upgraded Points"
@@ -174,6 +179,11 @@
           "title": "American Express Transfer Bonus: 25% To AirFrance/KLM FlyingBlue (1:1.25)",
           "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-25-to-airfrance-klm-flyingblue-11-25-4/",
           "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Get a 25% bonus when transferring Amex Membership Rewards to Air France/KLM Flying Blue",
+          "url": "https://frequentmiler.com/get-a-25-bonus-when-transferring-amex-membership-rewards-to-air-france-klm-flying-blue/",
+          "feed": "Frequent Miler"
         },
         {
           "title": "New 25% Transfer Bonus From Amex to Air France-KLM Flying Blue [Ends October 31]",
@@ -303,8 +313,7 @@
       "to": "qatar",
       "bonus": 35,
       "start": null,
-      "end": null,
-      "assumedEnd": "2026-11-01",
+      "end": "2026-10-31",
       "firstSeen": "2026-10-02",
       "sources": [
         {
@@ -316,8 +325,14 @@
           "title": "Qatar Airways Privilege Club 35% Bonus On Citi ThankYou Points Transfers",
           "url": "https://onemileatatime.com/deals/qatar-airways-transfer-bonus/",
           "feed": "One Mile at a Time"
+        },
+        {
+          "title": "Transfer Citi ThankYou Points to Qatar Airways With up to a 35% Bonus [Ends October 31]",
+          "url": "https://upgradedpoints.com/news/citi-qatar-airways-transfer-bonus/",
+          "feed": "Upgraded Points"
         }
-      ]
+      ],
+      "endSource": "https://upgradedpoints.com/news/citi-qatar-airways-transfer-bonus/"
     }
   ],
   "history": [
