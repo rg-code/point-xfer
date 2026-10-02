@@ -37,9 +37,21 @@ User-agent: serpstatbot
 User-agent: Barkrowler
 Disallow: /
 
-# Everyone else, including Googlebot, Bingbot, DuckDuckBot and Applebot (search), and AI
-# assistants fetching a page because a person asked them to (ChatGPT-User, Claude-User,
-# Perplexity-User, OAI-SearchBot). Add them to a group above to block them too.
+# AI assistants and AI search indexers may read the pages but not the museum finder's raw data
+# files (the museum list, memberships and network details). Search engines keep full access:
+# Google runs the page's JavaScript and needs those files to see the page's real content.
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: Perplexity-User
+User-agent: PerplexityBot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+Disallow: /museum_problem/data/
+
+# Everyone else, including Googlebot, Bingbot, DuckDuckBot and Applebot (search).
+# Add a crawler to a group above to block it.
 User-agent: *
 Disallow:
 
