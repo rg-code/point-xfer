@@ -51,20 +51,31 @@ jobs:
           sed -i -E "s#\"(assets/(app|advice)\.js|assets/styles\.css)\"#\"\1?v=${GITHUB_SHA::7}\"#g" _site/index.html
           grep -q "app.js?v=" _site/index.html
 
-      # Museum Reciprocal Finder lives in its own public repo and is published here
-      # at /museum_problem/. It's fetched fresh on every deploy (this workflow runs
-      # after each tracker run), so its monthly data refreshes show up within hours.
+      # Museum Reciprocal Finder lives in its own repo (private once MUSEUM_DEPLOY_KEY,
+      # a read-only deploy key on that repo, is set here) and is published at
+      # /museum_problem/. It's fetched fresh on every deploy (this workflow runs after
+      # each tracker run), so its monthly data refreshes show up within hours.
+      - uses: actions/checkout@v5
+        with:
+          repository: rg-code/museum-reciprocal-finder
+          path: _museum
+          ssh-key: ${{ secrets.MUSEUM_DEPLOY_KEY }}   # empty while the repo is public: falls back to github.token
+          persist-credentials: false
+
+      # Museums, networks and membership prices ship packed (gzip + AES-GCM, key in
+      # the page) so scrapers don't get plain JSON; the app unpacks them in the browser.
       - name: Add museum finder at /museum_problem/
         run: |
-          git clone --depth 1 https://github.com/rg-code/museum-reciprocal-finder.git "$RUNNER_TEMP/museum"
-          mkdir -p _site/museum_problem
-          cp "$RUNNER_TEMP"/museum/{index.html,manifest.webmanifest,sw.js} _site/museum_problem/
-          cp -r "$RUNNER_TEMP/museum/data" _site/museum_problem/data
-          cp -r "$RUNNER_TEMP/museum/icons" _site/museum_problem/icons
-          cp -r "$RUNNER_TEMP/museum/fonts" _site/museum_problem/fonts
-          test -s _site/museum_problem/data/museums.json
-          test -s _site/museum_problem/icons/icon-512.png   # the install prompt needs 192/512 icons
-          test -s _site/museum_problem/fonts/fraunces-600.woff2
+          M=_museum S=_site/museum_problem
+          mkdir -p $S/data
+          cp $M/{index.html,manifest.webmanifest,sw.js} $S/
+          cp -r $M/icons $M/fonts $S/
+          cp $M/data/{zip_centroids,places}.json $S/data/   # Census geography, public anyway
+          node $M/tools/pack-data.mjs $S/data
+          for f in museums programs memberships; do test -s $S/data/$f.bin; done
+          test ! -e $S/data/museums.json && test ! -e $S/data/memberships.seed.json
+          test -s $S/icons/icon-512.png   # the install prompt needs 192/512 icons
+          test -s $S/fonts/fraunces-600.woff2
 
       - uses: actions/configure-pages@v5
 
