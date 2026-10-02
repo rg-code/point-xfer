@@ -1,5 +1,46 @@
-# milesmaximizer.com (and /museum_problem/): personal tools, not for crawling or indexing.
-# This asks every crawler, search engines and AI crawlers alike, to stay out of the whole
-# site. Well-behaved crawlers follow it; it can't stop ones that ignore robots.txt.
-User-agent: *
+# milesmaximizer.com (and /museum_problem/)
+# Search engines are welcome. AI training crawlers and SEO-tool crawlers are asked to stay out.
+# Well-behaved crawlers follow this file; it can't stop ones that ignore it.
+
+# AI model training and dataset crawlers. Blocking these doesn't affect Google or Bing search:
+# Google-Extended and Applebot-Extended only control AI training, not search listings.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: FacebookBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: Omgilibot
+User-agent: Timpibot
+User-agent: ImagesiftBot
+User-agent: PanguBot
+User-agent: Kangaroo Bot
 Disallow: /
+
+# SEO-tool crawlers: they collect link data for paid SEO products and don't help search listings.
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+User-agent: DataForSeoBot
+User-agent: serpstatbot
+User-agent: Barkrowler
+Disallow: /
+
+# Everyone else, including Googlebot, Bingbot, DuckDuckBot and Applebot (search), and AI
+# assistants fetching a page because a person asked them to (ChatGPT-User, Claude-User,
+# Perplexity-User, OAI-SearchBot). Add them to a group above to block them too.
+User-agent: *
+Disallow:
+
+Sitemap: https://milesmaximizer.com/sitemap.xml
