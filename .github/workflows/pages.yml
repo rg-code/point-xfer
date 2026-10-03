@@ -46,6 +46,10 @@ jobs:
           mkdir -p _site
           cp -r index.html 404.html manifest.webmanifest robots.txt sitemap.xml assets data _site/
           test -s _site/robots.txt && test -s _site/sitemap.xml && test -s _site/404.html   # 404.html also covers /museum_problem/
+          # The art gallery problem, the reason the museum finder is "museum_problem".
+          mkdir -p _site/Art_gallery_problem
+          cp -r art-gallery-problem _site/
+          cp art-gallery-problem/index.html _site/Art_gallery_problem/
           # Pages serves everything with max-age=600. Versioned URLs make each deploy's
           # HTML fetch matching JS/CSS instead of a cached copy from the previous deploy.
           sed -i -E "s#\"(assets/(app|advice)\.js|assets/styles\.css)\"#\"\1?v=${GITHUB_SHA::7}\"#g" _site/index.html
