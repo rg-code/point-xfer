@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Page not found</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#eef2f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1a28" media="(prefers-color-scheme: dark)">
+  <script>
+    // Same saved theme as the transfer map.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <!-- GitHub Pages serves this for any missing path, including under /museum_problem/,
+       so every URL here is absolute. Same page as rohitkgupta.com's 404. -->
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <style>
+    .not-found { max-width: 640px; margin: 0 auto; padding: max(40px, env(safe-area-inset-top)) var(--gutter-r) 40px var(--gutter); text-align: center; }
+    .not-found img { display: block; width: 100%; max-width: 480px; height: auto; margin: 0 auto 28px; border-radius: 16px; }
+    .not-found h1 { margin: 0 0 12px; font-size: var(--step-2); line-height: 1.15; }
+    .not-found p { margin: 0 auto; max-width: 52ch; color: var(--muted); }
+    .not-found a { color: var(--ink); white-space: nowrap; }
+    .site-foot { text-align: center; }
+    .site-foot p { margin-inline: auto; }
+  </style>
+</head>
+<body>
+  <main class="not-found">
+    <img src="/assets/404.gif" width="480" height="373" alt="Error 404 — Empire keeps striking, we ran out of pages">
+    <h1>Sorry! That page doesn't exist.</h1>
+    <p>Maybe a typo in the address, or a page that has moved. Try the <a href="/">transfer map</a> or the <a href="/museum_problem/">museum finder</a>.</p>
+  </main>
+  <footer class="site-foot">
+    <p class="legal">© 2026 rg-code. Some rights reserved: <a href="https://github.com/rg-code/point-xfer/blob/main/LICENSE" rel="license">CC BY-NC-ND 4.0</a>.</p>
+  </footer>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "45648a62337f464ab1cb0bb363762e8e"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- GoatCounter --><script data-goatcounter="https://rg-code.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
