@@ -71,12 +71,14 @@
 
   // ---------- State ----------
 
-  const state = { view: 'routes', from: 'chase', type: 'all', bonusOnly: false, partner: null };
+  // Opens on Compare cards (every currency). By card is `?from=<currency>`, which is also how
+  // older links (from before Compare was the default) point at it.
+  const state = { view: 'compare', from: 'chase', type: 'all', bonusOnly: false, partner: null };
 
   function readURL() {
     const q = new URLSearchParams(location.search);
-    if (q.get('view') === 'compare') state.view = 'compare';
-    if (q.get('from') && D.currencies.has(q.get('from'))) state.from = q.get('from');
+    if (q.get('from') && D.currencies.has(q.get('from'))) { state.from = q.get('from'); state.view = 'routes'; }
+    if (['routes', 'compare'].includes(q.get('view'))) state.view = q.get('view');
     if (['airline', 'hotel'].includes(q.get('type'))) state.type = q.get('type');
     state.bonusOnly = q.get('bonus') === '1';
     if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
@@ -84,7 +86,6 @@
 
   function writeURL() {
     const q = new URLSearchParams();
-    if (state.view !== 'routes') q.set('view', state.view);
     if (state.view === 'routes') q.set('from', state.from);
     if (state.type !== 'all') q.set('type', state.type);
     if (state.bonusOnly) q.set('bonus', '1');
