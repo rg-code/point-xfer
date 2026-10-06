@@ -71,13 +71,14 @@
 
   // ---------- State ----------
 
-  // Opens on Compare cards (every currency). By card is `?from=<currency>`, which is also how
-  // older links (from before Compare was the default) point at it.
-  const state = { view: 'compare', from: 'chase', type: 'all', bonusOnly: false, partner: null };
+  // Opens on By card with "All cards": every partner, each at its best route. Picking a currency
+  // is `?from=<currency>`; Compare cards is `?view=compare`.
+  const ALL = 'all';
+  const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null };
 
   function readURL() {
     const q = new URLSearchParams(location.search);
-    if (q.get('from') && D.currencies.has(q.get('from'))) { state.from = q.get('from'); state.view = 'routes'; }
+    if (q.get('from') && D.currencies.has(q.get('from'))) state.from = q.get('from');
     if (['routes', 'compare'].includes(q.get('view'))) state.view = q.get('view');
     if (['airline', 'hotel'].includes(q.get('type'))) state.type = q.get('type');
     state.bonusOnly = q.get('bonus') === '1';
@@ -91,7 +92,8 @@
 
   function writeURL() {
     const q = new URLSearchParams();
-    if (state.view === 'routes') q.set('from', state.from);
+    if (state.view === 'compare') q.set('view', 'compare');
+    else if (state.from !== ALL) q.set('from', state.from);
     if (state.type !== 'all') q.set('type', state.type);
     if (state.bonusOnly) q.set('bonus', '1');
     if (state.partner) q.set('partner', state.partner);
@@ -104,7 +106,8 @@
 
   function setupControls() {
     const select = $('#from');
-    select.innerHTML = D.programs.currencies.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    select.innerHTML = `<option value="${ALL}">All cards</option>`
+      + D.programs.currencies.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
     select.value = state.from;
     select.addEventListener('change', () => { state.from = select.value; render({ animate: true }); });
 
@@ -156,18 +159,21 @@
 
   const typeOK = (p) => state.type === 'all' || p.type === state.type;
 
+  // The one currency in view: By card with a currency picked. Null for All cards and Compare.
+  const oneCard = () => (state.view === 'routes' && state.from !== ALL ? D.currencies.get(state.from) : null);
+
   // ---------- Bonus strip ----------
 
   function renderBonuses() {
     const el = $('#bonuses');
-    const cur = D.currencies.get(state.from);
+    const cur = oneCard();
     const list = D.live
-      .filter((p) => state.view === 'compare' || p.from === state.from)
+      .filter((p) => !cur || p.from === cur.id)
       .filter((p) => typeOK(D.partners.get(p.to)))
       .sort((a, b) => (a.end || a.assumedEnd || '9').localeCompare(b.end || b.assumedEnd || '9'));
 
     if (!list.length) {
-      const scope = state.view === 'compare' ? '' : ` from ${esc(cur.name)}`;
+      const scope = cur ? ` from ${esc(cur.name)}` : '';
       el.innerHTML = `<h2>Live bonuses</h2><p class="empty">No live transfer bonuses${scope} right now. The list is checked every 6 hours.</p>`;
       return;
     }
@@ -194,21 +200,46 @@
     return t.note || partner.note || '';
   }
 
+  // Every card's route to a partner, best first (live bonus included). Just `cur` if given.
+  function routesTo(p, cur) {
+    return D.programs.currencies
+      .filter((c) => !cur || c.id === cur.id)
+      .map((c) => ({ c, t: D.routes.get(`${c.id}>${p.id}`), promo: D.promo.get(`${c.id}>${p.id}`) }))
+      .filter((o) => o.t)
+      .sort((a, b) => received(b.t, b.promo) - received(a.t, a.promo));
+  }
+
+  const listText = (xs) => (xs.length < 3 ? xs.join(' and ') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
+
+  // All cards: the cards that reach a partner (best first), or the bonus behind its best route.
+  function allSubline(opts) {
+    const [best, ...rest] = opts;
+    if (!best.promo) return `From ${listText(opts.map((o) => o.c.short))}`;
+    return `${best.c.short} bonus ${endText(best.promo)}${rest.length ? `. Also ${listText(rest.map((o) => o.c.short))}` : ''}`;
+  }
+
   function renderRoutes(animate) {
-    const cur = D.currencies.get(state.from);
-    const reachable = (p) => D.routes.has(`${cur.id}>${p.id}`);
-    const all = D.programs.partners.filter(reachable);
-    const groups = groupedPartners((p) => reachable(p) && typeOK(p) && (!state.bonusOnly || D.promo.has(`${cur.id}>${p.id}`)));
+    const cur = oneCard();   // null for All cards: every partner, at its best route
+    const title = cur ? cur.name : 'All cards';
+    const all = D.programs.partners.filter((p) => routesTo(p, cur).length);
+    const groups = groupedPartners((p) => {
+      const opts = routesTo(p, cur);
+      return opts.length && typeOK(p) && (!state.bonusOnly || opts.some((o) => o.promo));
+    });
     const shown = groups.reduce((n, g) => n + g.items.length, 0);
 
     const view = $('#view');
     const countText = shown === all.length ? `${all.length} partners` : `${shown} of ${all.length} partners`;
 
     if (!shown) {
+      const kind = state.type === 'all' ? '' : `${state.type} `;
+      const why = state.bonusOnly
+        ? `No ${kind}partners have a live bonus${cur ? ` from ${esc(cur.short)}` : ''} right now.`
+        : `${cur ? esc(cur.short) : 'No card'} has no ${state.type} partners.`;
       view.innerHTML = `
-        <div class="route-head"><h2>${esc(cur.name)}</h2><span class="count">${countText}</span></div>
+        <div class="route-head"><h2>${esc(title)}</h2><span class="count">${countText}</span></div>
         <div class="empty-state">
-          <p>${state.bonusOnly ? `No ${state.type === 'all' ? '' : `${state.type} `}partners have a live bonus from ${esc(cur.short)} right now.` : `${esc(cur.short)} has no ${state.type} partners.`}</p>
+          <p>${why}</p>
           <button class="chip" id="reset-filters">Show all partners</button>
         </div>`;
       $('#reset-filters').addEventListener('click', () => { state.type = 'all'; state.bonusOnly = false; render(); });
@@ -216,19 +247,20 @@
     }
 
     view.innerHTML = `
-      <div class="route-head"><h2>${esc(cur.name)}</h2><span class="count">${countText}</span></div>
-      ${cur.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
+      <div class="route-head"><h2>${esc(title)}</h2><span class="count">${countText}</span></div>
+      ${cur?.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
       <div class="routes">
         <svg class="rail" aria-hidden="true"></svg>
         <ol class="route-list">
           ${groups.map(({ group, items }) => `
             <li class="group-label" aria-hidden="true">${esc(group.label)}</li>
             ${items.map((p) => {
-              const t = D.routes.get(`${cur.id}>${p.id}`);
-              const promo = D.promo.get(`${cur.id}>${p.id}`);
+              const opts = routesTo(p, cur);
+              const { c, t, promo } = opts[0];
               const out = received(t, promo);
-              const sub = stopSubline(t, promo, p);
-              const label = `${p.name}, ${group.label}. 1,000 ${cur.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.`;
+              const sub = cur ? stopSubline(t, promo, p) : allSubline(opts);
+              const also = cur ? [] : opts.slice(1).map((o) => o.c.short);
+              const label = `${p.name}, ${group.label}. ${cur ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.${also.length ? ` Also from ${listText(also)}.` : ''}`;
               return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}" aria-label="${esc(label)}">
                 <span class="stop-name">${esc(p.name)}</span>
                 ${sub ? `<span class="stop-sub">${esc(sub)}</span>` : ''}
@@ -246,7 +278,7 @@
         <span><svg width="36" height="10"><line class="swatch-bonus" x1="2" y1="5" x2="34" y2="5" stroke-width="4" stroke-linecap="round"/></svg>Live bonus</span>
       </div>`;
 
-    $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur.id)));
+    $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur?.id ?? null)));
     drawRail(animate && !reduceMotion.matches);
   }
 
@@ -597,7 +629,7 @@
 
     const choose = (id) => {
       dlg.close();
-      openSheet(id, state.view === 'routes' ? state.from : null);
+      openSheet(id, oneCard()?.id ?? null);
     };
 
     const open = () => {
@@ -786,7 +818,7 @@
     const sheet = $('#sheet');
     sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
     sheet.addEventListener('close', () => { state.partner = null; writeURL(); });
-    if (state.partner) openSheet(state.partner, state.view === 'routes' ? state.from : null);
+    if (state.partner) openSheet(state.partner, oneCard()?.id ?? null);
 
     // Redraw the rail only when the width actually changes (row heights follow width).
     let raf = 0;
