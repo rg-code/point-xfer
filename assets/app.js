@@ -84,12 +84,18 @@
     if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
   }
 
+  // Source tags on the arriving link (?source=mu from the museum finder) stay in the address:
+  // GoatCounter reads it when the page finishes loading, after the first writeURL().
+  const SOURCE_TAGS = ['source', 'ref', 'src', 'utm_source', 'utm_medium', 'utm_campaign', 'campaign'];
+  const arrivedWith = new URLSearchParams(location.search);
+
   function writeURL() {
     const q = new URLSearchParams();
     if (state.view === 'routes') q.set('from', state.from);
     if (state.type !== 'all') q.set('type', state.type);
     if (state.bonusOnly) q.set('bonus', '1');
     if (state.partner) q.set('partner', state.partner);
+    for (const k of SOURCE_TAGS) if (arrivedWith.has(k)) q.set(k, arrivedWith.get(k));
     const s = q.toString();
     try { history.replaceState(null, '', s ? `?${s}` : location.pathname); } catch { /* sandboxed previews */ }
   }
