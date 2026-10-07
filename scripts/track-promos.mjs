@@ -7,7 +7,8 @@
 //
 // When run inside GitHub Actions it also writes `new_count` and `slack_count` to $GITHUB_OUTPUT,
 // a Markdown summary of newly found bonuses to $RUNNER_TEMP/new-promos.md for the issue step, and
-// the Slack posts (announcements, and announced bonuses going live) to $RUNNER_TEMP/slack-messages.json.
+// the Slack posts (announcements, and announced bonuses going live) to $RUNNER_TEMP/slack-messages.json,
+// and the same bonuses as one subscriber email to $RUNNER_TEMP/alert-email.json (alert_count).
 
 import { readFile, writeFile, appendFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,7 @@ import path from 'node:path';
 import { parseFeed, extractPromotions, promoId } from './lib/parse.mjs';
 import { rankSources, sourceRank } from './lib/sources.mjs';
 import { slackMessages } from './lib/slack.mjs';
+import { alertEmail } from './lib/email.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = (f) => path.join(ROOT, 'data', f);
@@ -242,9 +244,13 @@ async function main() {
 
   if (process.env.GITHUB_OUTPUT) {
     const slack = slackMessages({ found: newlyFound, live: goingLive }, names);
-    await appendFile(process.env.GITHUB_OUTPUT, `new_count=${newlyFound.length}\nslack_count=${slack.length}\n`);
+    const alert = alertEmail({ found: newlyFound, live: goingLive }, names);
+    await appendFile(process.env.GITHUB_OUTPUT, `new_count=${newlyFound.length}\nslack_count=${slack.length}\nalert_count=${alert ? 1 : 0}\n`);
     if (slack.length && process.env.RUNNER_TEMP) {
       await writeFile(path.join(process.env.RUNNER_TEMP, 'slack-messages.json'), JSON.stringify(slack));
+    }
+    if (alert && process.env.RUNNER_TEMP) {
+      await writeFile(path.join(process.env.RUNNER_TEMP, 'alert-email.json'), JSON.stringify(alert));
     }
     if (newlyFound.length && process.env.RUNNER_TEMP) {
       const lines = newlyFound.map((p) => {

@@ -1,0 +1,39 @@
+name: Email a map update
+
+# Manual: email every bonus-alert subscriber about a change on the transfer map (a new partner, a
+# ratio change). Dry run is on by default and only prints the email in the log; untick it to send.
+on:
+  workflow_dispatch:
+    inputs:
+      subject:
+        description: Subject line
+        required: true
+      message:
+        description: Message (blank line between paragraphs)
+        required: true
+      dry_run:
+        description: Only print the email, don't send it
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Send (or print) the update
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_SEGMENT_ID: ${{ vars.RESEND_SEGMENT_ID }}
+          MAIL_FROM: ${{ vars.MAIL_FROM }}
+          MAIL_POSTAL_ADDRESS: ${{ vars.MAIL_POSTAL_ADDRESS }}
+          SUBJECT: ${{ inputs.subject }}
+          MESSAGE: ${{ inputs.message }}
+        run: node scripts/send-alert.mjs --subject "$SUBJECT" --message "$MESSAGE" ${{ inputs.dry_run && '--dry-run' || '' }}

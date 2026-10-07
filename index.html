@@ -69,12 +69,29 @@
 
   <footer class="site-foot">
     <p><span id="verified"></span> <a href="#" id="report-link" hidden>Report a mistake</a></p>
+    <p id="alerts-foot" hidden>Want new bonuses by email? <button type="button" class="link-button" id="alerts-open">Get bonus alerts</button>.</p>
     <p>Ad&amp;tracking-free on purpose. If this tool helped, you can support it via <a href="https://paypal.me/soulrg" target="_blank" rel="noopener" data-goatcounter-click="paypal-footer">PayPal</a>.</p>
     <p>Have a museum membership? Find where it gets you in free at <a href="https://milesmaximizer.com/museum_problem/?utm_source=home">milesmaximizer.com/museum_problem</a>.</p>
     <p class="legal">© <span class="year">2026</span> rg-code. Some rights reserved: <a href="https://github.com/rg-code/point-xfer/blob/main/LICENSE" rel="license">CC BY-NC-ND 4.0</a>.</p>
   </footer>
 
   <dialog class="sheet" id="sheet" aria-labelledby="sheet-title"></dialog>
+
+  <dialog class="alerts" id="alerts" aria-labelledby="alerts-title">
+    <form class="alerts-form" id="alerts-form" novalidate>
+      <button type="button" class="alerts-close" id="alerts-close" aria-label="Close">×</button>
+      <h2 id="alerts-title">Get bonus alerts</h2>
+      <p class="alerts-lead">One short email when a new transfer bonus or a partner change shows up. Unsubscribe anytime.</p>
+      <div class="alerts-row">
+        <label for="alerts-email" class="visually-hidden">Email address</label>
+        <input id="alerts-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+        <button type="submit" class="alerts-submit">Notify me</button>
+      </div>
+      <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="alerts-fine">We'll email you a link to confirm. Your address is only used for these alerts.</p>
+      <p class="alerts-status" id="alerts-status" role="status"></p>
+    </form>
+  </dialog>
 
   <dialog class="finder" id="finder" aria-label="Find a partner">
     <div class="finder-field">

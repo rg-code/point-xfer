@@ -647,6 +647,43 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 .site-foot p { max-width: 64ch; margin: 0 0 6px; }
 .site-foot a { color: inherit; }
 .site-foot .legal { font-size: var(--step--2); }
+.link-button { border: 0; background: none; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* Bonus alerts signup (see setupAlerts in app.js and worker/). */
+dialog.alerts {
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  width: min(440px, calc(100vw - 32px));
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+}
+dialog.alerts::backdrop { background: rgb(15 26 40 / 0.45); }
+.alerts-form { position: relative; padding: 22px 22px 16px; }
+.alerts-form h2 { margin: 0 44px 6px 0; font-size: var(--step-1); }
+.alerts-lead { margin: 0 0 14px; }
+.alerts-row { display: flex; gap: 8px; }
+.alerts-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--haze);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;   /* iOS doesn't zoom on focus at 16px+ */
+}
+.alerts-submit { min-height: 44px; padding: 0 16px; border: 0; border-radius: 10px; background: var(--ink); color: var(--haze); font-weight: 700; }
+.alerts-submit:disabled { opacity: 0.6; }
+.alerts-close { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; border: 0; background: none; color: var(--muted); font-size: 24px; line-height: 1; }
+.alerts-fine { margin: 10px 0 0; color: var(--muted); font-size: var(--step--1); }
+.alerts-status { margin: 10px 0 0; font-weight: 700; }
+.alerts-status:empty { display: none; }
+.alerts-form[data-state="done"] .alerts-row, .alerts-form[data-state="done"] .alerts-fine { display: none; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
 /* ---------- Easter eggs ---------- */
 
