@@ -300,16 +300,62 @@ button { touch-action: manipulation; cursor: pointer; }
 
 .route-list { list-style: none; margin: 0; padding: 0 0 0 var(--rail); }
 
-/* All cards: one colored line per currency, side by side like a subway strip map. A station
-   ring sits on every line that serves the partner; lines without one run past. */
-.routes.is-all { --rail: 80px; }
-.rail .line { fill: none; stroke-width: 2.5; stroke-linecap: round; }
-.rail .hairline { fill: none; stroke: var(--route); stroke-width: 1.25; }
-.rail .station { fill: var(--haze); stroke-width: 1.8; }
-.rail .station.is-bonus { fill: var(--bonus); stroke: var(--ink); }
-.rail .platform { fill: none; stroke: var(--route); stroke-linecap: round; }
-.rail .platform.is-bonus { stroke: var(--bonus); }
-.legend .line-key { display: inline-flex; align-items: center; color: var(--ink); }
+/* All cards: a transit map after fan-made ones. Bold lines with gaps, one per card, each from its
+   first to its last station; white stations with a dark ring; faint row guides; sticky chips that
+   light one line. On phones the rate moves under the name to give the lines room. */
+.routes.is-all { --rail: 92px; }
+.rail .line { fill: none; stroke-linecap: round; transition: opacity 0.15s; }
+.rail .station { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; transition: opacity 0.15s; }
+.rail .station.is-bonus { fill: var(--bonus); }
+.rail .is-off { opacity: 0.14; }
+.rail .row-guide { stroke: var(--rule); stroke-width: 1; }
+
+.line-chips {
+  position: sticky;
+  top: var(--controls-h, 0px);
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 4px calc(-1 * var(--gutter-r)) 6px 0;
+  padding: 8px var(--gutter-r) 8px 0;
+  background: var(--haze);
+}
+.line-chips::-webkit-scrollbar { display: none; }
+.line-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--step--1);
+}
+.line-chip::before, .line-tag::before {
+  content: "";
+  width: 14px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--c);
+}
+.line-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--haze); font-weight: 700; }
+
+.stop-lines { grid-column: 1; display: flex; flex-wrap: wrap; gap: 3px 10px; margin-top: 3px; font-size: var(--step--1); color: var(--muted); }
+.line-tag { display: inline-flex; align-items: center; gap: 4px; }
+.line-tag::before { width: 11px; height: 4px; }
+.line-tag.is-lit { color: var(--ink); font-weight: 700; }
+.line-tag.is-bonus { background: var(--bonus); color: var(--bonus-ink); border-radius: 4px; padding: 0 4px; }
+.stop.is-dim { opacity: 0.42; }
+.routes.is-all .stop { grid-template-columns: 1fr; }
+.routes.is-all .stop-rate { grid-row: auto; grid-column: 1; text-align: left; margin-top: 4px; }
+.routes.is-all .stop-rate .was { display: inline; margin-left: 8px; }
+.legend .station-key { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; }
+.legend .station-key.is-bonus { fill: var(--bonus); }
 .group-label {
   font-size: var(--step--1);
   font-weight: 700;
@@ -579,7 +625,10 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 
 @media (min-width: 720px) {
   :root { --rail: 88px; }
-  .routes.is-all { --rail: 104px; }
+  .routes.is-all { --rail: 132px; }
+  .routes.is-all .stop { grid-template-columns: 1fr auto; }
+  .routes.is-all .stop-rate { grid-row: 1 / span 3; grid-column: 2; text-align: right; margin-top: 0; }
+  .routes.is-all .stop-rate .was { display: block; margin-left: 0; }
   .controls-inner { grid-template-columns: 332px minmax(0, 1fr) auto; align-items: center; }
   .filters { flex-wrap: nowrap; }
   .tickets { flex-wrap: wrap; overflow: visible; }

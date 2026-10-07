@@ -74,7 +74,8 @@
   // Opens on By card with "All cards": every partner, each at its best route. Picking a currency
   // is `?from=<currency>`; Compare cards is `?view=compare`.
   const ALL = 'all';
-  const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null };
+  // `line`: the card lit on the All cards transit map (null = every line).
+  const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null };
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -83,6 +84,7 @@
     if (['airline', 'hotel'].includes(q.get('type'))) state.type = q.get('type');
     state.bonusOnly = q.get('bonus') === '1';
     if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
+    if (D.currencies.has(q.get('line'))) state.line = q.get('line');
   }
 
   // Source tags on the arriving link (?source=mu from the museum finder) stay in the address:
@@ -97,6 +99,7 @@
     if (state.type !== 'all') q.set('type', state.type);
     if (state.bonusOnly) q.set('bonus', '1');
     if (state.partner) q.set('partner', state.partner);
+    if (state.line && state.view === 'routes' && state.from === ALL) q.set('line', state.line);
     for (const k of SOURCE_TAGS) if (arrivedWith.has(k)) q.set(k, arrivedWith.get(k));
     const s = q.toString();
     try { history.replaceState(null, '', s ? `?${s}` : location.pathname); } catch { /* sandboxed previews */ }
@@ -211,13 +214,6 @@
 
   const listText = (xs) => (xs.length < 3 ? xs.join(' and ') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 
-  // All cards: the cards that reach a partner (best first), or the bonus behind its best route.
-  function allSubline(opts) {
-    const [best, ...rest] = opts;
-    if (!best.promo) return `From ${listText(opts.map((o) => o.c.short))}`;
-    return `${best.c.short} bonus ${endText(best.promo)}${rest.length ? `. Also ${listText(rest.map((o) => o.c.short))}` : ''}`;
-  }
-
   function renderRoutes(animate) {
     const cur = oneCard();   // null for All cards: every partner, at its best route
     const title = cur ? cur.name : 'All cards';
@@ -246,43 +242,68 @@
       return;
     }
 
+    // All cards is a transit map: one line per card (the cards serving what's shown, in dropdown
+    // order). `line` is the card lit from the chips; its rate shows on every row it serves.
+    const lineCards = cur ? [] : D.programs.currencies.filter((c) => groups.some(({ items }) => items.some((p) => D.routes.has(`${c.id}>${p.id}`))));
+    const line = lineCards.some((c) => c.id === state.line) ? state.line : null;
+    const lineColor = (id) => `--c: var(--line-${id}, var(--route))`;
+
     view.innerHTML = `
       <div class="route-head"><h2>${esc(title)}</h2><span class="count">${countText}</span></div>
       ${cur?.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
-      <div class="routes${cur ? '' : ' is-all'}">
+      ${cur ? '' : `<div class="line-chips" role="group" aria-label="Follow one card's line">
+        ${lineCards.map((c) => `<button class="line-chip" type="button" data-line="${c.id}" aria-pressed="${c.id === line}" style="${lineColor(c.id)}">${esc(c.short)}</button>`).join('')}
+      </div>`}
+      <div class="routes${cur ? '' : ' is-all'}${line ? ' has-line' : ''}">
         <svg class="rail" aria-hidden="true"></svg>
         <ol class="route-list">
           ${groups.map(({ group, items }) => `
             <li class="group-label" aria-hidden="true">${esc(group.label)}</li>
             ${items.map((p) => {
               const opts = routesTo(p, cur);
-              const { c, t, promo } = opts[0];
+              const lit = line ? opts.find((o) => o.c.id === line) : null;
+              const { c, t, promo } = lit || opts[0];
               const out = received(t, promo);
-              const sub = cur ? stopSubline(t, promo, p) : allSubline(opts);
-              const also = cur ? [] : opts.slice(1).map((o) => o.c.short);
-              const label = `${p.name}, ${group.label}. ${cur ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.${also.length ? ` Also from ${listText(also)}.` : ''}`;
-              const lines = cur ? '' : ` data-lines="${opts.map((o) => o.c.id).join(' ')}" data-bonus-lines="${opts.filter((o) => o.promo).map((o) => o.c.id).join(' ')}"`;
-              return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}"${lines} aria-label="${esc(label)}">
+              if (cur) {
+                const sub = stopSubline(t, promo, p);
+                const label = `${p.name}, ${group.label}. 1,000 ${c.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.`;
+                return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}" aria-label="${esc(label)}">
+                  <span class="stop-name">${esc(p.name)}</span>
+                  ${sub ? `<span class="stop-sub">${esc(sub)}</span>` : ''}
+                  <span class="stop-rate">1,000 → <strong>${num.format(out)}</strong>${promo ? `<span class="badge">+${promo.bonus}%</span><span class="was">${num.format(received(t))}</span>` : ''}</span>
+                </button></li>`;
+              }
+              const inLineOrder = lineCards.map((lc) => opts.find((o) => o.c.id === lc.id)).filter(Boolean);
+              const names = listText(inLineOrder.map((o) => o.c.short));
+              const label = `${p.name}, ${group.label}. ${lit ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}. Lines: ${names}.${line && !lit ? ` Not on the ${D.currencies.get(line).short} line.` : ''}`;
+              return `<li><button class="stop${line && !lit ? ' is-dim' : ''}" data-partner="${p.id}" data-bonus="${promo ? 1 : 0}"
+                  data-lines="${opts.map((o) => o.c.id).join(' ')}" data-bonus-lines="${opts.filter((o) => o.promo).map((o) => o.c.id).join(' ')}" aria-label="${esc(label)}">
                 <span class="stop-name">${esc(p.name)}</span>
-                ${sub ? `<span class="stop-sub">${esc(sub)}</span>` : ''}
-                <span class="stop-rate">1,000 → <strong>${num.format(out)}</strong>${promo ? `<span class="badge">+${promo.bonus}%</span><span class="was">${num.format(received(t))}</span>` : ''}</span>
+                <span class="stop-lines">${inLineOrder.map((o) => `<span class="line-tag${o.promo ? ' is-bonus' : ''}${o.c.id === line ? ' is-lit' : ''}" style="${lineColor(o.c.id)}">${esc(o.c.short)}</span>`).join('')}</span>
+                ${promo ? `<span class="stop-sub">${esc(c.short)} bonus ${endText(promo)}</span>` : ''}
+                <span class="stop-rate">${lit || opts.length === 1 ? '' : 'Best '}1,000 → <strong>${num.format(out)}</strong>${promo ? `<span class="badge">+${promo.bonus}%</span><span class="was">${num.format(received(t))}</span>` : ''}</span>
               </button></li>`;
             }).join('')}
           `).join('')}
         </ol>
       </div>
       <div class="legend" aria-hidden="true">
-        ${cur ? '' : `<span class="legend-title">Each card is a line; a ring marks a stop</span>
-        ${D.programs.currencies.filter((c) => groups.some(({ items }) => items.some((p) => D.routes.has(`${c.id}>${p.id}`)))).map((c) => `
-        <span class="line-key"><svg width="24" height="10"><line x1="2" y1="5" x2="22" y2="5" stroke="var(--line-${c.id}, var(--route))" stroke-width="2.5" stroke-linecap="round"/></svg>${esc(c.short)}</span>`).join('')}`}
-        <span class="legend-title">${cur ? 'Line weight' : 'Connector weight'} shows points received per 1,000 sent${cur ? '' : ' on the best route'}</span>
+        ${cur ? `<span class="legend-title">Line weight shows points received per 1,000 sent</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(500)}" stroke-linecap="round"/></svg>500</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(1000)}" stroke-linecap="round"/></svg>1,000</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(2000)}" stroke-linecap="round"/></svg>2,000</span>
-        <span><svg width="36" height="10"><line class="swatch-bonus" x1="2" y1="5" x2="34" y2="5" stroke-width="4" stroke-linecap="round"/></svg>Live bonus</span>
+        <span><svg width="36" height="10"><line class="swatch-bonus" x1="2" y1="5" x2="34" y2="5" stroke-width="4" stroke-linecap="round"/></svg>Live bonus</span>`
+        : `<span class="legend-title">Each card is a line, and a station means it transfers to that partner. Tap a card above to follow its line.</span>
+        <span><svg width="14" height="14"><circle class="station-key" cx="7" cy="7" r="5"/></svg>Station</span>
+        <span><svg width="14" height="14"><circle class="station-key is-bonus" cx="7" cy="7" r="5"/></svg>Live bonus from that card</span>`}
       </div>`;
 
-    $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur?.id ?? null)));
+    $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur?.id ?? line)));
+    $$('.line-chip', view).forEach((b) => b.addEventListener('click', () => {
+      state.line = state.line === b.dataset.line ? null : b.dataset.line;
+      render();
+      $(`.line-chip[data-line="${b.dataset.line}"]`)?.focus({ preventScroll: true });
+    }));
     drawRail(animate && !reduceMotion.matches);
   }
 
@@ -340,10 +361,10 @@
     dots.attr('opacity', 0).transition().delay((d) => 360 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', 1);
   }
 
-  // All cards as a subway strip map: one colored line per currency, in dropdown order, each running
-  // from the top to its last station. A ring on a line means that card transfers to the partner
-  // (yellow if that card has the live bonus); lines without one cross the row's hairline and run
-  // past. The stub from the bundle to the stop keeps the single-card encoding: weight = best route.
+  // All cards as a transit map, after fan-made maps: one bold line per card in dropdown order, each
+  // running from its first station to its last; a white station with a dark ring on a line means that
+  // card transfers to the partner on that row (yellow = that card's live bonus). Faint row guides
+  // tie stations to their row. With a card lit from the chips, the other lines and stations fade.
   function drawLines(wrap, svg, animate) {
     const box = wrap.getBoundingClientRect();
     const W = svg.node().clientWidth;
@@ -351,63 +372,56 @@
     const stops = $$('.stop', wrap).map((el) => {
       const b = el.getBoundingClientRect();
       return {
-        id: el.dataset.partner, y: b.top - box.top + b.height / 2, w: weight(+el.dataset.weight),
-        bonus: el.dataset.bonus === '1', lines: words(el.dataset.lines), bonusLines: words(el.dataset.bonusLines),
+        id: el.dataset.partner, y: b.top - box.top + b.height / 2, bottom: b.bottom - box.top,
+        lines: words(el.dataset.lines), bonusLines: words(el.dataset.bonusLines),
       };
     });
     if (!stops.length) return;
     const ids = D.programs.currencies.map((c) => c.id).filter((id) => stops.some((s) => s.lines.includes(id)));
-    const endX = W - 7;
-    const left = 7;
-    const pitch = Math.min(10, (endX - 22 - left) / Math.max(ids.length - 1, 1));
-    const r = Math.min(3.2, pitch / 2 - 0.9);
-    const x = (id) => left + ids.indexOf(id) * pitch;
-    const bundleEnd = x(ids[ids.length - 1]) + r + 4;
+    const lit = ids.includes(state.line) ? state.line : null;
+    const pad = 8;
+    const pitch = Math.min(16, (W - 2 * pad) / Math.max(ids.length - 1, 1));
+    const lineW = pitch >= 13 ? 6 : 4.5;
+    const r = Math.min(5, pitch / 2 - 1.3);
+    const x = (id) => pad + ids.indexOf(id) * pitch;
     const color = (id) => `var(--line-${id}, var(--route))`;
-    const firstLabel = $('.group-label', wrap).getBoundingClientRect();
-    const originY = firstLabel.top - box.top + firstLabel.height / 2;
+    const off = (id) => (lit && id !== lit ? ' is-off' : '');
+    const span = (id) => {
+      const ys = stops.filter((s) => s.lines.includes(id)).map((s) => s.y);
+      return [Math.min(...ys), Math.max(...ys)];
+    };
     const lastY = stops[stops.length - 1].y;
 
     svg.selectAll('*').remove();
 
-    // Hairlines under the lines join a row to its stations; a line crossing one without a ring runs past.
-    const hairlines = svg.append('g').selectAll('path').data(stops, (d) => d.id).join('path')
-      .attr('class', 'hairline')
-      .attr('d', (d) => `M${Math.min(...d.lines.map(x))},${d.y} H${bundleEnd}`);
-    const platforms = svg.append('g').selectAll('path').data([...stops].sort((a, b) => a.bonus - b.bonus), (d) => d.id).join('path')
-      .attr('class', (d) => `platform${d.bonus ? ' is-bonus' : ''}`)
-      .attr('stroke-width', (d) => (d.bonus ? Math.max(d.w, 3.5) : d.w))
-      .attr('d', (d) => `M${bundleEnd},${d.y} H${endX}`);
+    svg.append('g').selectAll('line').data(stops, (d) => d.id).join('line')
+      .attr('class', 'row-guide').attr('x1', 0).attr('x2', W)
+      .attr('y1', (d) => d.bottom - 0.5).attr('y2', (d) => d.bottom - 0.5);
 
-    const lines = svg.append('g').selectAll('path').data(ids).join('path')
-      .attr('class', 'line').style('stroke', color)
-      .attr('d', (id) => `M${x(id)},${originY} V${Math.max(...stops.filter((s) => s.lines.includes(id)).map((s) => s.y))}`);
+    // The lit line is drawn last so it sits on top of its neighbours.
+    const lines = svg.append('g').selectAll('path').data([...ids].sort((a, b) => (a === lit) - (b === lit))).join('path')
+      .attr('class', (id) => `line${off(id)}${id === lit ? ' is-lit' : ''}`)
+      .style('stroke', color)
+      .attr('stroke-width', (id) => (id === lit ? lineW + 2 : lineW))
+      .attr('d', (id) => { const [a, b] = span(id); return `M${x(id)},${a} V${b}`; });
 
     const stations = svg.append('g').selectAll('circle')
       .data(stops.flatMap((s) => s.lines.map((id) => ({ key: `${s.id}>${id}`, id, y: s.y, bonus: s.bonusLines.includes(id) }))), (d) => d.key)
       .join('circle')
-      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}`)
-      .style('stroke', (d) => (d.bonus ? null : color(d.id)))
-      .attr('cx', (d) => x(d.id)).attr('cy', (d) => d.y).attr('r', r);
-
-    const dots = svg.append('g').selectAll('circle').data(stops, (d) => d.id).join('circle')
-      .attr('class', (d) => `stop-dot${d.bonus ? ' is-bonus' : ''}`)
-      .attr('cx', endX).attr('cy', (d) => d.y).attr('r', 4.5);
+      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}${off(d.id)}`)
+      .attr('cx', (d) => x(d.id)).attr('cy', (d) => d.y)
+      .attr('r', (d) => (d.id === lit ? r + 1 : r));
 
     if (!animate) return;
 
-    // Same orchestrated moment as the single-card rail: lines draw down, stops appear in order.
+    // One orchestrated moment: each line draws down from its first station, stations appear in order.
     lines.each(function () {
       const len = this.getTotalLength();
       d3.select(this).attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
-        .transition().duration(520).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .transition().duration(560).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
         .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
-    const delay = (d) => 160 + (d.y / Math.max(lastY, 1)) * 420;
-    stations.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
-    hairlines.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
-    platforms.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
-    dots.attr('opacity', 0).transition().delay((d) => 60 + delay(d)).duration(200).attr('opacity', 1);
+    stations.attr('opacity', 0).transition().delay((d) => 160 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', null);
   }
 
   // ---------- Compare view ----------
