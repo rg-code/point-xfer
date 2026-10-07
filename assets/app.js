@@ -399,7 +399,8 @@
   // All cards as a transit map, after fan-made maps: one bold line per card in dropdown order, each
   // running from its first station to its last; a white station with a dark ring on a line means that
   // card transfers to the partner on that row (yellow = that card's live bonus). Faint row guides
-  // tie stations to their row. With a card lit from the chips, the other lines and stations fade.
+  // tie stations to their row, and rows with several stations are interchanges. With a card lit from
+  // the chips, the other lines and stations fade.
   function drawLines(wrap, svg, animate) {
     const box = wrap.getBoundingClientRect();
     const W = svg.node().clientWidth;
@@ -440,6 +441,32 @@
       .attr('stroke-width', (id) => (id === lit ? lineW + 2 : lineW))
       .attr('d', (id) => { const [a, b] = span(id); return `M${x(id)},${a} V${b}`; });
 
+    // Interchanges: a row served by several lines is one station, its stations joined by a connector.
+    // A line running through a connector without stopping bridges over it, with a gap on each side.
+    // With a card lit the connectors fade, so only the lit line keeps its bridges.
+    const barH = Math.max(5, r * 1.6);
+    const rows = stops.filter((s) => s.lines.length > 1).map((s) => {
+      const xs = s.lines.map(x);
+      const [x0, x1] = [Math.min(...xs), Math.max(...xs)];
+      const through = ids.filter((id) => (!lit || id === lit) && !s.lines.includes(id) && x(id) > x0 && x(id) < x1)
+        .filter((id) => { const [a, b] = span(id); return a < s.y && b > s.y; });
+      return { id: s.id, y: s.y, x0, x1, through };
+    });
+    const interchanges = svg.append('g').selectAll('g').data(rows, (d) => d.id).join('g');
+    interchanges.append('rect')
+      .attr('class', `connector${lit ? ' is-off' : ''}`)
+      .attr('x', (d) => d.x0).attr('y', (d) => d.y - barH / 2)
+      .attr('width', (d) => d.x1 - d.x0).attr('height', barH).attr('rx', barH / 2);
+    const bridges = interchanges.selectAll('g').data((d) => d.through.map((id) => ({ id, y: d.y, w: id === lit ? lineW + 2 : lineW }))).join('g')
+      .attr('class', 'bridge');
+    // The deck overshoots the gap so no seam shows where it meets the line.
+    for (const [cls, extra, reach] of [['bridge-gap', 3, 2.5], ['bridge-deck', 0, 4]]) {
+      bridges.append('line').attr('class', cls).style('stroke', cls === 'bridge-deck' ? (d) => color(d.id) : null)
+        .attr('stroke-width', (d) => d.w + extra)
+        .attr('x1', (d) => x(d.id)).attr('x2', (d) => x(d.id))
+        .attr('y1', (d) => d.y - barH / 2 - reach).attr('y2', (d) => d.y + barH / 2 + reach);
+    }
+
     const stations = svg.append('g').selectAll('circle')
       .data(stops.flatMap((s) => s.lines.map((id) => ({ key: `${s.id}>${id}`, id, y: s.y, bonus: s.bonusLines.includes(id) }))), (d) => d.key)
       .join('circle')
@@ -457,6 +484,7 @@
         .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
     stations.attr('opacity', 0).transition().delay((d) => 160 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', null);
+    interchanges.attr('opacity', 0).transition().delay((d) => 160 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', null);
   }
 
   // ---------- Terminal map ----------

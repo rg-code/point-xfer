@@ -309,6 +309,9 @@ button { touch-action: manipulation; cursor: pointer; }
 .rail .station.is-bonus { fill: var(--bonus); }
 .rail .is-off { opacity: 0.14; }
 .rail .row-guide { stroke: var(--rule); stroke-width: 1; }
+.rail .connector { fill: var(--surface); stroke: var(--ink); stroke-width: 1.8; transition: opacity 0.15s; }
+.rail .bridge-gap { stroke: var(--haze); }
+.rail .bridge-deck { stroke-linecap: butt; }
 
 .line-chips {
   position: sticky;
