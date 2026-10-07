@@ -685,8 +685,19 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 }
 .site-foot p { margin: 0 0 8px; }
 .site-foot a { color: inherit; white-space: nowrap; }
-/* Verified date and museum link side by side, stacking when there's no room for both. */
-.foot-row { display: flex; flex-wrap: wrap; gap: 0 40px; }
+/* Verified date and museum link side by side, stacking when there's no room for both, with a
+   plane in the gap. The row clips its overflow, so once the second item wraps to a new line its
+   plane falls outside the left edge and disappears. The padding keeps focus rings inside the clip. */
+.foot-row { display: flex; flex-wrap: wrap; gap: 0 40px; overflow: hidden; margin: -4px; padding: 4px; }
+.foot-row p + p { position: relative; }
+.foot-row p + p::before {
+  content: "\2708\FE0E";
+  content: "\2708\FE0E" / "";
+  position: absolute;
+  left: -40px;
+  width: 40px;
+  text-align: center;
+}
 .site-foot .legal {
   margin: 8px 0 0;
   padding-top: 12px;
