@@ -75,10 +75,10 @@
   // is `?from=<currency>`; Compare cards is `?view=compare`.
   const ALL = 'all';
   // `line`: the card lit on the All cards transit map (null = every line).
-  // `layout`: All cards drawn as the 'strip' or the 'circle' map; null = circle on wide screens, strip on phones.
+  // `layout`: All cards drawn as the 'strip' or the 'terminal' map; null = terminal on wide screens, strip on phones.
   const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null, layout: null };
   const wide = window.matchMedia('(min-width: 720px)');
-  const circleLayout = () => (state.layout ?? (wide.matches ? 'circle' : 'strip')) === 'circle';
+  const terminalLayout = () => (state.layout ?? (wide.matches ? 'terminal' : 'strip')) === 'terminal';
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -88,7 +88,9 @@
     state.bonusOnly = q.get('bonus') === '1';
     if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
     if (D.currencies.has(q.get('line'))) state.line = q.get('line');
-    if (['strip', 'circle'].includes(q.get('layout'))) state.layout = q.get('layout');
+    // 'circle' was the concentric-ring layout the terminal replaced; old links open the terminal.
+    const layout = q.get('layout') === 'circle' ? 'terminal' : q.get('layout');
+    if (['strip', 'terminal'].includes(layout)) state.layout = layout;
   }
 
   // Source tags on the arriving link (?source=mu from the museum finder) stay in the address:
@@ -254,15 +256,15 @@
     const lineColor = (id) => `--c: var(--line-${id}, var(--route))`;
     const head = `<div class="route-head"><h2>${esc(title)}</h2>${cur ? '' : `
       <div class="layout-switch" role="group" aria-label="Map layout">
-        <button type="button" data-layout="strip" aria-pressed="${!circleLayout()}">Strip</button>
-        <button type="button" data-layout="circle" aria-pressed="${circleLayout()}">Circle</button>
+        <button type="button" data-layout="strip" aria-pressed="${!terminalLayout()}">Strip</button>
+        <button type="button" data-layout="terminal" aria-pressed="${terminalLayout()}">Terminal</button>
       </div>`}<span class="count">${countText}</span></div>`;
     const chips = cur ? '' : `<div class="line-chips" role="group" aria-label="Follow one card's line">
         ${lineCards.map((c) => `<button class="line-chip" type="button" data-line="${c.id}" aria-pressed="${c.id === line}" style="${lineColor(c.id)}">${esc(c.short)}</button>`).join('')}
       </div>`;
 
-    if (!cur && circleLayout()) {
-      renderCircle({ view, head, chips, groups, lineCards, line, shown, animate });
+    if (!cur && terminalLayout()) {
+      renderTerminal({ view, head, chips, groups, lineCards, line, shown, animate });
       return;
     }
 
@@ -335,7 +337,7 @@
   }
 
   function drawRail(animate) {
-    if ($('.circle-map')) { drawCircle(animate); return; }
+    if ($('.terminal-map')) { drawTerminal(animate); return; }
     const wrap = $('.routes');
     if (!wrap) return;
     const svg = d3.select(wrap).select('svg.rail');
@@ -452,183 +454,212 @@
     stations.attr('opacity', 0).transition().delay((d) => 160 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', null);
   }
 
-  // ---------- Circle map ----------
+  // ---------- Terminal map ----------
 
-  // All cards as concentric rings, after Max Roberts' circle maps: each card is a ring (dropdown order,
-  // innermost first) and each partner a spoke, grouped in alliance sectors. A station sits where a
-  // card's ring crosses a partner it serves (yellow = that card's live bonus). The center is a hub
-  // showing the partner under the pointer or keyboard focus; a spoke opens the detail sheet.
-  let circleRows = [];
+  // All cards as an airport terminal map: a long terminal building with a concourse per alliance
+  // (A Star Alliance, B oneworld, C SkyTeam above it; D other airlines, E hotels below). Partners are
+  // gates along their concourse, numbered from the terminal out. Each card is a colored walkway lane
+  // down the concourses it serves, out to its last gate there, with a station at each gate it serves
+  // (yellow = that card's live bonus). The terminal is a departures board for the gate under the
+  // pointer or keyboard focus; a gate opens the detail sheet.
+  let terminalPiers = [];
+  let gateCodes = null;
   const canHover = window.matchMedia('(hover: hover)');
 
-  function renderCircle({ view, head, chips, groups, lineCards, line, shown, animate }) {
-    circleRows = groups.map(({ group, items }) => ({
+  // Stable gate codes: concourse letter by alliance group, number by name among every partner in it,
+  // so filters never renumber a gate.
+  function gateCode(id) {
+    if (!gateCodes) {
+      gateCodes = new Map();
+      D.groups.forEach((g, i) => {
+        D.programs.partners.filter((p) => p.group === g.id).sort((a, b) => a.name.localeCompare(b.name))
+          .forEach((p, j) => gateCodes.set(p.id, `${String.fromCharCode(65 + i)}${j + 1}`));
+      });
+    }
+    return gateCodes.get(id);
+  }
+
+  function renderTerminal({ view, head, chips, groups, line, shown, animate }) {
+    terminalPiers = groups.map(({ group, items }) => ({
       group,
-      items: items.map((p) => {
+      letter: String.fromCharCode(65 + D.groups.indexOf(group)),
+      gates: items.map((p) => {
         const opts = routesTo(p, null);
         const lit = line ? opts.find((o) => o.c.id === line) : null;
-        return { p, group, opts, lit, best: lit || opts[0] };
+        return { p, group, code: gateCode(p.id), opts, lit, best: lit || opts[0] };
       }),
     }));
     view.innerHTML = `
       ${head}
       ${chips}
-      <div class="circle-map">
-        <svg class="circle" role="group" aria-label="${shown} transfer partners on a circle map. Each ring is a card. Tab through the partners and press Enter to open one."></svg>
-        <div class="circle-hub" aria-live="polite"></div>
+      <div class="terminal-map">
+        <svg class="terminal" role="group" aria-label="${shown} transfer partners as gates on an airport terminal map. Tab through the gates and press Enter to open one."></svg>
+        <div class="terminal-board" aria-live="polite"></div>
       </div>
       <div class="legend" aria-hidden="true">
-        <span class="legend-title">Each ring is a card, ${esc(lineCards[0].short)} inside to ${esc(lineCards.at(-1).short)} outside, and a station means it transfers to that partner. ${canHover.matches ? 'Hover' : 'Tap'} a partner to open it; tap a card above to follow its ring.</span>
+        <span class="legend-title">Each concourse is an alliance and each gate a partner. Colored lanes are the cards, and a station means that card transfers to the gate's partner. ${canHover.matches ? 'Hover a gate for details and click to open it' : 'Tap a gate to open it'}; tap a card above to follow its lanes.</span>
         <span><svg width="14" height="14"><circle class="station-key" cx="7" cy="7" r="5"/></svg>Station</span>
         <span><svg width="14" height="14"><circle class="station-key is-bonus" cx="7" cy="7" r="5"/></svg>Live bonus from that card</span>
       </div>`;
     bindMapControls(view);
-    drawCircle(animate && !reduceMotion.matches, true);
+    drawTerminal(animate && !reduceMotion.matches, true);
   }
 
-  // What the hub in the middle shows: the partner in focus, or a summary.
-  function hubHTML(row) {
-    const rows = circleRows.flatMap((g) => g.items);
+  // The departures board in the terminal: the gate in focus, or a summary.
+  function boardHTML(gate) {
+    const gates = terminalPiers.flatMap((pr) => pr.gates);
     const lit = D.currencies.get(state.line);
-    if (!row) {
-      if (lit && rows.some((r) => r.lit)) return `<strong>${esc(lit.name)}</strong><span>${rows.filter((r) => r.lit).length} of ${rows.length} partners</span>`;
-      return `<strong>All cards</strong><span>${rows.length} partners</span><span class="hub-hint">${canHover.matches ? 'Hover a partner to see it here' : 'Tap a partner for details'}</span>`;
+    if (!gate) {
+      if (lit && gates.some((g) => g.lit)) return `<strong>${esc(lit.name)}</strong><span>${gates.filter((g) => g.lit).length} of ${gates.length} gates</span>`;
+      return `<strong>All cards terminal</strong><span>${gates.length} gate${gates.length === 1 ? '' : 's'} in ${terminalPiers.length} concourse${terminalPiers.length === 1 ? '' : 's'}</span><span class="hub-hint">${canHover.matches ? 'Hover a gate to see it here' : 'Tap a gate for details'}</span>`;
     }
-    const { p, opts, best } = row;
+    const { p, opts, best } = gate;
     const { c, t, promo } = best;
-    return `<strong>${esc(p.name)}</strong>
-      <span>${row.lit || opts.length === 1 ? esc(c.short) : 'Best'} 1,000 → <b>${num.format(received(t, promo))}</b></span>
-      ${promo ? `<span><span class="badge">+${promo.bonus}%</span> ${esc(c.short)} ${endText(promo)}</span>` : ''}
-      ${lit && !row.lit ? `<span class="hub-hint">Not on the ${esc(lit.short)} line</span>` : ''}`;
+    return `<span class="board-gate">Gate ${gate.code}</span><strong>${esc(p.name)}</strong>
+      <span>${gate.lit || opts.length === 1 ? esc(c.short) : 'Best'} 1,000 → <b>${num.format(received(t, promo))}</b>${promo ? ` <span class="badge">+${promo.bonus}%</span> ${esc(c.short)} ${endText(promo)}` : ''}</span>
+      <span class="hub-hint">${lit && !gate.lit ? `Not on the ${esc(lit.short)} line` : `Cards: ${esc(listText(opts.map((o) => o.c.short)))}`}</span>`;
   }
 
-  function drawCircle(animate, fresh = false) {
-    const wrap = $('.circle-map');
+  function drawTerminal(animate, fresh = false) {
+    const wrap = $('.terminal-map');
     if (!wrap) return;
-    const svg = d3.select(wrap).select('svg.circle');
-    const hub = $('.circle-hub', wrap);
-    const rows = circleRows.flatMap((g) => g.items);
-    if (!rows.length) return;
-    const ids = D.programs.currencies.map((c) => c.id).filter((id) => rows.some((r) => r.opts.some((o) => o.c.id === id)));
-    const lit = ids.includes(state.line) ? state.line : null;
+    const svg = d3.select(wrap).select('svg.terminal');
+    const board = $('.terminal-board', wrap);
+    const piers = terminalPiers.filter((pr) => pr.gates.length);
+    if (!piers.length) return;
+    const all = piers.flatMap((pr) => pr.gates);
+    const lit = all.some((g) => g.opts.some((o) => o.c.id === state.line)) ? state.line : null;
 
-    // As wide as the column, but never so small that names can't be read: phones scroll sideways.
-    const S = Math.max(760, Math.min(wrap.clientWidth, 860));
-    const A = S / 2;
-    svg.attr('width', S).attr('height', S).attr('viewBox', `${-A} ${-A} ${S} ${S}`);
+    // Airline alliances above the terminal, the rest below; three columns wide either way.
+    const W = Math.max(760, wrap.clientWidth);
+    const nTop = Math.ceil((piers.length * 3) / 5);
+    const top = piers.slice(0, nTop);
+    const bottom = piers.slice(nTop);
+    const cols = Math.max(top.length, bottom.length, 3);
+    const colW = W / cols;
+    const PITCH = 7;
+    const LANE = 4;
+    const PAD = 7;
+    const GAP = 34;
+    const TIP = 54;          // room past the last gate for the concourse badge
+    const TERM_H = 104;
+    const pierLen = (pr) => pr.gates.length * GAP + 12;
+    const topH = top.length ? d3.max(top, pierLen) + TIP : 0;
+    const botH = bottom.length ? d3.max(bottom, pierLen) + TIP : 0;
+    const termY = topH + 6;
+    const H = termY + TERM_H + botH + 6;
+    svg.attr('width', W).attr('height', H).attr('viewBox', `0 0 ${W} ${H}`);
     svg.selectAll('*').remove();
 
-    const probe = svg.append('text').attr('class', 'p-label');
-    for (const r of rows) { probe.text(r.p.name); r.labelW = probe.node().getComputedTextLength(); }
-    probe.remove();
-    const labelW = d3.max(rows, (r) => r.labelW);
-    const rOut = A - labelW - 18;
-    const pitch = Math.min(14, (rOut * 0.5) / Math.max(ids.length - 1, 1));
-    const rIn = rOut - pitch * (ids.length - 1);
-    const ringR = (id) => rIn + ids.indexOf(id) * pitch;
-    const lineW = Math.max(3.5, Math.min(6, pitch - 6));
-
-    // One slot per partner and a slot and a half between sectors, clockwise from the top.
-    const GAP = 1.5;
-    const step = 360 / (rows.length + GAP * circleRows.length);
-    let pos = GAP / 2;
-    const sectors = circleRows.map(({ group, items }) => {
-      const a0 = pos * step;
-      for (const it of items) { it.angle = (pos + 0.5) * step; pos += 1; }
-      const a1 = pos * step;
-      pos += GAP;
-      return { group, a0, a1 };
-    });
-    const pt = (a, r) => [r * Math.sin((a * Math.PI) / 180), -r * Math.cos((a * Math.PI) / 180)];
-    const stR = (r) => Math.min(5, (r * step * Math.PI) / 180 / 2 - 1.2, pitch / 2 - 0.8);
+    // Lay out each concourse: column, lanes (only the cards that board there), gate positions.
+    const layoutRow = (row, up) => {
+      const start = (W - row.length * colW) / 2;
+      row.forEach((pr, i) => {
+        pr.up = up;
+        pr.ids = D.programs.currencies.map((c) => c.id).filter((id) => pr.gates.some((g) => g.opts.some((o) => o.c.id === id)));
+        pr.x0 = start + i * colW + 12;
+        pr.w = PAD * 2 + (pr.ids.length - 1) * PITCH + LANE;
+        pr.edge = up ? termY : termY + TERM_H;                          // where the concourse meets the terminal
+        pr.sign = up ? -1 : 1;
+        pr.tip = pr.edge + pr.sign * pierLen(pr);
+        pr.labelX = pr.x0 + pr.w + 12;
+        pr.labelW = colW - pr.w - 12 - 46 - 14;                          // room for a name after the gate code
+        pr.gates.forEach((g, j) => { g.pier = pr; g.y = pr.edge + pr.sign * (14 + (j + 0.5) * GAP); });
+      });
+    };
+    layoutRow(top, true);
+    layoutRow(bottom, false);
+    const laneX = (pr, id) => pr.x0 + PAD + LANE / 2 + pr.ids.indexOf(id) * PITCH;
     const color = (id) => `var(--line-${id}, var(--route))`;
-    const dim = (r) => (lit && !r.lit ? ' is-dim' : '');
+    const dim = (g) => (lit && !g.lit ? ' is-dim' : '');
 
-    // Sector names on arcs just inside the innermost ring, flipped on the bottom half to stay upright.
-    const defs = svg.append('defs');
-    sectors.forEach((s, i) => {
-      const bottom = (s.a0 + s.a1) / 2 > 90 && (s.a0 + s.a1) / 2 < 270;
-      const r = bottom ? rIn - 9 : rIn - 18;
-      const [x0, y0] = pt(bottom ? s.a1 : s.a0, r);
-      const [x1, y1] = pt(bottom ? s.a0 : s.a1, r);
-      defs.append('path').attr('id', `sector-${i}`).attr('d', `M${x0},${y0} A${r},${r} 0 ${s.a1 - s.a0 > 180 ? 1 : 0} ${bottom ? 0 : 1} ${x1},${y1}`);
+    // Buildings: concourses first so the terminal overlaps their roots.
+    svg.append('g').selectAll('rect').data(piers).join('rect').attr('class', 'pier')
+      .attr('x', (pr) => pr.x0).attr('width', (pr) => pr.w)
+      .attr('y', (pr) => Math.min(pr.edge, pr.tip) - (pr.up ? 0 : 8)).attr('height', (pr) => Math.abs(pr.tip - pr.edge) + 8)
+      .attr('rx', (pr) => pr.w / 2);
+    svg.append('rect').attr('class', 'term').attr('x', 4).attr('y', termY).attr('width', W - 8).attr('height', TERM_H).attr('rx', TERM_H / 2);
+
+    // Concourse badges at the tips.
+    const badge = svg.append('g').selectAll('g').data(piers).join('g').attr('class', 'concourse')
+      .attr('transform', (pr) => `translate(${pr.x0 + pr.w / 2},${pr.tip + pr.sign * 22})`);
+    badge.append('circle').attr('r', 15);
+    badge.append('text').attr('class', 'concourse-letter').attr('dy', '0.35em').attr('text-anchor', 'middle').text((pr) => pr.letter);
+    badge.append('text').attr('class', 'concourse-name').attr('x', 22).attr('dy', '0.35em').text((pr) => pr.group.label);
+
+    // Walkway lanes: from the terminal out to the card's last gate on that concourse.
+    const lanes = piers.flatMap((pr) => pr.ids.map((id) => {
+      const far = pr.gates.filter((g) => g.opts.some((o) => o.c.id === id)).at(-1);
+      return { key: `${pr.letter}>${id}`, pr, id, y1: far.y };
+    }));
+    const laneSel = svg.append('g').selectAll('path').data([...lanes].sort((a, b) => (a.id === lit) - (b.id === lit)), (d) => d.key).join('path')
+      .attr('class', (d) => `lane${lit && d.id !== lit ? ' is-off' : ''}`)
+      .style('stroke', (d) => color(d.id)).attr('stroke-width', (d) => (d.id === lit ? LANE + 1.5 : LANE))
+      .attr('d', (d) => `M${laneX(d.pr, d.id)},${d.pr.edge} V${d.y1}`);
+
+    // Gates: stub, gate code, name (wrapped to two lines when long), stations on serving lanes.
+    const gateSel = svg.append('g').selectAll('g').data(all, (g) => g.p.id).join('g')
+      .attr('class', (g) => `gate${dim(g)}`).attr('data-p', (g) => g.p.id)
+      .attr('transform', (g) => `translate(0,${g.y})`);
+    gateSel.append('line').attr('class', 'jetway').attr('x1', (g) => g.pier.x0 + g.pier.w).attr('x2', (g) => g.pier.labelX);
+    gateSel.append('rect').attr('class', (g) => `gate-code${g.opts.some((o) => o.promo) ? ' is-bonus' : ''}`)
+      .attr('x', (g) => g.pier.labelX).attr('y', -9).attr('width', 38).attr('height', 18).attr('rx', 4);
+    gateSel.append('text').attr('class', (g) => `gate-code-text${g.opts.some((o) => o.promo) ? ' is-bonus' : ''}`).attr('x', (g) => g.pier.labelX + 19).attr('dy', '0.35em').attr('text-anchor', 'middle').text((g) => g.code);
+    const names = gateSel.append('text').attr('class', 'gate-name').attr('x', (g) => g.pier.labelX + 46).attr('dy', '0.35em').text((g) => g.p.name);
+    names.each(function (g) {
+      if (this.getComputedTextLength() <= g.pier.labelW) return;
+      const words = g.p.name.split(' ');
+      let cut = words.length - 1;
+      const t = d3.select(this).text(null);
+      while (cut > 1) {
+        t.text(words.slice(0, cut).join(' '));
+        if (this.getComputedTextLength() <= g.pier.labelW) break;
+        cut -= 1;
+      }
+      t.text(null);
+      t.append('tspan').attr('x', g.pier.labelX + 46).attr('dy', '-0.25em').text(words.slice(0, cut).join(' '));
+      t.append('tspan').attr('x', g.pier.labelX + 46).attr('dy', '1.15em').text(words.slice(cut).join(' '));
     });
-    const sectorText = svg.append('g').selectAll('text').data(sectors).join('text').attr('class', 'sector')
-      .append('textPath').attr('href', (d, i) => `#sector-${i}`).attr('startOffset', '50%').attr('text-anchor', 'middle')
-      .text((d) => d.group.label);
-    // A name longer than its arc ("Other airlines" over a few spokes) falls back to its first word.
-    sectorText.each(function (d) {
-      const arc = ((rIn - 14) * (d.a1 - d.a0) * Math.PI) / 180;
-      if (this.getComputedTextLength() > arc - 4) d3.select(this).text(d.group.label.split(' ')[0]);
-    });
-
-    svg.append('g').selectAll('line').data(rows, (d) => d.p.id).join('line')
-      .attr('class', (d) => `guide${dim(d)}`).attr('data-p', (d) => d.p.id)
-      .attr('x1', (d) => pt(d.angle, rIn - 5)[0]).attr('y1', (d) => pt(d.angle, rIn - 5)[1])
-      .attr('x2', (d) => pt(d.angle, rOut + 6)[0]).attr('y2', (d) => pt(d.angle, rOut + 6)[1]);
-
-    const rings = svg.append('g').selectAll('circle').data([...ids].sort((a, b) => (a === lit) - (b === lit))).join('circle')
-      .attr('class', (id) => `ring${lit && id !== lit ? ' is-off' : ''}`)
-      .style('stroke', color).attr('stroke-width', (id) => (id === lit ? lineW + 2 : lineW))
-      .attr('r', ringR);
-
     const stations = svg.append('g').selectAll('circle')
-      .data(rows.flatMap((r) => r.opts.map((o) => ({ key: `${r.p.id}>${o.c.id}`, pid: r.p.id, id: o.c.id, angle: r.angle, bonus: !!o.promo }))), (d) => d.key)
+      .data(all.flatMap((g) => g.opts.map((o) => ({ key: `${g.p.id}>${o.c.id}`, g, id: o.c.id, bonus: !!o.promo }))), (d) => d.key)
       .join('circle')
-      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}${lit && d.id !== lit ? ' is-off' : ''}`).attr('data-p', (d) => d.pid)
-      .attr('cx', (d) => pt(d.angle, ringR(d.id))[0]).attr('cy', (d) => pt(d.angle, ringR(d.id))[1])
-      .attr('r', (d) => stR(ringR(d.id)) + (d.id === lit ? 1 : 0));
+      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}${lit && d.id !== lit ? ' is-off' : ''}`).attr('data-p', (d) => d.g.p.id)
+      .attr('cx', (d) => laneX(d.g.pier, d.id)).attr('cy', (d) => d.g.y).attr('r', (d) => (d.id === lit ? 4.4 : 3.6));
 
-    svg.append('g').selectAll('text').data(rows, (d) => d.p.id).join('text')
-      .attr('class', (d) => `p-label${dim(d)}`).attr('data-p', (d) => d.p.id)
-      .attr('dy', '0.35em').attr('text-anchor', (d) => (d.angle > 180 ? 'end' : 'start'))
-      .attr('transform', (d) => `rotate(${d.angle - 90}) translate(${rOut + 12},0)${d.angle > 180 ? ' rotate(180)' : ''}`)
-      .text((d) => d.p.name);
-
-    // Hit areas: a wedge per partner from the hub to the edge, focusable like a button.
-    const showHub = (d) => {
+    // Hit areas: the whole gate row, focusable like a button.
+    const showBoard = (g) => {
       svg.selectAll('.is-hover').classed('is-hover', false);
-      if (d) svg.selectAll(`[data-p="${d.p.id}"]`).classed('is-hover', true);
-      hub.innerHTML = hubHTML(d);
+      if (g) svg.selectAll(`[data-p="${g.p.id}"]`).classed('is-hover', true);
+      board.innerHTML = boardHTML(g);
     };
-    const wedge = (d) => {
-      const [a, b] = [d.angle - step / 2, d.angle + step / 2];
-      const [r0, r1] = [rIn - 4, rOut + 16 + d.labelW];   // out to the end of this partner's name
-      const p = (ang, r) => pt(ang, r).join(',');
-      return `M${p(a, r0)} L${p(a, r1)} A${r1},${r1} 0 0 1 ${p(b, r1)} L${p(b, r0)} A${r0},${r0} 0 0 0 ${p(a, r0)} Z`;
-    };
-    svg.append('g').selectAll('path').data(rows, (d) => d.p.id).join('path')
-      .attr('class', 'hit').attr('d', wedge).attr('tabindex', 0).attr('role', 'button')
-      .attr('aria-label', (d) => {
-        const { c, t, promo } = d.best;
-        return `${d.p.name}, ${d.group.label}. ${d.lit ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(received(t, promo))}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}. Lines: ${listText(d.opts.map((o) => o.c.short))}.`;
+    svg.append('g').selectAll('rect').data(all, (g) => g.p.id).join('rect').attr('class', 'hit')
+      .attr('x', (g) => g.pier.x0 - 4).attr('width', (g) => g.pier.labelX + 46 + g.pier.labelW - g.pier.x0 + 8)
+      .attr('y', (g) => g.y - GAP / 2).attr('height', GAP)
+      .attr('tabindex', 0).attr('role', 'button')
+      .attr('aria-label', (g) => {
+        const { c, t, promo } = g.best;
+        return `Gate ${g.code}, ${g.p.name}, ${g.group.label}. ${g.lit ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(received(t, promo))}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}. Lines: ${listText(g.opts.map((o) => o.c.short))}.`;
       })
-      .on('pointerenter focus', (e, d) => showHub(d))
-      .on('pointerleave blur', () => showHub(null))
-      .on('click', (e, d) => openSheet(d.p.id, lit))
-      .on('keydown', (e, d) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(d.p.id, lit); } });
+      .on('pointerenter focus', (e, g) => showBoard(g))
+      .on('pointerleave blur', () => showBoard(null))
+      .on('click', (e, g) => openSheet(g.p.id, lit))
+      .on('keydown', (e, g) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(g.p.id, lit); } });
 
-    // Crop to what was drawn (labels rarely reach the square's corners), then sit the hub on the center.
-    const bb = svg.node().getBBox();
-    const PAD = 8;
-    const [vx, vy, vw, vh] = [bb.x - PAD, bb.y - PAD, bb.width + 2 * PAD, bb.height + 2 * PAD];
-    svg.attr('viewBox', `${vx} ${vy} ${vw} ${vh}`).attr('width', vw).attr('height', vh);
-    // The hub's text box is the square inscribed in the space inside the sector names.
-    const half = Math.max(44, (rIn - 26) * 0.72);
+    // The departures board sits inside the terminal building.
     const svgLeft = svg.node().getBoundingClientRect().left - wrap.getBoundingClientRect().left + wrap.scrollLeft;
-    Object.assign(hub.style, { left: `${svgLeft - vx - half}px`, top: `${-vy - half}px`, width: `${half * 2}px`, height: `${half * 2}px` });
-    hub.innerHTML = hubHTML(null);
-    if (fresh && vw > wrap.clientWidth) wrap.scrollLeft = (-vx - wrap.clientWidth / 2) + svgLeft;
+    Object.assign(board.style, { left: `${svgLeft + TERM_H / 2}px`, top: `${termY}px`, width: `${W - TERM_H}px`, height: `${TERM_H}px` });
+    board.innerHTML = boardHTML(null);
+    if (fresh && W > wrap.clientWidth) wrap.scrollLeft = (W - wrap.clientWidth) / 2;
 
     if (!animate) return;
-    // One orchestrated moment: rings draw round from the top, stations appear clockwise.
-    rings.each(function (id) {
-      const len = 2 * Math.PI * ringR(id);
-      d3.select(this).attr('transform', 'rotate(-90)').attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
-        .transition().duration(700).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
-        .on('end', function () { d3.select(this).attr('stroke-dasharray', null).attr('transform', null); });
+    // One orchestrated moment: walkways run out from the terminal, stations appear gate by gate.
+    laneSel.each(function () {
+      const len = this.getTotalLength();
+      d3.select(this).attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+        .transition().duration(520).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
-    stations.attr('opacity', 0).transition().delay((d) => 200 + (d.angle / 360) * 500).duration(200).attr('opacity', null);
+    stations.attr('opacity', 0).transition().delay((d) => 140 + Math.abs(d.g.y - d.g.pier.edge) * 0.9).duration(200).attr('opacity', null);
   }
 
   // ---------- Compare view ----------
