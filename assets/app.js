@@ -75,10 +75,11 @@
   // is `?from=<currency>`; Compare cards is `?view=compare`.
   const ALL = 'all';
   // `line`: the card lit on the All cards transit map (null = every line).
-  // `layout`: All cards drawn as the 'strip', 'terminal' or 'rings' map; null = terminal on wide screens, strip on phones.
+  // `layout`: All cards drawn as the 'strip', 'terminal' or 'rings' map. Null = rings from 720px up,
+  // strip on phones (the only one of the three that fits a narrow screen without scrolling sideways).
   const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null, layout: null };
   const wide = window.matchMedia('(min-width: 720px)');
-  const mapLayout = () => state.layout ?? (wide.matches ? 'terminal' : 'strip');
+  const mapLayout = () => state.layout ?? (wide.matches ? 'rings' : 'strip');
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -1345,7 +1346,7 @@
     sheet.addEventListener('close', () => { state.partner = null; writeURL(); });
     if (state.partner) openSheet(state.partner, oneCard()?.id ?? null);
 
-    // With no layout chosen, All cards is the circle on wide screens and the strip on phones.
+    // With no layout chosen, All cards is the rings on wide screens and the strip on phones.
     wide.addEventListener('change', () => { if (!state.layout && state.view === 'routes' && state.from === ALL) render(); });
 
     // Redraw the rail only when the width actually changes (row heights follow width).
