@@ -678,13 +678,14 @@
   let ringGroups = [];
 
   function renderRings({ view, head, chips, groups, line, shown, animate }) {
+    // Within each sector, the partners most cards reach come first (Flying Blue leads SkyTeam), then A to Z.
     ringGroups = groups.map(({ group, items }) => ({
       group,
       items: items.map((p) => {
         const opts = routesTo(p, null);
         const lit = line ? opts.find((o) => o.c.id === line) : null;
         return { p, group, opts, lit, best: lit || opts[0] };
-      }),
+      }).sort((a, b) => b.opts.length - a.opts.length || a.p.name.localeCompare(b.p.name)),
     }));
     view.innerHTML = `
       ${head}
