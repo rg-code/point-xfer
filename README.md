@@ -45,6 +45,22 @@ Each run that finds new bonuses also posts them to Slack as you. The post opens 
 
 It needs a Slack app with the **User Token Scope** `chat:write`, installed by you, with the user token stored as the repo secret `SLACK_USER_TOKEN` and the channel ID as the repo variable `SLACK_CHANNEL_ID`. Without them the step is skipped. A failed post shows as a warning in the Actions log and never blocks the deploy. To stop posting, delete the secret or revoke the token in the Slack app's **OAuth & Permissions** page. To test the stored token, run **Actions → Slack check** (posts to your own DM by default).
 
+### Email alerts
+
+Visitors can sign up for an email when a new bonus shows up, using free tiers only:
+
+- **Signup:** a popup on the site (it offers itself once, after a minute, and is always reachable from the footer) posts the address to a small Cloudflare Worker in `worker/`. The Worker emails a link to confirm (double opt-in). Confirming adds the address to a Resend segment. The Worker keeps no data of its own.
+- **Alerts:** each tracker run that finds new bonuses, or an announced bonus going live, sends one Resend broadcast to that segment with an unsubscribe link and your postal address.
+- **Map updates:** for partner changes, run **Actions → Email a map update** with a subject and message. It's a dry run by default, which only prints the email.
+
+Until it's set up, the popup and footer link stay hidden and the email step is skipped. To turn it on:
+
+1. **Resend** (free): add the domain milesmaximizer.com, create a segment for subscribers, and make two API keys (one for the Worker, one for GitHub).
+2. **NameSilo DNS:** add the records Resend shows (an MX and an SPF TXT on `send`, a DKIM TXT on `resend._domainkey`, and a DMARC TXT on `_dmarc`). They don't touch the GitHub Pages records. Wait until Resend says the domain is verified.
+3. **Worker:** from `worker/`, set `POSTAL_ADDRESS` in `wrangler.toml`, then run `npx wrangler login`, `npx wrangler deploy` and `npx wrangler secret put` for `RESEND_API_KEY`, `SIGNING_SECRET` (any long random string) and `RESEND_SEGMENT_ID`.
+4. **Site:** put the Worker's `https://….workers.dev` address in `ALERTS_ENDPOINT` in `assets/app.js`.
+5. **GitHub:** add the secret `RESEND_API_KEY` and the variables `RESEND_SEGMENT_ID`, `MAIL_FROM` (e.g. `Miles Maximizer <alerts@milesmaximizer.com>`) and `MAIL_POSTAL_ADDRESS`. US law (CAN-SPAM) requires a postal address in every email; a PO box or virtual mailbox is fine, and no email is sent without one.
+
 ### Fixing mistakes by hand
 
 `data/promotions.manual.json` has two lists:

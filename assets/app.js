@@ -1092,6 +1092,78 @@
     eggPlaying = false;
   }
 
+  // ---------- Bonus alerts ----------
+
+  // Email signups for bonus alerts go to the Cloudflare Worker in worker/, which emails a link to
+  // confirm (double opt-in) and then adds the address to Resend; the tracker emails new bonuses.
+  // Empty until the Worker is deployed. Then the footer link appears, and the popup offers itself
+  // once per visitor after a minute on the site (never where storage is blocked, as in the preview,
+  // because it couldn't remember being dismissed).
+  const ALERTS_ENDPOINT = '';
+  const ALERTS_PROMPT_AFTER = 60_000;
+  const ALERTS_KEY = 'alerts-prompt';                        // 'subscribed', or when it was last closed
+  const alertsResult = new URLSearchParams(location.search).get('alerts');   // the Worker's confirm redirect
+
+  function setupAlerts() {
+    const dlg = $('#alerts');
+    if (!ALERTS_ENDPOINT || !dlg) return;
+    const form = $('#alerts-form');
+    const input = $('#alerts-email');
+    const status = $('#alerts-status');
+    const submit = $('.alerts-submit', form);
+    const recall = () => { try { return canStore ? localStorage.getItem(ALERTS_KEY) : null; } catch { return null; } };
+    const remember = (v) => { try { if (canStore) localStorage.setItem(ALERTS_KEY, v); } catch { /* private mode */ } };
+    const open = (message = '', done = false) => {
+      if (dlg.open) return;
+      form.dataset.state = done ? 'done' : '';
+      status.textContent = message;
+      dlg.showModal();
+      if (!done) input.focus();
+    };
+
+    $('#alerts-foot').hidden = false;
+    $('#alerts-open').addEventListener('click', () => open());
+    $('#alerts-close').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => { if (recall() !== 'subscribed') remember(String(Date.now())); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!input.value.trim() || !input.checkValidity()) { status.textContent = 'Enter a valid email address.'; input.focus(); return; }
+      submit.disabled = true;
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(`${ALERTS_ENDPOINT}/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: input.value.trim(), website: form.elements.website.value }),
+        });
+        if (res.ok) {
+          form.dataset.state = 'done';
+          status.textContent = `Check ${input.value.trim()} and tap the link to confirm.`;
+        } else {
+          status.textContent = res.status === 400 ? "That email address doesn't look right." : "Couldn't sign you up right now. Please try again later.";
+        }
+      } catch {
+        status.textContent = "Couldn't reach the signup service. Please try again later.";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    // Back from the confirmation link.
+    if (alertsResult === 'subscribed') { remember('subscribed'); open("You're subscribed. The next bonus will land in your inbox.", true); return; }
+    if (alertsResult === 'expired') { open('That confirmation link has expired. Enter your email again for a new one.'); return; }
+    if (alertsResult === 'error') { open("Something went wrong confirming your email. Please try again."); return; }
+
+    // Offer itself once: not to subscribers, and not again within four months of being closed.
+    const seen = recall();
+    if (!canStore || seen === 'subscribed' || (seen && Date.now() - Number(seen) < 120 * 864e5)) return;
+    setTimeout(() => {
+      if (!document.querySelector('dialog[open]') && document.visibilityState === 'visible') open();
+    }, ALERTS_PROMPT_AFTER);
+  }
+
   // ---------- Render ----------
 
   function render({ animate = false } = {}) {
@@ -1137,6 +1209,7 @@
     setupControls();
     setupFinder();
     setupEggs();
+    setupAlerts();
     setupReportLink();
     renderStatus();
     // Wait briefly for B612 so row heights are final before the rail animates.

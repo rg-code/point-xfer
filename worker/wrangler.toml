@@ -1,0 +1,17 @@
+# Bonus alert signups (see src/index.js). Deploy from this folder:
+#   npx wrangler login
+#   npx wrangler deploy
+#   npx wrangler secret put RESEND_API_KEY      # a Resend key for this Worker only
+#   npx wrangler secret put SIGNING_SECRET      # any long random string, e.g. `openssl rand -base64 32`
+#   npx wrangler secret put RESEND_SEGMENT_ID   # the "subscribers" segment id from Resend
+# Then put the printed https://point-xfer-alerts.<account>.workers.dev address in ALERTS_ENDPOINT in assets/app.js.
+name = "point-xfer-alerts"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://milesmaximizer.com"
+SITE_URL = "https://milesmaximizer.com"
+FROM_ADDRESS = "Miles Maximizer <alerts@milesmaximizer.com>"
+POSTAL_ADDRESS = ""   # required by CAN-SPAM in every email; a PO box or virtual mailbox is fine

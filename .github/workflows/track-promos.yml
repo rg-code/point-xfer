@@ -65,6 +65,18 @@ jobs:
           done < <(jq -c '.[]' "$RUNNER_TEMP/slack-messages.json")
           exit $failed
 
+      # One Resend broadcast to the bonus-alert subscribers (signups via worker/). Skipped until the
+      # secret and variables are set; never fails the run, so the site still redeploys.
+      - name: Email new bonuses to subscribers
+        if: steps.track.outputs.alert_count == '1'
+        continue-on-error: true
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_SEGMENT_ID: ${{ vars.RESEND_SEGMENT_ID }}
+          MAIL_FROM: ${{ vars.MAIL_FROM }}
+          MAIL_POSTAL_ADDRESS: ${{ vars.MAIL_POSTAL_ADDRESS }}
+        run: node scripts/send-alert.mjs --file "$RUNNER_TEMP/alert-email.json"
+
       - name: Open an issue for new bonuses
         if: steps.track.outputs.new_count != '' && steps.track.outputs.new_count != '0'
         env:
