@@ -683,9 +683,17 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
   color: var(--muted);
   font-size: var(--step--1);
 }
-.site-foot p { max-width: 64ch; margin: 0 0 6px; }
-.site-foot a { color: inherit; }
-.site-foot .legal { font-size: var(--step--2); }
+.site-foot p { margin: 0 0 8px; }
+.site-foot a { color: inherit; white-space: nowrap; }
+/* Verified date and museum link side by side, stacking when there's no room for both. */
+.foot-row { display: flex; flex-wrap: wrap; gap: 0 40px; }
+.site-foot .legal {
+  margin: 8px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: var(--step--2);
+}
 
 /* ---------- Easter eggs ---------- */
 
