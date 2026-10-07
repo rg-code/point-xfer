@@ -75,7 +75,10 @@
   // is `?from=<currency>`; Compare cards is `?view=compare`.
   const ALL = 'all';
   // `line`: the card lit on the All cards transit map (null = every line).
-  const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null };
+  // `layout`: All cards drawn as the 'strip' or the 'circle' map; null = circle on wide screens, strip on phones.
+  const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null, layout: null };
+  const wide = window.matchMedia('(min-width: 720px)');
+  const circleLayout = () => (state.layout ?? (wide.matches ? 'circle' : 'strip')) === 'circle';
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -85,6 +88,7 @@
     state.bonusOnly = q.get('bonus') === '1';
     if (D.partners.has(q.get('partner'))) state.partner = q.get('partner');
     if (D.currencies.has(q.get('line'))) state.line = q.get('line');
+    if (['strip', 'circle'].includes(q.get('layout'))) state.layout = q.get('layout');
   }
 
   // Source tags on the arriving link (?source=mu from the museum finder) stay in the address:
@@ -100,6 +104,7 @@
     if (state.bonusOnly) q.set('bonus', '1');
     if (state.partner) q.set('partner', state.partner);
     if (state.line && state.view === 'routes' && state.from === ALL) q.set('line', state.line);
+    if (state.layout && state.view === 'routes' && state.from === ALL) q.set('layout', state.layout);
     for (const k of SOURCE_TAGS) if (arrivedWith.has(k)) q.set(k, arrivedWith.get(k));
     const s = q.toString();
     try { history.replaceState(null, '', s ? `?${s}` : location.pathname); } catch { /* sandboxed previews */ }
@@ -247,13 +252,24 @@
     const lineCards = cur ? [] : D.programs.currencies.filter((c) => groups.some(({ items }) => items.some((p) => D.routes.has(`${c.id}>${p.id}`))));
     const line = lineCards.some((c) => c.id === state.line) ? state.line : null;
     const lineColor = (id) => `--c: var(--line-${id}, var(--route))`;
+    const head = `<div class="route-head"><h2>${esc(title)}</h2>${cur ? '' : `
+      <div class="layout-switch" role="group" aria-label="Map layout">
+        <button type="button" data-layout="strip" aria-pressed="${!circleLayout()}">Strip</button>
+        <button type="button" data-layout="circle" aria-pressed="${circleLayout()}">Circle</button>
+      </div>`}<span class="count">${countText}</span></div>`;
+    const chips = cur ? '' : `<div class="line-chips" role="group" aria-label="Follow one card's line">
+        ${lineCards.map((c) => `<button class="line-chip" type="button" data-line="${c.id}" aria-pressed="${c.id === line}" style="${lineColor(c.id)}">${esc(c.short)}</button>`).join('')}
+      </div>`;
+
+    if (!cur && circleLayout()) {
+      renderCircle({ view, head, chips, groups, lineCards, line, shown, animate });
+      return;
+    }
 
     view.innerHTML = `
-      <div class="route-head"><h2>${esc(title)}</h2><span class="count">${countText}</span></div>
+      ${head}
       ${cur?.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
-      ${cur ? '' : `<div class="line-chips" role="group" aria-label="Follow one card's line">
-        ${lineCards.map((c) => `<button class="line-chip" type="button" data-line="${c.id}" aria-pressed="${c.id === line}" style="${lineColor(c.id)}">${esc(c.short)}</button>`).join('')}
-      </div>`}
+      ${chips}
       <div class="routes${cur ? '' : ' is-all'}${line ? ' has-line' : ''}">
         <svg class="rail" aria-hidden="true"></svg>
         <ol class="route-list">
@@ -299,15 +315,27 @@
       </div>`;
 
     $$('.stop', view).forEach((b) => b.addEventListener('click', () => openSheet(b.dataset.partner, cur?.id ?? line)));
+    bindMapControls(view);
+    drawRail(animate && !reduceMotion.matches);
+  }
+
+  // Line chips and the Strip / Circle switch, shared by both All cards layouts.
+  function bindMapControls(view) {
     $$('.line-chip', view).forEach((b) => b.addEventListener('click', () => {
       state.line = state.line === b.dataset.line ? null : b.dataset.line;
       render();
       $(`.line-chip[data-line="${b.dataset.line}"]`)?.focus({ preventScroll: true });
     }));
-    drawRail(animate && !reduceMotion.matches);
+    $$('.layout-switch button', view).forEach((b) => b.addEventListener('click', () => {
+      if (b.getAttribute('aria-pressed') === 'true') return;
+      state.layout = b.dataset.layout;
+      render({ animate: true });
+      $(`.layout-switch [data-layout="${b.dataset.layout}"]`)?.focus({ preventScroll: true });
+    }));
   }
 
   function drawRail(animate) {
+    if ($('.circle-map')) { drawCircle(animate); return; }
     const wrap = $('.routes');
     if (!wrap) return;
     const svg = d3.select(wrap).select('svg.rail');
@@ -422,6 +450,185 @@
         .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
     stations.attr('opacity', 0).transition().delay((d) => 160 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', null);
+  }
+
+  // ---------- Circle map ----------
+
+  // All cards as concentric rings, after Max Roberts' circle maps: each card is a ring (dropdown order,
+  // innermost first) and each partner a spoke, grouped in alliance sectors. A station sits where a
+  // card's ring crosses a partner it serves (yellow = that card's live bonus). The center is a hub
+  // showing the partner under the pointer or keyboard focus; a spoke opens the detail sheet.
+  let circleRows = [];
+  const canHover = window.matchMedia('(hover: hover)');
+
+  function renderCircle({ view, head, chips, groups, lineCards, line, shown, animate }) {
+    circleRows = groups.map(({ group, items }) => ({
+      group,
+      items: items.map((p) => {
+        const opts = routesTo(p, null);
+        const lit = line ? opts.find((o) => o.c.id === line) : null;
+        return { p, group, opts, lit, best: lit || opts[0] };
+      }),
+    }));
+    view.innerHTML = `
+      ${head}
+      ${chips}
+      <div class="circle-map">
+        <svg class="circle" role="group" aria-label="${shown} transfer partners on a circle map. Each ring is a card. Tab through the partners and press Enter to open one."></svg>
+        <div class="circle-hub" aria-live="polite"></div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span class="legend-title">Each ring is a card, ${esc(lineCards[0].short)} inside to ${esc(lineCards.at(-1).short)} outside, and a station means it transfers to that partner. ${canHover.matches ? 'Hover' : 'Tap'} a partner to open it; tap a card above to follow its ring.</span>
+        <span><svg width="14" height="14"><circle class="station-key" cx="7" cy="7" r="5"/></svg>Station</span>
+        <span><svg width="14" height="14"><circle class="station-key is-bonus" cx="7" cy="7" r="5"/></svg>Live bonus from that card</span>
+      </div>`;
+    bindMapControls(view);
+    drawCircle(animate && !reduceMotion.matches, true);
+  }
+
+  // What the hub in the middle shows: the partner in focus, or a summary.
+  function hubHTML(row) {
+    const rows = circleRows.flatMap((g) => g.items);
+    const lit = D.currencies.get(state.line);
+    if (!row) {
+      if (lit && rows.some((r) => r.lit)) return `<strong>${esc(lit.name)}</strong><span>${rows.filter((r) => r.lit).length} of ${rows.length} partners</span>`;
+      return `<strong>All cards</strong><span>${rows.length} partners</span><span class="hub-hint">${canHover.matches ? 'Hover a partner to see it here' : 'Tap a partner for details'}</span>`;
+    }
+    const { p, opts, best } = row;
+    const { c, t, promo } = best;
+    return `<strong>${esc(p.name)}</strong>
+      <span>${row.lit || opts.length === 1 ? esc(c.short) : 'Best'} 1,000 → <b>${num.format(received(t, promo))}</b></span>
+      ${promo ? `<span><span class="badge">+${promo.bonus}%</span> ${esc(c.short)} ${endText(promo)}</span>` : ''}
+      ${lit && !row.lit ? `<span class="hub-hint">Not on the ${esc(lit.short)} line</span>` : ''}`;
+  }
+
+  function drawCircle(animate, fresh = false) {
+    const wrap = $('.circle-map');
+    if (!wrap) return;
+    const svg = d3.select(wrap).select('svg.circle');
+    const hub = $('.circle-hub', wrap);
+    const rows = circleRows.flatMap((g) => g.items);
+    if (!rows.length) return;
+    const ids = D.programs.currencies.map((c) => c.id).filter((id) => rows.some((r) => r.opts.some((o) => o.c.id === id)));
+    const lit = ids.includes(state.line) ? state.line : null;
+
+    // As wide as the column, but never so small that names can't be read: phones scroll sideways.
+    const S = Math.max(760, Math.min(wrap.clientWidth, 860));
+    const A = S / 2;
+    svg.attr('width', S).attr('height', S).attr('viewBox', `${-A} ${-A} ${S} ${S}`);
+    svg.selectAll('*').remove();
+
+    const probe = svg.append('text').attr('class', 'p-label');
+    for (const r of rows) { probe.text(r.p.name); r.labelW = probe.node().getComputedTextLength(); }
+    probe.remove();
+    const labelW = d3.max(rows, (r) => r.labelW);
+    const rOut = A - labelW - 18;
+    const pitch = Math.min(14, (rOut * 0.5) / Math.max(ids.length - 1, 1));
+    const rIn = rOut - pitch * (ids.length - 1);
+    const ringR = (id) => rIn + ids.indexOf(id) * pitch;
+    const lineW = Math.max(3.5, Math.min(6, pitch - 6));
+
+    // One slot per partner and a slot and a half between sectors, clockwise from the top.
+    const GAP = 1.5;
+    const step = 360 / (rows.length + GAP * circleRows.length);
+    let pos = GAP / 2;
+    const sectors = circleRows.map(({ group, items }) => {
+      const a0 = pos * step;
+      for (const it of items) { it.angle = (pos + 0.5) * step; pos += 1; }
+      const a1 = pos * step;
+      pos += GAP;
+      return { group, a0, a1 };
+    });
+    const pt = (a, r) => [r * Math.sin((a * Math.PI) / 180), -r * Math.cos((a * Math.PI) / 180)];
+    const stR = (r) => Math.min(5, (r * step * Math.PI) / 180 / 2 - 1.2, pitch / 2 - 0.8);
+    const color = (id) => `var(--line-${id}, var(--route))`;
+    const dim = (r) => (lit && !r.lit ? ' is-dim' : '');
+
+    // Sector names on arcs just inside the innermost ring, flipped on the bottom half to stay upright.
+    const defs = svg.append('defs');
+    sectors.forEach((s, i) => {
+      const bottom = (s.a0 + s.a1) / 2 > 90 && (s.a0 + s.a1) / 2 < 270;
+      const r = bottom ? rIn - 9 : rIn - 18;
+      const [x0, y0] = pt(bottom ? s.a1 : s.a0, r);
+      const [x1, y1] = pt(bottom ? s.a0 : s.a1, r);
+      defs.append('path').attr('id', `sector-${i}`).attr('d', `M${x0},${y0} A${r},${r} 0 ${s.a1 - s.a0 > 180 ? 1 : 0} ${bottom ? 0 : 1} ${x1},${y1}`);
+    });
+    const sectorText = svg.append('g').selectAll('text').data(sectors).join('text').attr('class', 'sector')
+      .append('textPath').attr('href', (d, i) => `#sector-${i}`).attr('startOffset', '50%').attr('text-anchor', 'middle')
+      .text((d) => d.group.label);
+    // A name longer than its arc ("Other airlines" over a few spokes) falls back to its first word.
+    sectorText.each(function (d) {
+      const arc = ((rIn - 14) * (d.a1 - d.a0) * Math.PI) / 180;
+      if (this.getComputedTextLength() > arc - 4) d3.select(this).text(d.group.label.split(' ')[0]);
+    });
+
+    svg.append('g').selectAll('line').data(rows, (d) => d.p.id).join('line')
+      .attr('class', (d) => `guide${dim(d)}`).attr('data-p', (d) => d.p.id)
+      .attr('x1', (d) => pt(d.angle, rIn - 5)[0]).attr('y1', (d) => pt(d.angle, rIn - 5)[1])
+      .attr('x2', (d) => pt(d.angle, rOut + 6)[0]).attr('y2', (d) => pt(d.angle, rOut + 6)[1]);
+
+    const rings = svg.append('g').selectAll('circle').data([...ids].sort((a, b) => (a === lit) - (b === lit))).join('circle')
+      .attr('class', (id) => `ring${lit && id !== lit ? ' is-off' : ''}`)
+      .style('stroke', color).attr('stroke-width', (id) => (id === lit ? lineW + 2 : lineW))
+      .attr('r', ringR);
+
+    const stations = svg.append('g').selectAll('circle')
+      .data(rows.flatMap((r) => r.opts.map((o) => ({ key: `${r.p.id}>${o.c.id}`, pid: r.p.id, id: o.c.id, angle: r.angle, bonus: !!o.promo }))), (d) => d.key)
+      .join('circle')
+      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}${lit && d.id !== lit ? ' is-off' : ''}`).attr('data-p', (d) => d.pid)
+      .attr('cx', (d) => pt(d.angle, ringR(d.id))[0]).attr('cy', (d) => pt(d.angle, ringR(d.id))[1])
+      .attr('r', (d) => stR(ringR(d.id)) + (d.id === lit ? 1 : 0));
+
+    svg.append('g').selectAll('text').data(rows, (d) => d.p.id).join('text')
+      .attr('class', (d) => `p-label${dim(d)}`).attr('data-p', (d) => d.p.id)
+      .attr('dy', '0.35em').attr('text-anchor', (d) => (d.angle > 180 ? 'end' : 'start'))
+      .attr('transform', (d) => `rotate(${d.angle - 90}) translate(${rOut + 12},0)${d.angle > 180 ? ' rotate(180)' : ''}`)
+      .text((d) => d.p.name);
+
+    // Hit areas: a wedge per partner from the hub to the edge, focusable like a button.
+    const showHub = (d) => {
+      svg.selectAll('.is-hover').classed('is-hover', false);
+      if (d) svg.selectAll(`[data-p="${d.p.id}"]`).classed('is-hover', true);
+      hub.innerHTML = hubHTML(d);
+    };
+    const wedge = (d) => {
+      const [a, b] = [d.angle - step / 2, d.angle + step / 2];
+      const [r0, r1] = [rIn - 4, rOut + 16 + d.labelW];   // out to the end of this partner's name
+      const p = (ang, r) => pt(ang, r).join(',');
+      return `M${p(a, r0)} L${p(a, r1)} A${r1},${r1} 0 0 1 ${p(b, r1)} L${p(b, r0)} A${r0},${r0} 0 0 0 ${p(a, r0)} Z`;
+    };
+    svg.append('g').selectAll('path').data(rows, (d) => d.p.id).join('path')
+      .attr('class', 'hit').attr('d', wedge).attr('tabindex', 0).attr('role', 'button')
+      .attr('aria-label', (d) => {
+        const { c, t, promo } = d.best;
+        return `${d.p.name}, ${d.group.label}. ${d.lit ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(received(t, promo))}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}. Lines: ${listText(d.opts.map((o) => o.c.short))}.`;
+      })
+      .on('pointerenter focus', (e, d) => showHub(d))
+      .on('pointerleave blur', () => showHub(null))
+      .on('click', (e, d) => openSheet(d.p.id, lit))
+      .on('keydown', (e, d) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(d.p.id, lit); } });
+
+    // Crop to what was drawn (labels rarely reach the square's corners), then sit the hub on the center.
+    const bb = svg.node().getBBox();
+    const PAD = 8;
+    const [vx, vy, vw, vh] = [bb.x - PAD, bb.y - PAD, bb.width + 2 * PAD, bb.height + 2 * PAD];
+    svg.attr('viewBox', `${vx} ${vy} ${vw} ${vh}`).attr('width', vw).attr('height', vh);
+    // The hub's text box is the square inscribed in the space inside the sector names.
+    const half = Math.max(44, (rIn - 26) * 0.72);
+    const svgLeft = svg.node().getBoundingClientRect().left - wrap.getBoundingClientRect().left + wrap.scrollLeft;
+    Object.assign(hub.style, { left: `${svgLeft - vx - half}px`, top: `${-vy - half}px`, width: `${half * 2}px`, height: `${half * 2}px` });
+    hub.innerHTML = hubHTML(null);
+    if (fresh && vw > wrap.clientWidth) wrap.scrollLeft = (-vx - wrap.clientWidth / 2) + svgLeft;
+
+    if (!animate) return;
+    // One orchestrated moment: rings draw round from the top, stations appear clockwise.
+    rings.each(function (id) {
+      const len = 2 * Math.PI * ringR(id);
+      d3.select(this).attr('transform', 'rotate(-90)').attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+        .transition().duration(700).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function () { d3.select(this).attr('stroke-dasharray', null).attr('transform', null); });
+    });
+    stations.attr('opacity', 0).transition().delay((d) => 200 + (d.angle / 360) * 500).duration(200).attr('opacity', null);
   }
 
   // ---------- Compare view ----------
@@ -909,6 +1116,9 @@
     sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
     sheet.addEventListener('close', () => { state.partner = null; writeURL(); });
     if (state.partner) openSheet(state.partner, oneCard()?.id ?? null);
+
+    // With no layout chosen, All cards is the circle on wide screens and the strip on phones.
+    wide.addEventListener('change', () => { if (!state.layout && state.view === 'routes' && state.from === ALL) render(); });
 
     // Redraw the rail only when the width actually changes (row heights follow width).
     let raf = 0;
