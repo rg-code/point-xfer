@@ -403,6 +403,45 @@ button { touch-action: manipulation; cursor: pointer; }
 .terminal-board .board-gate { font-size: var(--step--2); font-weight: 700; letter-spacing: 0.04em; color: var(--muted); }
 .terminal-board .hub-hint { color: var(--muted); font-size: var(--step--2); }
 .terminal-board .badge { background: var(--bonus); color: var(--bonus-ink); font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+
+/* Rings map: open arcs, one per card, kept quiet. Thin arcs and small dots by default; the lit
+   card's arc thickens and its stations turn white; a spoke shows only for the partner in focus. */
+.rings-map { position: relative; overflow-x: auto; margin: 0 calc(-1 * var(--gutter-r)) 0 0; }
+.rings { display: block; margin: 0 auto; overflow: visible; }
+.rings .r-arc { fill: none; stroke-width: 3; stroke-linecap: round; transition: opacity 0.15s; }
+.rings .r-arc.is-lit { stroke-width: 6; }
+.rings .r-arc.is-off, .rings .r-dot.is-off, .rings .r-ring-name.is-off { opacity: 0.16; }
+.rings .r-dot { transition: opacity 0.15s; }
+.rings .r-dot.is-lit { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
+.rings .r-dot.is-bonus { fill: var(--bonus); stroke: var(--ink); stroke-width: 1.4; }
+.rings .r-dot.is-hover { stroke: var(--ink); stroke-width: 1.6; }
+.rings .r-spoke { stroke: var(--rule); stroke-width: 1.5; opacity: 0; }
+.rings .r-spoke.is-hover { opacity: 1; }
+.rings .r-label { font-size: 11.5px; fill: var(--ink); transition: opacity 0.15s; }
+.rings .r-label.is-dim { opacity: 0.3; }
+.rings .r-label.is-hover { font-weight: 700; }
+.rings .r-sector { font-size: 10.5px; font-weight: 700; fill: var(--muted); }
+.rings .r-ring-name { font-size: 11px; fill: var(--muted); cursor: pointer; }
+.rings .r-ring-name.is-lit { fill: var(--ink); font-weight: 700; }
+.rings .r-arc-hit { fill: none; stroke: transparent; cursor: pointer; }
+.rings .r-hit { fill: transparent; cursor: pointer; outline: none; }
+.rings .r-hit:focus-visible { fill: color-mix(in srgb, var(--focus) 12%, transparent); }
+.rings-board {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  pointer-events: none;
+  font-size: var(--step--1);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.rings-board strong { font-size: var(--step-0); line-height: 1.25; }
+.rings-board .hub-hint { color: var(--muted); font-size: var(--step--2); }
+.rings-board .badge { background: var(--bonus); color: var(--bonus-ink); font-weight: 700; padding: 1px 6px; border-radius: 4px; }
 .group-label {
   font-size: var(--step--1);
   font-weight: 700;

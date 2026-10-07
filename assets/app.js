@@ -75,10 +75,10 @@
   // is `?from=<currency>`; Compare cards is `?view=compare`.
   const ALL = 'all';
   // `line`: the card lit on the All cards transit map (null = every line).
-  // `layout`: All cards drawn as the 'strip' or the 'terminal' map; null = terminal on wide screens, strip on phones.
+  // `layout`: All cards drawn as the 'strip', 'terminal' or 'rings' map; null = terminal on wide screens, strip on phones.
   const state = { view: 'routes', from: ALL, type: 'all', bonusOnly: false, partner: null, line: null, layout: null };
   const wide = window.matchMedia('(min-width: 720px)');
-  const terminalLayout = () => (state.layout ?? (wide.matches ? 'terminal' : 'strip')) === 'terminal';
+  const mapLayout = () => state.layout ?? (wide.matches ? 'terminal' : 'strip');
 
   function readURL() {
     const q = new URLSearchParams(location.search);
@@ -90,7 +90,7 @@
     if (D.currencies.has(q.get('line'))) state.line = q.get('line');
     // 'circle' was the concentric-ring layout the terminal replaced; old links open the terminal.
     const layout = q.get('layout') === 'circle' ? 'terminal' : q.get('layout');
-    if (['strip', 'terminal'].includes(layout)) state.layout = layout;
+    if (['strip', 'terminal', 'rings'].includes(layout)) state.layout = layout;
   }
 
   // Source tags on the arriving link (?source=mu from the museum finder) stay in the address:
@@ -256,14 +256,17 @@
     const lineColor = (id) => `--c: var(--line-${id}, var(--route))`;
     const head = `<div class="route-head"><h2>${esc(title)}</h2>${cur ? '' : `
       <div class="layout-switch" role="group" aria-label="Map layout">
-        <button type="button" data-layout="strip" aria-pressed="${!terminalLayout()}">Strip</button>
-        <button type="button" data-layout="terminal" aria-pressed="${terminalLayout()}">Terminal</button>
+        ${[['strip', 'Strip'], ['terminal', 'Terminal'], ['rings', 'Rings']].map(([id, label]) => `<button type="button" data-layout="${id}" aria-pressed="${mapLayout() === id}">${label}</button>`).join('')}
       </div>`}<span class="count">${countText}</span></div>`;
     const chips = cur ? '' : `<div class="line-chips" role="group" aria-label="Follow one card's line">
         ${lineCards.map((c) => `<button class="line-chip" type="button" data-line="${c.id}" aria-pressed="${c.id === line}" style="${lineColor(c.id)}">${esc(c.short)}</button>`).join('')}
       </div>`;
 
-    if (!cur && terminalLayout()) {
+    if (!cur && mapLayout() === 'rings') {
+      renderRings({ view, head, chips, groups, line, shown, animate });
+      return;
+    }
+    if (!cur && mapLayout() === 'terminal') {
       renderTerminal({ view, head, chips, groups, lineCards, line, shown, animate });
       return;
     }
@@ -338,6 +341,7 @@
 
   function drawRail(animate) {
     if ($('.terminal-map')) { drawTerminal(animate); return; }
+    if ($('.rings-map')) { drawRings(animate); return; }
     const wrap = $('.routes');
     if (!wrap) return;
     const svg = d3.select(wrap).select('svg.rail');
@@ -660,6 +664,199 @@
         .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
     stations.attr('opacity', 0).transition().delay((d) => 140 + Math.abs(d.g.y - d.g.pier.edge) * 0.9).duration(200).attr('opacity', null);
+  }
+
+  // ---------- Rings map ----------
+
+  // All cards as open rings: each card is an arc of at most three quarters of a circle (dropdown
+  // order, innermost first), running only from its first partner to its last. Partners sit around a
+  // 270° fan in alliance sectors with their names outside; a dot on an arc means that card transfers
+  // there (yellow = live bonus). The open quarter at the bottom names the rings. Kept quiet on
+  // purpose: thin arcs, small dots, a spoke only for the partner under the pointer. Clicking an arc
+  // or its name lights that card (same as the chips); the center is a board for the partner in focus.
+  let ringGroups = [];
+
+  function renderRings({ view, head, chips, groups, line, shown, animate }) {
+    ringGroups = groups.map(({ group, items }) => ({
+      group,
+      items: items.map((p) => {
+        const opts = routesTo(p, null);
+        const lit = line ? opts.find((o) => o.c.id === line) : null;
+        return { p, group, opts, lit, best: lit || opts[0] };
+      }),
+    }));
+    view.innerHTML = `
+      ${head}
+      ${chips}
+      <div class="rings-map">
+        <svg class="rings" role="group" aria-label="${shown} transfer partners around open rings, one ring per card. Tab through the partners and press Enter to open one."></svg>
+        <div class="rings-board" aria-live="polite"></div>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span class="legend-title">Each ring is a card, named in the gap at the bottom, and a dot means it transfers to that partner. Click a ring or its name to follow it. ${canHover.matches ? 'Hover a partner for details and click to open it' : 'Tap a partner to open it'}.</span>
+        <span><svg width="14" height="14"><circle class="station-key" cx="7" cy="7" r="5"/></svg>Partner on the lit ring</span>
+        <span><svg width="14" height="14"><circle class="station-key is-bonus" cx="7" cy="7" r="5"/></svg>Live bonus from that card</span>
+      </div>`;
+    bindMapControls(view);
+    drawRings(animate && !reduceMotion.matches, true);
+  }
+
+  function ringsBoardHTML(row) {
+    const rows = ringGroups.flatMap((g) => g.items);
+    const lit = D.currencies.get(state.line);
+    if (!row) {
+      if (lit && rows.some((r) => r.lit)) return `<strong>${esc(lit.name)}</strong><span>${rows.filter((r) => r.lit).length} of ${rows.length} partners</span><span class="hub-hint">Click its ring again to see every card</span>`;
+      return `<strong>All cards</strong><span>${rows.length} partners on ${new Set(rows.flatMap((r) => r.opts.map((o) => o.c.id))).size} rings</span><span class="hub-hint">${canHover.matches ? 'Hover a partner, or click a ring' : 'Tap a ring to follow a card'}</span>`;
+    }
+    const { p, opts, best } = row;
+    const { c, t, promo } = best;
+    return `<strong>${esc(p.name)}</strong>
+      <span>${row.lit || opts.length === 1 ? esc(c.short) : 'Best'} 1,000 → <b>${num.format(received(t, promo))}</b>${promo ? ` <span class="badge">+${promo.bonus}%</span>` : ''}</span>
+      ${promo ? `<span>${esc(c.short)} bonus ${endText(promo)}</span>` : ''}
+      <span class="hub-hint">${lit && !row.lit ? `Not on the ${esc(lit.short)} ring` : esc(listText(opts.map((o) => o.c.short)))}</span>`;
+  }
+
+  function drawRings(animate, fresh = false) {
+    const wrap = $('.rings-map');
+    if (!wrap) return;
+    const svg = d3.select(wrap).select('svg.rings');
+    const board = $('.rings-board', wrap);
+    const rows = ringGroups.flatMap((g) => g.items);
+    if (!rows.length) return;
+    const ids = D.programs.currencies.map((c) => c.id).filter((id) => rows.some((r) => r.opts.some((o) => o.c.id === id)));
+    const lit = ids.includes(state.line) ? state.line : null;
+
+    const S = Math.max(700, Math.min(wrap.clientWidth, 860));
+    const A = S / 2;
+    svg.attr('width', S).attr('height', S).attr('viewBox', `${-A} ${-A} ${S} ${S}`);
+    svg.selectAll('*').remove();
+
+    const probe = svg.append('text').attr('class', 'r-label');
+    for (const r of rows) { probe.text(r.p.name); r.labelW = probe.node().getComputedTextLength(); }
+    probe.remove();
+    const rOut = A - d3.max(rows, (r) => r.labelW) - 20;
+    const pitch = Math.min(15, (rOut * 0.42) / Math.max(ids.length - 1, 1));
+    const rIn = rOut - pitch * (ids.length - 1);
+    const ringR = (id) => rIn + ids.indexOf(id) * pitch;
+
+    // Partners around a 270° fan, open at the bottom, a slot between sectors.
+    const SPAN = 270;
+    const GAP = 1.2;
+    const step = SPAN / (rows.length + GAP * (ringGroups.length - 1));
+    let pos = 0;
+    const sectors = ringGroups.map(({ group, items }) => {
+      const a0 = -SPAN / 2 + pos * step;
+      for (const it of items) { it.angle = -SPAN / 2 + (pos + 0.5) * step; pos += 1; }
+      const a1 = -SPAN / 2 + pos * step;
+      pos += GAP;
+      return { group, a0, a1 };
+    });
+    const rad = (a) => (a * Math.PI) / 180;
+    const pt = (a, r) => [r * Math.sin(rad(a)), -r * Math.cos(rad(a))];
+    const arc = (r, a0, a1) => {
+      const [x0, y0] = pt(a0, r);
+      const [x1, y1] = pt(a1, r);
+      return `M${x0},${y0} A${r},${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1},${y1}`;
+    };
+    const color = (id) => `var(--line-${id}, var(--route))`;
+    const off = (id) => (lit && id !== lit ? ' is-off' : '');
+    const dim = (r) => (lit && !r.lit ? ' is-dim' : '');
+    const span = (id) => {
+      const as = rows.filter((r) => r.opts.some((o) => o.c.id === id)).map((r) => r.angle);
+      return [Math.min(...as) - step * 0.35, Math.max(...as) + step * 0.35];
+    };
+    const toggle = (id) => { state.line = state.line === id ? null : id; render(); };
+
+    // Sector names, quietly, on arcs just inside the innermost ring.
+    const defs = svg.append('defs');
+    sectors.forEach((s, i) => {
+      const r = rIn - 16;
+      defs.append('path').attr('id', `rsec-${i}`).attr('d', arc(r, s.a0, s.a1));
+    });
+    const secText = svg.append('g').selectAll('text').data(sectors).join('text').attr('class', 'r-sector')
+      .append('textPath').attr('href', (d, i) => `#rsec-${i}`).attr('startOffset', '50%').attr('text-anchor', 'middle')
+      .text((d) => d.group.label);
+    secText.each(function (d) {
+      if (this.getComputedTextLength() > (((rIn - 16) * rad(d.a1 - d.a0)) - 4)) d3.select(this).text(d.group.label.split(' ')[0]);
+    });
+
+    // A faint spoke for the partner in focus only.
+    svg.append('g').selectAll('line').data(rows, (d) => d.p.id).join('line')
+      .attr('class', 'r-spoke').attr('data-p', (d) => d.p.id)
+      .attr('x1', (d) => pt(d.angle, rIn - 6)[0]).attr('y1', (d) => pt(d.angle, rIn - 6)[1])
+      .attr('x2', (d) => pt(d.angle, rOut + 8)[0]).attr('y2', (d) => pt(d.angle, rOut + 8)[1]);
+
+    const arcs = svg.append('g').selectAll('path').data([...ids].sort((a, b) => (a === lit) - (b === lit))).join('path')
+      .attr('class', (id) => `r-arc${off(id)}${id === lit ? ' is-lit' : ''}`)
+      .style('stroke', color).attr('d', (id) => arc(ringR(id), ...span(id)));
+
+    const dots = svg.append('g').selectAll('circle')
+      .data(rows.flatMap((r) => r.opts.map((o) => ({ key: `${r.p.id}>${o.c.id}`, pid: r.p.id, id: o.c.id, angle: r.angle, bonus: !!o.promo }))), (d) => d.key)
+      .join('circle')
+      .attr('class', (d) => `r-dot${d.bonus ? ' is-bonus' : ''}${off(d.id)}${d.id === lit ? ' is-lit' : ''}`).attr('data-p', (d) => d.pid)
+      .style('fill', (d) => (d.bonus || d.id === lit ? null : color(d.id)))
+      .attr('cx', (d) => pt(d.angle, ringR(d.id))[0]).attr('cy', (d) => pt(d.angle, ringR(d.id))[1])
+      .attr('r', (d) => (d.bonus ? 4 : d.id === lit ? 4.4 : 2.8));
+
+    svg.append('g').selectAll('text').data(rows, (d) => d.p.id).join('text')
+      .attr('class', (d) => `r-label${dim(d)}`).attr('data-p', (d) => d.p.id)
+      .attr('dy', '0.35em').attr('text-anchor', (d) => (d.angle < 0 ? 'end' : 'start'))
+      .attr('transform', (d) => `rotate(${d.angle - 90}) translate(${rOut + 14},0)${d.angle < 0 ? ' rotate(180)' : ''}`)
+      .text((d) => d.p.name);
+
+    // The open quarter names the rings; each name sits level with its ring and lights it.
+    svg.append('g').selectAll('text').data(ids).join('text')
+      .attr('class', (id) => `r-ring-name${id === lit ? ' is-lit' : ''}${off(id)}`)
+      .attr('x', 0).attr('y', (id) => ringR(id)).attr('dy', '0.35em').attr('text-anchor', 'middle')
+      .text((id) => D.currencies.get(id).short)
+      .on('click', (e, id) => toggle(id));
+
+    // Hit areas: wide invisible arcs for the rings, wedges for the partners.
+    svg.append('g').selectAll('path').data(ids).join('path').attr('class', 'r-arc-hit')
+      .attr('d', (id) => arc(ringR(id), ...span(id))).attr('stroke-width', pitch)
+      .on('click', (e, id) => toggle(id));
+    const showBoard = (r) => {
+      svg.selectAll('.is-hover').classed('is-hover', false);
+      if (r) svg.selectAll(`[data-p="${r.p.id}"]`).classed('is-hover', true);
+      board.innerHTML = ringsBoardHTML(r);
+    };
+    const wedge = (d) => {
+      const [a, b] = [d.angle - step / 2, d.angle + step / 2];
+      const [r0, r1] = [rOut + 6, rOut + 18 + d.labelW];
+      const p = (ang, r) => pt(ang, r).join(',');
+      return `M${p(a, r0)} L${p(a, r1)} A${r1},${r1} 0 0 1 ${p(b, r1)} L${p(b, r0)} A${r0},${r0} 0 0 0 ${p(a, r0)} Z`;
+    };
+    svg.append('g').selectAll('path').data(rows, (d) => d.p.id).join('path')
+      .attr('class', 'r-hit').attr('d', wedge).attr('tabindex', 0).attr('role', 'button')
+      .attr('aria-label', (d) => {
+        const { c, t, promo } = d.best;
+        return `${d.p.name}, ${d.group.label}. ${d.lit ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(received(t, promo))}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}. Rings: ${listText(d.opts.map((o) => o.c.short))}.`;
+      })
+      .on('pointerenter focus', (e, d) => showBoard(d))
+      .on('pointerleave blur', () => showBoard(null))
+      .on('click', (e, d) => openSheet(d.p.id, lit))
+      .on('keydown', (e, d) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(d.p.id, lit); } });
+
+    // Crop to what was drawn, then sit the board in the middle.
+    const bb = svg.node().getBBox();
+    const PAD = 8;
+    const [vx, vy, vw, vh] = [bb.x - PAD, bb.y - PAD, bb.width + 2 * PAD, bb.height + 2 * PAD];
+    svg.attr('viewBox', `${vx} ${vy} ${vw} ${vh}`).attr('width', vw).attr('height', vh);
+    const half = Math.max(48, (rIn - 26) * 0.74);
+    const svgLeft = svg.node().getBoundingClientRect().left - wrap.getBoundingClientRect().left + wrap.scrollLeft;
+    Object.assign(board.style, { left: `${svgLeft - vx - half}px`, top: `${-vy - half - 6}px`, width: `${half * 2}px`, height: `${half * 2}px` });
+    board.innerHTML = ringsBoardHTML(null);
+    if (fresh && vw > wrap.clientWidth) wrap.scrollLeft = (-vx - wrap.clientWidth / 2) + svgLeft;
+
+    if (!animate) return;
+    // One calm moment: the arcs sweep round from their first partner, then the dots appear.
+    arcs.each(function () {
+      const len = this.getTotalLength();
+      d3.select(this).attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+        .transition().duration(700).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
+    });
+    dots.attr('opacity', 0).transition().delay((d) => 300 + ((d.angle + SPAN / 2) / SPAN) * 400).duration(220).attr('opacity', null);
   }
 
   // ---------- Compare view ----------
