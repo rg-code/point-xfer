@@ -10,11 +10,13 @@ export const OFFICIAL_DOMAINS = {
   c1: ['capitalone.com'],
   bilt: ['bilt.com', 'biltrewards.com'],
   wf: ['wellsfargo.com'],
+  usbank: ['usbank.com'],
   rove: ['rove.com', 'rovemiles.com'],
 
   aeroplan: ['aircanada.com', 'aeroplan.com'],
   ana: ['ana.co.jp'],
   lifemiles: ['lifemiles.com', 'avianca.com'],
+  ethiopian: ['ethiopianairlines.com'],
   eva: ['evaair.com'],
   singapore: ['singaporeair.com'],
   tap: ['flytap.com'],

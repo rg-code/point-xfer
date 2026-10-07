@@ -169,6 +169,8 @@ test('first-ever bonus on a route: go', () => {
 test('dataset: transfer times and minimums are well formed', () => {
   const units = new Set(['minutes', 'hours', 'days']);
   for (const c of programs.currencies) {
+    // null = not published by the issuer (U.S. Bank); the sheet says so rather than guessing.
+    if (c.minTransfer === null) { assert.equal(c.increment, null, `${c.id} increment without a minimum`); continue; }
     assert.ok(c.minTransfer >= 1, `${c.id} minTransfer`);
     assert.ok(c.increment >= 1, `${c.id} increment`);
   }

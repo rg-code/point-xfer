@@ -140,6 +140,19 @@ test('real bonus phrasing still counts next to the devaluation guard', () => {
   assert.equal(q.bonus, 30, '"reduces" in the summary does not block a real bonus');
 });
 
+test('U.S. Bank headlines and Ethiopian are recognized', () => {
+  const [a] = extractPromotions(item('U.S. Bank: 25% transfer bonus to Air France-KLM Flying Blue through October 31'), valid);
+  assert.deepEqual([a.from, a.to, a.bonus, a.end], ['usbank', 'flyingblue', 25, '2026-10-31']);
+  const [b] = extractPromotions(item('US Bank Altitude Reserve 30% bonus transferring to Ethiopian ShebaMiles'), valid);
+  assert.deepEqual([b.from, b.to, b.bonus], ['usbank', 'ethiopian', 30]);
+  const [c] = extractPromotions(item('FlexPerks points: 20% transfer bonus to Qantas'), valid);
+  assert.deepEqual([c.from, c.to], ['usbank', 'qantas']);
+  // "us bank" inside other words is not U.S. Bank.
+  assert.deepEqual(extractPromotions(item('Bonus bank: 25% transfer bonus to Qantas, plus bank holiday deals'), valid), []);
+  // U.S. Bank doesn't transfer to United, so this route is dropped.
+  assert.deepEqual(extractPromotions(item('U.S. Bank 25% transfer bonus to United MileagePlus'), valid), []);
+});
+
 test('Rove headlines and Rove-only partners are recognized', () => {
   const [p] = extractPromotions(item('Rove Adds Copa Airlines ConnectMiles as 1:1 Transfer Partner, Plus 40% Transfer Bonus', 'Transfers completed by September 30, 2026 get the bonus.'), valid);
   assert.deepEqual([p.from, p.to, p.bonus, p.end], ['rove', 'copa', 40, '2026-09-30']);

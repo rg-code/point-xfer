@@ -10,6 +10,7 @@ export const CURRENCY_ALIASES = {
   c1: [/capital one/i, /\bcap ?one\b/i, /venture x/i],
   bilt: [/\bbilt\b/i],
   wf: [/wells fargo/i, /\bautograph\b/i],
+  usbank: [/\bu\.?\s?s\.?\s*bank\b/i, /\baltitude reserve\b/i, /\bflexperks\b/i],
   rove: [/\brove\b/i],
 };
 
@@ -18,6 +19,7 @@ export const PARTNER_ALIASES = {
   aeroplan: [/aeroplan/i, /air canada/i],
   ana: [/\bANA\b/, /all nippon/i],
   lifemiles: [/lifemiles/i, /avianca/i],
+  ethiopian: [/ethiopian/i, /\bsheba ?miles\b/i],
   eva: [/\bEVA\b/, /infinity mileagelands/i],
   singapore: [/singapore/i, /krisflyer/i],
   tap: [/\bTAP\b/, /miles ?& ?go/i, /tap air portugal/i],

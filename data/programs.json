@@ -46,6 +46,14 @@
       "note": "Autograph and Autograph Journey cards only. No minimum transfer."
     },
     {
+      "id": "usbank",
+      "name": "U.S. Bank Rewards",
+      "short": "US Bank",
+      "minTransfer": null,
+      "increment": null,
+      "note": "Only the Altitude Reserve and FlexPerks Travel cards can transfer, and none of them is open to new applicants. Minimums aren't published, and U.S. Bank shows the rate on the transfer screen, so check it before you confirm."
+    },
+    {
       "id": "rove",
       "name": "Rove Miles",
       "short": "Rove",
@@ -347,6 +355,12 @@
       "name": "Wyndham Rewards",
       "type": "hotel",
       "group": "hotel"
+    },
+    {
+      "id": "ethiopian",
+      "name": "Ethiopian ShebaMiles",
+      "type": "airline",
+      "group": "star"
     }
   ]
 }

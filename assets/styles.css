@@ -9,6 +9,18 @@
   --bonus-ink: #172a42;
   --focus: #2f6fd6;
 
+  /* One line color per currency on the All cards rail (subway style), in dropdown order so
+     neighbours on the rail are neighbours here. Validated as an adjacent set in both modes;
+     yellow is left out because --bonus owns it, and Rove (no card) rides the slate line. */
+  --line-amex: #2a78d6;
+  --line-chase: #e87ba4;
+  --line-citi: #008300;
+  --line-c1: #e34948;
+  --line-bilt: #4a3aa7;
+  --line-wf: #eb6834;
+  --line-usbank: #1baf7a;
+  --line-rove: var(--muted);
+
   --font: "B612", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --step--2: 0.6875rem; /* 11 */
   --step--1: 0.8125rem; /* 13 */
@@ -32,6 +44,13 @@
     --route: #4e6784;
     --bonus: #f5c33b;
     --focus: #7fb0ff;
+    --line-amex: #3987e5;
+    --line-chase: #d55181;
+    --line-citi: #008300;
+    --line-c1: #e66767;
+    --line-bilt: #9085e9;
+    --line-wf: #d95926;
+    --line-usbank: #199e70;
     color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -44,6 +63,13 @@
     --route: #4e6784;
     --bonus: #f5c33b;
     --focus: #7fb0ff;
+    --line-amex: #3987e5;
+    --line-chase: #d55181;
+    --line-citi: #008300;
+    --line-c1: #e66767;
+    --line-bilt: #9085e9;
+    --line-wf: #d95926;
+    --line-usbank: #199e70;
     color-scheme: dark;
   }
 }
@@ -273,6 +299,17 @@ button { touch-action: manipulation; cursor: pointer; }
 .rail .stop-dot.is-bonus { fill: var(--bonus); }
 
 .route-list { list-style: none; margin: 0; padding: 0 0 0 var(--rail); }
+
+/* All cards: one colored line per currency, side by side like a subway strip map. A station
+   ring sits on every line that serves the partner; lines without one run past. */
+.routes.is-all { --rail: 80px; }
+.rail .line { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.rail .hairline { fill: none; stroke: var(--route); stroke-width: 1.25; }
+.rail .station { fill: var(--haze); stroke-width: 1.8; }
+.rail .station.is-bonus { fill: var(--bonus); stroke: var(--ink); }
+.rail .platform { fill: none; stroke: var(--route); stroke-linecap: round; }
+.rail .platform.is-bonus { stroke: var(--bonus); }
+.legend .line-key { display: inline-flex; align-items: center; color: var(--ink); }
 .group-label {
   font-size: var(--step--1);
   font-weight: 700;
@@ -542,6 +579,7 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 
 @media (min-width: 720px) {
   :root { --rail: 88px; }
+  .routes.is-all { --rail: 104px; }
   .controls-inner { grid-template-columns: 332px minmax(0, 1fr) auto; align-items: center; }
   .filters { flex-wrap: nowrap; }
   .tickets { flex-wrap: wrap; overflow: visible; }

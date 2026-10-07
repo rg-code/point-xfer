@@ -249,7 +249,7 @@
     view.innerHTML = `
       <div class="route-head"><h2>${esc(title)}</h2><span class="count">${countText}</span></div>
       ${cur?.note ? `<p class="currency-note">${esc(cur.note)}</p>` : ''}
-      <div class="routes">
+      <div class="routes${cur ? '' : ' is-all'}">
         <svg class="rail" aria-hidden="true"></svg>
         <ol class="route-list">
           ${groups.map(({ group, items }) => `
@@ -261,7 +261,8 @@
               const sub = cur ? stopSubline(t, promo, p) : allSubline(opts);
               const also = cur ? [] : opts.slice(1).map((o) => o.c.short);
               const label = `${p.name}, ${group.label}. ${cur ? '' : 'Best route: '}1,000 ${c.short} points become ${num.format(out)}${promo ? ` with a ${promo.bonus}% bonus ${endText(promo)}` : ''}.${also.length ? ` Also from ${listText(also)}.` : ''}`;
-              return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}" aria-label="${esc(label)}">
+              const lines = cur ? '' : ` data-lines="${opts.map((o) => o.c.id).join(' ')}" data-bonus-lines="${opts.filter((o) => o.promo).map((o) => o.c.id).join(' ')}"`;
+              return `<li><button class="stop" data-partner="${p.id}" data-weight="${out}" data-bonus="${promo ? 1 : 0}"${lines} aria-label="${esc(label)}">
                 <span class="stop-name">${esc(p.name)}</span>
                 ${sub ? `<span class="stop-sub">${esc(sub)}</span>` : ''}
                 <span class="stop-rate">1,000 → <strong>${num.format(out)}</strong>${promo ? `<span class="badge">+${promo.bonus}%</span><span class="was">${num.format(received(t))}</span>` : ''}</span>
@@ -271,7 +272,10 @@
         </ol>
       </div>
       <div class="legend" aria-hidden="true">
-        <span class="legend-title">Line weight shows points received per 1,000 sent</span>
+        ${cur ? '' : `<span class="legend-title">Each card is a line; a ring marks a stop</span>
+        ${D.programs.currencies.filter((c) => groups.some(({ items }) => items.some((p) => D.routes.has(`${c.id}>${p.id}`)))).map((c) => `
+        <span class="line-key"><svg width="24" height="10"><line x1="2" y1="5" x2="22" y2="5" stroke="var(--line-${c.id}, var(--route))" stroke-width="2.5" stroke-linecap="round"/></svg>${esc(c.short)}</span>`).join('')}`}
+        <span class="legend-title">${cur ? 'Line weight' : 'Connector weight'} shows points received per 1,000 sent${cur ? '' : ' on the best route'}</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(500)}" stroke-linecap="round"/></svg>500</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(1000)}" stroke-linecap="round"/></svg>1,000</span>
         <span><svg width="36" height="10"><line class="swatch-route" x1="2" y1="5" x2="34" y2="5" stroke-width="${weight(2000)}" stroke-linecap="round"/></svg>2,000</span>
@@ -286,6 +290,7 @@
     const wrap = $('.routes');
     if (!wrap) return;
     const svg = d3.select(wrap).select('svg.rail');
+    if (wrap.classList.contains('is-all')) { drawLines(wrap, svg, animate); return; }
     const box = wrap.getBoundingClientRect();
     const W = svg.node().clientWidth;
     const trunkX = W < 60 ? 12 : 20;
@@ -333,6 +338,76 @@
         .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
     });
     dots.attr('opacity', 0).transition().delay((d) => 360 + (d.y / Math.max(lastY, 1)) * 420).duration(200).attr('opacity', 1);
+  }
+
+  // All cards as a subway strip map: one colored line per currency, in dropdown order, each running
+  // from the top to its last station. A ring on a line means that card transfers to the partner
+  // (yellow if that card has the live bonus); lines without one cross the row's hairline and run
+  // past. The stub from the bundle to the stop keeps the single-card encoding: weight = best route.
+  function drawLines(wrap, svg, animate) {
+    const box = wrap.getBoundingClientRect();
+    const W = svg.node().clientWidth;
+    const words = (s) => (s || '').split(' ').filter(Boolean);
+    const stops = $$('.stop', wrap).map((el) => {
+      const b = el.getBoundingClientRect();
+      return {
+        id: el.dataset.partner, y: b.top - box.top + b.height / 2, w: weight(+el.dataset.weight),
+        bonus: el.dataset.bonus === '1', lines: words(el.dataset.lines), bonusLines: words(el.dataset.bonusLines),
+      };
+    });
+    if (!stops.length) return;
+    const ids = D.programs.currencies.map((c) => c.id).filter((id) => stops.some((s) => s.lines.includes(id)));
+    const endX = W - 7;
+    const left = 7;
+    const pitch = Math.min(10, (endX - 22 - left) / Math.max(ids.length - 1, 1));
+    const r = Math.min(3.2, pitch / 2 - 0.9);
+    const x = (id) => left + ids.indexOf(id) * pitch;
+    const bundleEnd = x(ids[ids.length - 1]) + r + 4;
+    const color = (id) => `var(--line-${id}, var(--route))`;
+    const firstLabel = $('.group-label', wrap).getBoundingClientRect();
+    const originY = firstLabel.top - box.top + firstLabel.height / 2;
+    const lastY = stops[stops.length - 1].y;
+
+    svg.selectAll('*').remove();
+
+    // Hairlines under the lines join a row to its stations; a line crossing one without a ring runs past.
+    const hairlines = svg.append('g').selectAll('path').data(stops, (d) => d.id).join('path')
+      .attr('class', 'hairline')
+      .attr('d', (d) => `M${Math.min(...d.lines.map(x))},${d.y} H${bundleEnd}`);
+    const platforms = svg.append('g').selectAll('path').data([...stops].sort((a, b) => a.bonus - b.bonus), (d) => d.id).join('path')
+      .attr('class', (d) => `platform${d.bonus ? ' is-bonus' : ''}`)
+      .attr('stroke-width', (d) => (d.bonus ? Math.max(d.w, 3.5) : d.w))
+      .attr('d', (d) => `M${bundleEnd},${d.y} H${endX}`);
+
+    const lines = svg.append('g').selectAll('path').data(ids).join('path')
+      .attr('class', 'line').style('stroke', color)
+      .attr('d', (id) => `M${x(id)},${originY} V${Math.max(...stops.filter((s) => s.lines.includes(id)).map((s) => s.y))}`);
+
+    const stations = svg.append('g').selectAll('circle')
+      .data(stops.flatMap((s) => s.lines.map((id) => ({ key: `${s.id}>${id}`, id, y: s.y, bonus: s.bonusLines.includes(id) }))), (d) => d.key)
+      .join('circle')
+      .attr('class', (d) => `station${d.bonus ? ' is-bonus' : ''}`)
+      .style('stroke', (d) => (d.bonus ? null : color(d.id)))
+      .attr('cx', (d) => x(d.id)).attr('cy', (d) => d.y).attr('r', r);
+
+    const dots = svg.append('g').selectAll('circle').data(stops, (d) => d.id).join('circle')
+      .attr('class', (d) => `stop-dot${d.bonus ? ' is-bonus' : ''}`)
+      .attr('cx', endX).attr('cy', (d) => d.y).attr('r', 4.5);
+
+    if (!animate) return;
+
+    // Same orchestrated moment as the single-card rail: lines draw down, stops appear in order.
+    lines.each(function () {
+      const len = this.getTotalLength();
+      d3.select(this).attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+        .transition().duration(520).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+        .on('end', function () { d3.select(this).attr('stroke-dasharray', null); });
+    });
+    const delay = (d) => 160 + (d.y / Math.max(lastY, 1)) * 420;
+    stations.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
+    hairlines.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
+    platforms.attr('opacity', 0).transition().delay(delay).duration(200).attr('opacity', 1);
+    dots.attr('opacity', 0).transition().delay((d) => 60 + delay(d)).duration(200).attr('opacity', 1);
   }
 
   // ---------- Compare view ----------
@@ -416,6 +491,7 @@
   const minimumOf = (t, c) => ({ min: t.min ?? c.minTransfer, step: t.increment ?? c.increment ?? c.minTransfer });
 
   function minimumText({ min, step }) {
+    if (min == null) return 'Minimum not published';
     if (min <= 1 && step <= 1) return 'No minimum';
     if (step <= 1) return `Minimum ${num.format(min)}`;
     return `Minimum ${num.format(min)}, ${step === min ? 'in' : 'then'} ${num.format(step)}-point steps`;
