@@ -103,6 +103,10 @@ jobs:
           sed -i -E "s#(src|href)=\"(app\.js|style\.css)\"#\1=\"\2?v=$V\"#g" $S/index.html
           sed -i -E "s#'\./(config|lib|icons|map)\.js'#'./\1.js?v=$V'#g" $S/*.js
           grep -q "app.js?v=$V" $S/index.html && grep -q "lib.js?v=$V" $S/app.js
+          # Installable app: name its offline cache after the commit, so each deploy starts fresh.
+          sed -i "s/const CACHE = 'inkling-dev';/const CACHE = 'inkling-$V';/" $S/sw.js
+          grep -q "inkling-$V" $S/sw.js
+          test -s $S/manifest.webmanifest && test -s $S/icons/icon-512.png && test -s $S/icons/maskable-512.png
           for f in restaurants removed zips meta; do test -s $S/data/$f.json; done
 
       - uses: actions/configure-pages@v5
