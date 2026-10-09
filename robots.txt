@@ -1,4 +1,4 @@
-# milesmaximizer.com (and /museum_problem/)
+# milesmaximizer.com (and /museum_problem/ and /inkling/)
 # Search engines are welcome. AI training crawlers and SEO-tool crawlers are asked to stay out.
 # Well-behaved crawlers follow this file; it can't stop ones that ignore it.
 
@@ -37,8 +37,8 @@ User-agent: serpstatbot
 User-agent: Barkrowler
 Disallow: /
 
-# AI assistants and AI search indexers may read the pages but not the museum finder's raw data
-# files (the museum list, memberships and network details). Search engines keep full access:
+# AI assistants and AI search indexers may read the pages but not the museum finder's or
+# Inkling's raw data files (the museum list, memberships and network details; the restaurant list). Search engines keep full access:
 # Google runs the page's JavaScript and needs those files to see the page's real content.
 User-agent: ChatGPT-User
 User-agent: OAI-SearchBot
@@ -49,6 +49,7 @@ User-agent: PerplexityBot
 User-agent: DuckAssistBot
 User-agent: MistralAI-User
 Disallow: /museum_problem/data/
+Disallow: /inkling/data/
 
 # Everyone else, including Googlebot, Bingbot, DuckDuckBot and Applebot (search).
 # Add a crawler to a group above to block it.

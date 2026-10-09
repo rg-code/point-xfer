@@ -23,7 +23,7 @@ Opening `index.html` directly from disk won't work because browsers block `fetch
 3. In **Settings → Actions → General → Workflow permissions**, choose **Read and write permissions** (needed if your account or org defaults to read-only).
 4. Open the **Actions** tab, pick **Track transfer bonuses**, and click **Run workflow** once to confirm everything works.
 
-The live site is at [milesmaximizer.com](https://milesmaximizer.com). The deploy also publishes the Museum Reciprocal Finder at [milesmaximizer.com/museum_problem](https://milesmaximizer.com/museum_problem/), fetched from its own (private) repo on every deploy. For a custom domain of your own, point the apex at GitHub's Pages A/AAAA records and `www` at `<user>.github.io`, set the domain in **Settings → Pages**, and tick **Enforce HTTPS** once the certificate is issued.
+The live site is at [milesmaximizer.com](https://milesmaximizer.com). The deploy also publishes the Museum Reciprocal Finder at [milesmaximizer.com/museum_problem](https://milesmaximizer.com/museum_problem/), fetched from its own (private) repo on every deploy, and [Inkling](https://milesmaximizer.com/inkling/) (inKind restaurants by zip, with what joined and what left) the same way. For a custom domain of your own, point the apex at GitHub's Pages A/AAAA records and `www` at `<user>.github.io`, set the domain in **Settings → Pages**, and tick **Enforce HTTPS** once the certificate is issued.
 
 The footer's "Report a mistake" link fills in your username and repo automatically when the site runs on `github.io`. On a custom domain, add it to `CUSTOM_DOMAINS` in `assets/app.js`.
 

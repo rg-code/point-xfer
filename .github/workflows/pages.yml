@@ -81,6 +81,30 @@ jobs:
           test -s $S/icons/icon-512.png   # the install prompt needs 192/512 icons
           test -s $S/fonts/fraunces-600.woff2
 
+      # Inkling (inKind restaurants by zip: what joined, what left) lives in the private
+      # rg-code/RInkU repo, read with INKLING_DEPLOY_KEY (a read-only deploy key there), and
+      # is published at /inkling/. Its data updates daily; it's fetched fresh on every deploy.
+      - uses: actions/checkout@v5
+        with:
+          repository: rg-code/RInkU
+          path: _inkling
+          ssh-key: ${{ secrets.INKLING_DEPLOY_KEY }}
+          persist-credentials: false
+          sparse-checkout: site
+
+      - name: Add Inkling at /inkling/
+        run: |
+          S=_site/inkling
+          cp -r _inkling/site $S
+          rm -f $S/404.html   # this site's 404.html covers /inkling/ too
+          # Same reason as above: versioned URLs, so each deploy's HTML gets matching JS/CSS,
+          # including the modules app.js imports.
+          V=$(git -C _inkling rev-parse --short=7 HEAD)
+          sed -i -E "s#(src|href)=\"(app\.js|style\.css)\"#\1=\"\2?v=$V\"#g" $S/index.html
+          sed -i -E "s#'\./(config|lib|icons|map)\.js'#'./\1.js?v=$V'#g" $S/*.js
+          grep -q "app.js?v=$V" $S/index.html && grep -q "lib.js?v=$V" $S/app.js
+          for f in restaurants removed zips meta; do test -s $S/data/$f.json; done
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v4
