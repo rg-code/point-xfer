@@ -84,14 +84,19 @@ jobs:
       # Inkling (inKind restaurants by zip: what joined, what left) lives in the private
       # rg-code/RInkU repo, read with INKLING_DEPLOY_KEY (a read-only deploy key there), and
       # is published at /inkling/. Its data updates daily; it's fetched fresh on every deploy.
+      # scripts/ is only for pack-data.mjs; it isn't published.
       - uses: actions/checkout@v5
         with:
           repository: rg-code/RInkU
           path: _inkling
           ssh-key: ${{ secrets.INKLING_DEPLOY_KEY }}
           persist-credentials: false
-          sparse-checkout: site
+          sparse-checkout: |
+            site
+            scripts
 
+      # Restaurants, zips, removals and phone numbers ship packed (gzip + AES-GCM, key in the
+      # page) like the museum finder; the app unpacks them. meta.json (counts) stays plain.
       - name: Add Inkling at /inkling/
         run: |
           S=_site/inkling
@@ -101,13 +106,16 @@ jobs:
           # including the modules app.js imports.
           V=$(git -C _inkling rev-parse --short=7 HEAD)
           sed -i -E "s#(src|href)=\"(app\.js|style\.css)\"#\1=\"\2?v=$V\"#g" $S/index.html
-          sed -i -E "s#'\./(config|lib|icons|map)\.js'#'./\1.js?v=$V'#g" $S/*.js
+          sed -i -E "s#'\./(config|lib|icons|map|pack)\.js'#'./\1.js?v=$V'#g" $S/*.js
           grep -q "app.js?v=$V" $S/index.html && grep -q "lib.js?v=$V" $S/app.js
           # Installable app: name its offline cache after the commit, so each deploy starts fresh.
           sed -i "s/const CACHE = 'inkling-dev';/const CACHE = 'inkling-$V';/" $S/sw.js
           grep -q "inkling-$V" $S/sw.js
           test -s $S/manifest.webmanifest && test -s $S/icons/icon-512.png && test -s $S/icons/maskable-512.png
-          for f in restaurants removed zips meta; do test -s $S/data/$f.json; done
+          node _inkling/scripts/pack-data.mjs $S/data
+          sed -i -E "s#'\./data/(restaurants|removed|zips)\.json'#'./data/\1.bin'#g" $S/sw.js
+          for f in restaurants removed zips; do test -s $S/data/$f.bin && test ! -e $S/data/$f.json; done
+          test ! -e $S/data/contacts.json && test -s $S/data/meta.json && grep -q "data/restaurants.bin" $S/sw.js
 
       - uses: actions/configure-pages@v5
 
