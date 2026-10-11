@@ -31,11 +31,17 @@
       <h1>Transfer map</h1>
       <p id="status">Loading partners</p>
     </div>
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
-      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
-      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
-      <span class="t-label">Light</span>
-    </button>
+    <div class="masthead-actions">
+      <button class="alerts-toggle" id="alerts-open" type="button" aria-haspopup="dialog" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>
+        <span class="t-label">Alerts</span>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+        <span class="t-label">Light</span>
+      </button>
+    </div>
   </header>
 
   <div class="controls" id="controls">
@@ -78,6 +84,21 @@
   </footer>
 
   <dialog class="sheet" id="sheet" aria-labelledby="sheet-title"></dialog>
+
+  <dialog class="alerts" id="alerts" aria-labelledby="alerts-title">
+    <form class="alerts-form" id="alerts-form" novalidate>
+      <button type="button" class="alerts-close" id="alerts-close" aria-label="Close">×</button>
+      <h2 id="alerts-title">Get bonus alerts</h2>
+      <p class="alerts-lead">An email when a new transfer bonus or a partner change shows up, at most one a day. Unsubscribe anytime.</p>
+      <div class="alerts-row">
+        <label for="alerts-email" class="visually-hidden">Email address</label>
+        <input id="alerts-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+        <button type="submit" class="alerts-submit">Notify me</button>
+      </div>
+      <p class="alerts-fine">We'll email you a link to confirm. Your address is only used for these alerts.</p>
+      <p class="alerts-status" id="alerts-status" role="status"></p>
+    </form>
+  </dialog>
 
   <dialog class="finder" id="finder" aria-label="Find a partner">
     <div class="finder-field">

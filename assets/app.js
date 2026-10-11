@@ -1319,6 +1319,78 @@
     eggPlaying = false;
   }
 
+  // ---------- Bonus alerts ----------
+
+  // The header's Alerts button opens an email signup. The list lives in Inkling's Cloudflare Worker
+  // (rg-code/RInkU, /lists/xfer/*): it emails a link to confirm, and its own pages handle confirming
+  // and unsubscribing. scripts/send-alert.mjs sends the daily digest through it. The Worker only
+  // accepts signups from this site, so the button stays hidden elsewhere (the preview, forks). The
+  // popup also offers itself once per visitor after a minute (never where storage is blocked,
+  // because it couldn't remember being closed).
+  const ALERTS_ENDPOINT = 'https://inkling-mcp.soul-clutching.workers.dev/lists/xfer';
+  const ALERTS_HOSTS = ['milesmaximizer.com', 'localhost'];
+  const ALERTS_PROMPT_AFTER = 60_000;
+  const ALERTS_KEY = 'alerts-prompt';   // 'subscribed', or when it was last closed
+
+  function setupAlerts() {
+    const dlg = $('#alerts');
+    if (!dlg || !ALERTS_HOSTS.includes(location.hostname)) return;
+    const form = $('#alerts-form');
+    const input = $('#alerts-email');
+    const status = $('#alerts-status');
+    const submit = $('.alerts-submit', form);
+    const recall = () => { try { return canStore ? localStorage.getItem(ALERTS_KEY) : null; } catch { return null; } };
+    const remember = (v) => { try { if (canStore) localStorage.setItem(ALERTS_KEY, v); } catch { /* private mode */ } };
+    const open = () => {
+      if (dlg.open) return;
+      form.dataset.state = '';
+      status.textContent = '';
+      dlg.showModal();
+      input.focus();
+    };
+
+    const btn = $('#alerts-open');
+    btn.hidden = false;
+    btn.addEventListener('click', open);
+    $('#alerts-close').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => { if (recall() !== 'subscribed') remember(String(Date.now())); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = input.value.trim();
+      if (!email || !input.checkValidity()) { status.textContent = 'Enter a valid email address.'; input.focus(); return; }
+      submit.disabled = true;
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(`${ALERTS_ENDPOINT}/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        if (res.ok) {
+          remember('subscribed');
+          form.dataset.state = 'done';
+          status.textContent = `Check ${email} and tap the link to confirm.`;
+        } else {
+          const why = res.status === 400 || res.status === 429 ? (await res.json().catch(() => ({}))).error : '';
+          status.textContent = why || "Couldn't sign you up right now. Please try again later.";
+        }
+      } catch {
+        status.textContent = "Couldn't reach the signup service. Please try again later.";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    // Offer itself once: not after a signup, and not again within four months of being closed.
+    const seen = recall();
+    if (!canStore || seen === 'subscribed' || (seen && Date.now() - Number(seen) < 120 * 864e5)) return;
+    setTimeout(() => {
+      if (!document.querySelector('dialog[open]') && document.visibilityState === 'visible') open();
+    }, ALERTS_PROMPT_AFTER);
+  }
+
   // ---------- Render ----------
 
   function render({ animate = false } = {}) {
@@ -1364,6 +1436,7 @@
     setupControls();
     setupFinder();
     setupEggs();
+    setupAlerts();
     setupReportLink();
     renderStatus();
     // Wait briefly for B612 so row heights are final before the rail animates.
