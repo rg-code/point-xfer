@@ -1323,7 +1323,7 @@
 
   // The header's Alerts button opens an email signup. The list lives in Inkling's Cloudflare Worker
   // (rg-code/RInkU, /lists/xfer/*): it emails a link to confirm, and its own pages handle confirming
-  // and unsubscribing. scripts/send-alert.mjs sends the daily digest through it. The Worker only
+  // and unsubscribing. scripts/send-alert.mjs sends new bonuses and route changes through it. The Worker only
   // accepts signups from this site, so the button stays hidden elsewhere (the preview, forks). The
   // popup also offers itself once per visitor after a minute (never where storage is blocked,
   // because it couldn't remember being closed).

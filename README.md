@@ -47,11 +47,14 @@ It needs a Slack app with the **User Token Scope** `chat:write`, installed by yo
 
 ### Email alerts
 
-The **Alerts** button in the header (and a one-time popup after a minute on the site) signs visitors up for email. The list lives in Inkling's Cloudflare Worker ([rg-code/RInkU](https://github.com/rg-code/RInkU), routes `/lists/xfer/*`), which sends a confirmation link, hosts the confirm and unsubscribe pages, and sends through Inkling's Resend account. This repo stores no addresses and no Resend key.
+The **Alerts** button in the header (and a one-time popup after a minute on the site) signs visitors up for email. The list lives in Inkling's Cloudflare Worker ([rg-code/RInkU](https://github.com/rg-code/RInkU), routes `/lists/xfer/*`), which sends a confirmation link and hosts the confirm and unsubscribe pages. This repo stores no addresses and no email-provider key.
 
-Once a day, on the first tracker run from 9am Eastern, `scripts/send-alert.mjs --digest` emails new bonuses and announced bonuses that went live, if there are any. `data/email-sent.json` remembers what went out. For anything else (a new partner, a ratio change), run **Actions → Email a map update**; it only prints the email unless you untick dry run.
+Emails go out only when something changes, never on a schedule:
 
-Setup: the repo secret `XFER_ALERTS_TOKEN` must match the secret of the same name in RInkU (which hands it to the Worker on deploy). Without it the email step is skipped. Optionally set the repo variable `MAIL_POSTAL_ADDRESS` to put a postal address in the footer. Resend's free plan allows 100 emails a day for the whole account, so the Worker caps this list at 40 a day; past that, the newest subscribers miss that day's email.
+- **New bonus:** a tracker run that finds new bonuses sends one email listing them.
+- **Transfer partner change:** pushing a change to `data/transfers.json` on main that adds a route, removes one, or changes its ratio sends one email (`email-changes.yml`). Edits to notes, transfer times or minimums send nothing.
+
+Setup: the repo secret `XFER_ALERTS_TOKEN` must match the secret of the same name in RInkU (which hands it to the Worker on deploy). Without it the email steps are skipped. Optionally set the repo variable `MAIL_POSTAL_ADDRESS` to put a postal address in the footer. To preview an email, run `node scripts/send-alert.mjs --changes <old transfers.json> --dry-run`.
 
 ### Fixing mistakes by hand
 
@@ -86,11 +89,11 @@ data/sources.json          feeds the tracker reads
 scripts/track-promos.mjs   tracker entry point
 scripts/lib/parse.mjs      feed parsing and bonus extraction
 scripts/lib/sources.mjs    official domains and source ranking
-scripts/lib/email.mjs      daily digest and map-update emails
+scripts/lib/email.mjs      new-bonus and partner-change emails
 scripts/send-alert.mjs     sends them through Inkling's Worker
 scripts/build-preview.mjs  single-file build
 tests/*.test.mjs           node:test suites (tracker, insights, slack, email)
-.github/workflows/         track-promos.yml (cron), pages.yml (deploy), email-update.yml (manual)
+.github/workflows/         track-promos.yml (cron), pages.yml (deploy), email-changes.yml (partner-change emails)
 ```
 
 ## Things to know
