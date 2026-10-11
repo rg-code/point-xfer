@@ -47,7 +47,7 @@ It needs a Slack app with the **User Token Scope** `chat:write`, installed by yo
 
 ### Email alerts
 
-The **Alerts** button in the header (and a one-time popup after a minute on the site) signs visitors up for email. The list lives in Inkling's Cloudflare Worker ([rg-code/RInkU](https://github.com/rg-code/RInkU), routes `/lists/xfer/*`), which sends a confirmation link and hosts the confirm and unsubscribe pages. This repo stores no addresses and no email-provider key.
+The **Alerts** button in the header (and a one-time popup after a minute on the site) offers two ways to hear about changes, like Inkling's alerts: **Email**, or **This browser**, which needs no address: the browser remembers what it has seen and shows a "Since your last visit" banner (and a notification, if allowed) when something changed. Browser alerts never leave the browser. The list lives in Inkling's Cloudflare Worker ([rg-code/RInkU](https://github.com/rg-code/RInkU), routes `/lists/xfer/*`), which sends a confirmation link and hosts the confirm and unsubscribe pages. This repo stores no addresses and no email-provider key.
 
 Emails go out only when something changes, never on a schedule:
 

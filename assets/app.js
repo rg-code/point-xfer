@@ -1321,16 +1321,94 @@
 
   // ---------- Bonus alerts ----------
 
-  // The header's Alerts button opens an email signup. The list lives in Inkling's Cloudflare Worker
-  // (rg-code/RInkU, /lists/xfer/*): it emails a link to confirm, and its own pages handle confirming
-  // and unsubscribing. scripts/send-alert.mjs sends new bonuses and route changes through it. The Worker only
-  // accepts signups from this site, so the button stays hidden elsewhere (the preview, forks). The
-  // popup also offers itself once per visitor after a minute (never where storage is blocked,
-  // because it couldn't remember being closed).
+  // The header's Alerts button opens a signup with two ways to hear about changes, like Inkling's:
+  // - Email: the list lives in Inkling's Cloudflare Worker (rg-code/RInkU, /lists/xfer/*). It emails a
+  //   link to confirm, and its own pages handle confirming and unsubscribing. scripts/send-alert.mjs
+  //   sends new bonuses and route changes through it.
+  // - This browser: a snapshot of the bonuses and routes seen so far is kept in localStorage; each
+  //   visit shows what's new since then as a banner (and a notification, if allowed). Nothing leaves
+  //   the browser.
+  // The Worker only accepts signups from this site, so the button stays hidden elsewhere (the preview,
+  // forks). The popup also offers itself once per visitor after a minute (never where storage is
+  // blocked, because it couldn't remember being closed).
   const ALERTS_ENDPOINT = 'https://inkling-mcp.soul-clutching.workers.dev/lists/xfer';
   const ALERTS_HOSTS = ['milesmaximizer.com', 'localhost'];
   const ALERTS_PROMPT_AFTER = 60_000;
-  const ALERTS_KEY = 'alerts-prompt';   // 'subscribed', or when it was last closed
+  const ALERTS_KEY = 'alerts-prompt';     // 'subscribed', or when it was last closed
+  const BROWSER_KEY = 'alerts-browser';   // { bonuses: [promo ids], routes: { 'from>to': rates } }
+
+  const readStore = (k) => { try { return canStore ? localStorage.getItem(k) : null; } catch { return null; } };
+  const writeStore = (k, v) => { try { if (canStore) (v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)); } catch { /* private mode */ } };
+
+  // Bonuses that are live or announced, and every route's rates, as the browser alert remembers them.
+  function alertSnapshot() {
+    const bonuses = (D.promotions.promotions || []).filter((p) => {
+      const end = p.end || p.assumedEnd;
+      return D.routes.has(`${p.from}>${p.to}`) && (!end || end >= D.day);
+    });
+    const routes = Object.fromEntries(D.transfers.transfers.map((t) => [`${t.from}>${t.to}`, JSON.stringify([t.ratio, t.variants || null])]));
+    return { bonuses, routes };
+  }
+
+  function browserAlertOn() {
+    try { return JSON.parse(readStore(BROWSER_KEY)); } catch { return null; }
+  }
+
+  function saveBrowserAlert() {
+    const snap = alertSnapshot();
+    writeStore(BROWSER_KEY, JSON.stringify({ bonuses: snap.bonuses.map((p) => p.id), routes: snap.routes }));
+  }
+
+  // On each visit with a browser alert on: what changed since the last visit.
+  function checkBrowserAlerts() {
+    const saved = browserAlertOn();
+    if (!saved) return;
+    const now = alertSnapshot();
+    const seen = new Set(saved.bonuses || []);
+    const cur = (id) => D.currencies.get(id)?.name || id;
+    const par = (id) => D.partners.get(id)?.name || id;
+    const items = [];
+    for (const p of now.bonuses) {
+      if (seen.has(p.id)) continue;
+      const when = p.start && p.start > D.day ? ` from ${shortDate.format(new Date(`${p.start}T00:00:00Z`))}` : '';
+      items.push({ to: p.to, text: `${cur(p.from)} → ${par(p.to)}: +${p.bonus}% bonus${when}` });
+    }
+    const was = saved.routes || {};
+    for (const [k, rates] of Object.entries(now.routes)) {
+      const [from, to] = k.split('>');
+      const t = D.routes.get(k);
+      if (!(k in was)) items.push({ to, text: `${cur(from)} adds ${par(to)} (${ratioText(t.ratio)})` });
+      else if (was[k] !== rates) {
+        const before = JSON.parse(was[k])[0];
+        items.push({ to, text: `${cur(from)} → ${par(to)} ${String(before) === String(t.ratio) ? 'changes its card-specific rates' : `goes from ${ratioText(before)} to ${ratioText(t.ratio)}`}` });
+      }
+    }
+    for (const k of Object.keys(was)) {
+      if (k in now.routes) continue;
+      const [from, to] = k.split('>');
+      items.push({ to, text: `${cur(from)} drops ${par(to)}` });
+    }
+    saveBrowserAlert();
+    if (!items.length) return;
+
+    const banner = $('#alerts-banner');
+    const shown = items.slice(0, 5);
+    banner.innerHTML = `<p>Since your last visit</p><ul>${shown.map((it, i) => `<li>${D.partners.has(it.to)
+      ? `<button type="button" class="link-button" data-i="${i}">${esc(it.text)}</button>` : esc(it.text)}</li>`).join('')}</ul>${
+      items.length > shown.length ? `<p class="alerts-more">and ${items.length - shown.length} more</p>` : ''}<button type="button" class="alerts-close" aria-label="Dismiss">×</button>`;
+    banner.hidden = false;
+    banner.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.classList.contains('alerts-close')) { banner.hidden = true; return; }
+      openSheet(shown[Number(b.dataset.i)].to, null);
+    });
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(`Transfer map: ${items.length} update${items.length === 1 ? '' : 's'}`, { body: items.slice(0, 5).map((it) => it.text).join('\n'), icon: 'assets/icon.svg' });
+      } catch { /* some mobile browsers only notify from a service worker */ }
+    }
+  }
 
   function setupAlerts() {
     const dlg = $('#alerts');
@@ -1339,14 +1417,25 @@
     const input = $('#alerts-email');
     const status = $('#alerts-status');
     const submit = $('.alerts-submit', form);
-    const recall = () => { try { return canStore ? localStorage.getItem(ALERTS_KEY) : null; } catch { return null; } };
-    const remember = (v) => { try { if (canStore) localStorage.setItem(ALERTS_KEY, v); } catch { /* private mode */ } };
+    const recall = () => readStore(ALERTS_KEY);
+    const remember = (v) => writeStore(ALERTS_KEY, v);
+    const channel = () => form.elements.channel.value;
+    const sync = () => {
+      const on = !!browserAlertOn();
+      $('#alerts-browser-on').hidden = !on;
+      // With browser alerts on (or no storage, as in the preview), email is the only choice left.
+      $('.alerts-how', form).hidden = on || !canStore;
+      if (on || !canStore) form.elements.channel.value = 'email';
+      input.hidden = channel() !== 'email';
+      submit.textContent = channel() === 'email' ? 'Notify me' : 'Turn on';
+    };
     const open = () => {
       if (dlg.open) return;
       form.dataset.state = '';
       status.textContent = '';
+      sync();
       dlg.showModal();
-      input.focus();
+      (channel() === 'email' ? input : submit).focus();
     };
 
     const btn = $('#alerts-open');
@@ -1355,9 +1444,25 @@
     $('#alerts-close').addEventListener('click', () => dlg.close());
     dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
     dlg.addEventListener('close', () => { if (recall() !== 'subscribed') remember(String(Date.now())); });
+    form.addEventListener('change', (e) => { if (e.target.name === 'channel') { status.textContent = ''; sync(); } });
+    $('#alerts-browser-off').addEventListener('click', () => {
+      writeStore(BROWSER_KEY, null);
+      remember(String(Date.now()));
+      sync();
+      status.textContent = 'Alerts in this browser are off.';
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (channel() === 'browser') {
+        saveBrowserAlert();
+        remember('subscribed');
+        if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission().catch(() => {});
+        form.dataset.state = 'done';
+        sync();
+        status.textContent = 'Saved in this browser. New bonuses and partner changes will show here (and as a notification, if allowed) when you open the map.';
+        return;
+      }
       const email = input.value.trim();
       if (!email || !input.checkValidity()) { status.textContent = 'Enter a valid email address.'; input.focus(); return; }
       submit.disabled = true;
@@ -1382,6 +1487,8 @@
         submit.disabled = false;
       }
     });
+
+    checkBrowserAlerts();
 
     // Offer itself once: not after a signup, and not again within four months of being closed.
     const seen = recall();
