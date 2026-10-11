@@ -65,6 +65,17 @@ jobs:
           done < <(jq -c '.[]' "$RUNNER_TEMP/slack-messages.json")
           exit $failed
 
+      # One email to the alert subscribers (signups from the header's Alerts button) per run that
+      # finds new bonuses, sent through Inkling's Worker. After the commit, like Slack, so a failed push
+      # can't send twice. Skipped until XFER_ALERTS_TOKEN is set; never fails the run.
+      - name: Email new bonuses to subscribers
+        if: steps.track.outputs.new_count != '' && steps.track.outputs.new_count != '0'
+        continue-on-error: true
+        env:
+          XFER_ALERTS_TOKEN: ${{ secrets.XFER_ALERTS_TOKEN }}
+          MAIL_POSTAL_ADDRESS: ${{ vars.MAIL_POSTAL_ADDRESS }}
+        run: node scripts/send-alert.mjs --bonuses "$RUNNER_TEMP/new-bonuses.json"
+
       - name: Open an issue for new bonuses
         if: steps.track.outputs.new_count != '' && steps.track.outputs.new_count != '0'
         env:

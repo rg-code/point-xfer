@@ -7,7 +7,8 @@
 //
 // When run inside GitHub Actions it also writes `new_count` and `slack_count` to $GITHUB_OUTPUT,
 // a Markdown summary of newly found bonuses to $RUNNER_TEMP/new-promos.md for the issue step, and
-// the Slack posts (announcements, and announced bonuses going live) to $RUNNER_TEMP/slack-messages.json.
+// the Slack posts (announcements, and announced bonuses going live) to $RUNNER_TEMP/slack-messages.json,
+// and the new bonuses to $RUNNER_TEMP/new-bonuses.json for the subscriber email.
 
 import { readFile, writeFile, appendFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -245,6 +246,9 @@ async function main() {
     await appendFile(process.env.GITHUB_OUTPUT, `new_count=${newlyFound.length}\nslack_count=${slack.length}\n`);
     if (slack.length && process.env.RUNNER_TEMP) {
       await writeFile(path.join(process.env.RUNNER_TEMP, 'slack-messages.json'), JSON.stringify(slack));
+    }
+    if (newlyFound.length && process.env.RUNNER_TEMP) {
+      await writeFile(path.join(process.env.RUNNER_TEMP, 'new-bonuses.json'), JSON.stringify(newlyFound));
     }
     if (newlyFound.length && process.env.RUNNER_TEMP) {
       const lines = newlyFound.map((p) => {

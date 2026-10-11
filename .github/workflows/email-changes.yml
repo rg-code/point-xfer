@@ -1,0 +1,38 @@
+name: Email transfer partner changes
+
+# When data/transfers.json changes on main, emails the alert subscribers about routes added, removed
+# or re-rated (notes, times and minimums don't count), through Inkling's Worker. Skipped until
+# XFER_ALERTS_TOKEN is set.
+on:
+  push:
+    branches: [main]
+    paths: [data/transfers.json]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: email-changes
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Fetch the version before this push
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if ! git fetch --no-tags --depth=1 origin "$BEFORE" 2>/dev/null; then echo "No earlier commit to compare with."; exit 0; fi
+          git show "$BEFORE:data/transfers.json" > "$RUNNER_TEMP/old-transfers.json"
+          git show "$BEFORE:data/programs.json" > "$RUNNER_TEMP/old-programs.json"
+      - name: Email the changes
+        env:
+          XFER_ALERTS_TOKEN: ${{ secrets.XFER_ALERTS_TOKEN }}
+          MAIL_POSTAL_ADDRESS: ${{ vars.MAIL_POSTAL_ADDRESS }}
+        run: node scripts/send-alert.mjs --changes "$RUNNER_TEMP/old-transfers.json" --old-programs "$RUNNER_TEMP/old-programs.json"
