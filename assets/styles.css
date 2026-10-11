@@ -749,7 +749,26 @@ dialog.alerts::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 .alerts-fine { margin: 10px 0 0; color: var(--muted); font-size: var(--step--1); }
 .alerts-status { margin: 10px 0 0; font-weight: 700; }
 .alerts-status:empty { display: none; }
-.alerts-form[data-state="done"] .alerts-row, .alerts-form[data-state="done"] .alerts-fine { display: none; }
+.alerts-form[data-state="done"] .alerts-row, .alerts-form[data-state="done"] .alerts-fine, .alerts-form[data-state="done"] .alerts-how { display: none; }
+.alerts-how { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 12px; padding: 0; border: 0; min-width: 0; }
+.alerts-how[hidden] { display: none; }
+.alerts-option { position: relative; }
+.alerts-option input { position: absolute; opacity: 0; }
+.alerts-option > span { display: grid; gap: 2px; height: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; cursor: pointer; }
+.alerts-option small { color: var(--muted); font-size: var(--step--1); }
+.alerts-option input:checked + span { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.alerts-option input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.alerts-on { margin: 0 0 12px; font-weight: 700; }
+.link-button { border: 0; background: none; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* What changed since the last visit, for browser alerts (checkBrowserAlerts in app.js). */
+.alerts-banner { position: relative; margin: 0 0 12px; padding: 12px 48px 12px 16px; border: 1px solid var(--rule); border-radius: 12px; background: var(--surface); }
+.alerts-banner p { margin: 0 0 4px; font-weight: 700; }
+.alerts-banner ul { margin: 0; padding-left: 18px; }
+.alerts-banner li { margin: 2px 0; }
+.alerts-banner .alerts-more { margin: 4px 0 0; font-weight: 400; color: var(--muted); font-size: var(--step--1); }
+.alerts-banner .link-button { vertical-align: top; text-align: left; }   /* keeps the bullet on the first line when it wraps */
+.alerts-banner .alerts-close { top: 2px; right: 2px; }
 
 /* ---------- Easter eggs ---------- */
 
@@ -798,6 +817,7 @@ dialog.alerts::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
     align-items: start;
   }
   .bonuses { position: sticky; top: calc(var(--controls-h, 0px) + 16px); margin-top: 4px; }
+  .alerts-banner { grid-column: 1 / -1; }
   .tickets { flex-direction: column; flex-wrap: nowrap; }
   .ticket { width: 100%; min-width: 0; }
   #view { max-width: 760px; }

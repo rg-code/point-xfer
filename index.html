@@ -69,6 +69,7 @@
   </div>
 
   <main class="layout">
+    <div class="alerts-banner" id="alerts-banner" role="status" hidden></div>
     <section class="bonuses" id="bonuses" aria-live="polite"></section>
     <div id="view" role="tabpanel"></div>
   </main>
@@ -89,13 +90,19 @@
     <form class="alerts-form" id="alerts-form" novalidate>
       <button type="button" class="alerts-close" id="alerts-close" aria-label="Close">×</button>
       <h2 id="alerts-title">Get bonus alerts</h2>
-      <p class="alerts-lead">An email only when a new transfer bonus shows up, or a card adds, drops or re-rates a transfer partner. Unsubscribe anytime.</p>
+      <p class="alerts-lead">Only when a new transfer bonus shows up, or a card adds, drops or re-rates a transfer partner.</p>
+      <p class="alerts-on" id="alerts-browser-on" hidden>Alerts in this browser are on. <button type="button" class="link-button" id="alerts-browser-off">Turn off</button></p>
+      <fieldset class="alerts-how">
+        <legend class="visually-hidden">Send to</legend>
+        <label class="alerts-option"><input type="radio" name="channel" value="email" checked><span><strong>Email</strong><small>Unsubscribe anytime</small></span></label>
+        <label class="alerts-option" id="alerts-browser-option"><input type="radio" name="channel" value="browser"><span><strong>This browser</strong><small>When you open the map</small></span></label>
+      </fieldset>
       <div class="alerts-row">
         <label for="alerts-email" class="visually-hidden">Email address</label>
         <input id="alerts-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
         <button type="submit" class="alerts-submit">Notify me</button>
       </div>
-      <p class="alerts-fine">We'll email you a link to confirm. Your address is only used for these alerts.</p>
+      <p class="alerts-fine">No ads, no tracking. Your email is used only for these alerts, never sold or shared, and deleted when you unsubscribe. Browser alerts stay in this browser.</p>
       <p class="alerts-status" id="alerts-status" role="status"></p>
     </form>
   </dialog>
