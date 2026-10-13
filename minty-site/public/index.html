@@ -66,6 +66,9 @@
   dialog.panel[open] { animation: slide-in .22s ease-out; }
   @keyframes slide-in { from { transform: translateX(40px); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { dialog.panel[open] { animation: none; } }
+  dialog.panel.wide { width: min(1200px, 100vw); }
+  .panel-frame { flex: 1; width: 100%; border: 0; display: block; background: var(--bg); }
+  .links .btn.demo { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
   .panel-inner { height: 100%; display: flex; flex-direction: column; }
   .panel-head { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 20px; border-bottom: 1px solid var(--hairline); }
   .panel-head img { width: 28px; height: 28px; }
@@ -115,6 +118,7 @@
 
   <div class="links" id="links">
     <a class="btn" id="getStarted" href="https://github.com/rg-code/minty/blob/main/GET-STARTED.md" data-goatcounter-click="minty-get-started">Get started (about 30 minutes)</a>
+    <a class="btn demo" id="demoOpen" href="/demo/" data-goatcounter-click="minty-demo-open">Try the live demo</a>
     <a class="btn secondary" href="https://github.com/rg-code/minty/fork" data-goatcounter-click="minty-fork">Copy Minty to your GitHub (fork)</a>
     <a class="btn secondary" href="https://github.com/rg-code/minty/archive/refs/heads/main.zip" data-goatcounter-click="minty-zip">Download the code (ZIP)</a>
     <div class="clone"><code id="lClone">git clone https://github.com/rg-code/minty.git</code><button type="button" id="copyClone" data-goatcounter-click="minty-clone-copy">Copy</button></div>
@@ -147,6 +151,18 @@
   </nav>
   <p class="legal">© <span id="year">2026</span> rg-code. Minty is source-available under <a href="https://github.com/rg-code/minty/blob/main/LICENSE" rel="license">PolyForm Strict 1.0.0</a>.</p>
 </footer>
+
+<dialog class="panel wide" id="demo" aria-labelledby="demoTitle">
+  <div class="panel-inner">
+    <div class="panel-head">
+      <img src="/favicon.svg" alt="" width="28" height="28" />
+      <h2 id="demoTitle">Live demo</h2>
+      <a href="/demo/" target="_blank" rel="noopener" data-goatcounter-click="minty-demo-fullscreen">Open full screen</a>
+      <button type="button" class="close" id="demoClose" aria-label="Close">×</button>
+    </div>
+    <iframe class="panel-frame" id="demoFrame" title="Minty live demo, with made-up data"></iframe>
+  </div>
+</dialog>
 
 <dialog class="panel" id="guide" aria-labelledby="guideTitle">
   <div class="panel-inner">
@@ -251,6 +267,34 @@ $("guideClose").addEventListener("click", () => guide.close());
 guide.addEventListener("click", (e) => { if (e.target === guide) guide.close(); });   // the dimmed backdrop
 guide.addEventListener("close", () => history.replaceState(null, "", location.pathname + location.search));
 if (location.hash === "#get-started") openGuide();
+
+// Live demo: Minty itself with made-up data, running in the visitor's browser (/demo/, built from
+// rg-code/minty by deploy.mjs). The frame starts loading on hover or focus, so it's ready on click.
+const demo = $("demo"), frame = $("demoFrame");
+const warm = () => { if (!frame.src) frame.src = "/demo/"; };
+function openDemo() {
+  warm();
+  if (!demo.open) demo.showModal();
+  if (location.hash !== "#demo") history.replaceState(null, "", "#demo");
+}
+$("demoOpen").addEventListener("click", (e) => {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;   // new tab: the demo full screen
+  e.preventDefault();
+  openDemo();
+});
+for (const ev of ["pointerenter", "focus"]) $("demoOpen").addEventListener(ev, warm, { once: true });
+$("demoClose").addEventListener("click", () => demo.close());
+demo.addEventListener("click", (e) => { if (e.target === demo) demo.close(); });
+demo.addEventListener("close", () => history.replaceState(null, "", location.pathname + location.search));
+// Esc inside the demo closes the panel, unless one of the demo's own popups is open.
+frame.addEventListener("load", () => {
+  try {
+    frame.contentWindow.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !frame.contentDocument.querySelector("dialog[open]")) demo.close();
+    });
+  } catch {}
+});
+if (location.hash === "#demo") openDemo();
 </script>
 
 <!-- GoatCounter (shared with milesmaximizer.com): no cookies, no personal data. The host goes in

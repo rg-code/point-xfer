@@ -11,6 +11,11 @@ redirects here. No forms.
   fetched from raw.githubusercontent.com when it opens and rendered with marked + DOMPurify
   (cdnjs, pinned with SRI). Relative links point to the repo on GitHub. `#get-started` opens it
   directly. Without JavaScript, or if loading fails, the button goes to the guide on GitHub.
+- **Try the live demo** opens a wide side panel (full screen on phones) with `/demo/` in a frame:
+  Minty itself with made-up data, running in the visitor's browser (the real dashboard and Worker
+  over sql.js; nothing is sent anywhere). It's built from rg-code/minty by `deploy.mjs` into
+  `public/demo/`, which isn't committed here; see Minty's `docs/demo.md`. `#demo` opens it
+  directly, and the frame starts loading when the button is hovered or focused.
 - **GoatCounter** (the shared `rg-code` site, no cookies, no personal data) counts visits with
   the host in the path, as GRAZE does (`minty.milesmaximizer.com/`), plus a `<noscript>` pixel.
   Click events are named `minty-*`.
@@ -19,7 +24,12 @@ redirects here. No forms.
 
 ## Deploy
 
-    cd minty-site && npx wrangler pages deploy public --project-name minty-site --branch main
+Builds the live demo from a Minty checkout (an up-to-date main; default `../../minty`), then
+publishes `public/`. Redeploy after Minty dashboard changes so the demo follows them.
+
+    cd minty-site && node deploy.mjs [--minty ../../minty] [--preview]
+
+`--preview` publishes to https://preview.minty-site-853.pages.dev instead of the live site.
 
 ## Custom domain (one-time)
 
