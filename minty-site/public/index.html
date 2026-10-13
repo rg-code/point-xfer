@@ -26,17 +26,9 @@
   .brand .coin { width: 64px; height: 64px; }
   .brand .word { height: 40px; width: auto; color: var(--brand); }
   p.lede { margin: 0 0 22px; color: var(--muted); }
-  label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
-  .row { display: flex; gap: 8px; }
-  input { flex: 1; min-width: 0; font: inherit; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--hairline);
-          background: var(--bg); color: var(--ink); }
-  input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   button, .btn { font: inherit; font-weight: 600; padding: 11px 16px; border-radius: 12px; border: 0; cursor: pointer;
                  background: var(--accent); color: var(--accent-ink); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-  button:disabled { opacity: .6; cursor: wait; }
-  .msg { min-height: 1.5em; font-size: 14px; margin: 8px 0 0; color: var(--err); }
-  .links { display: grid; gap: 10px; margin-top: 4px; }
-  .links[hidden], .gate[hidden] { display: none; }
+  .links { display: grid; gap: 10px; }
   .links .btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--hairline); }
   .clone { display: flex; gap: 8px; align-items: center; border: 1px solid var(--hairline); border-radius: 12px; padding: 6px 6px 6px 12px; }
   .clone code { flex: 1; min-width: 0; font-size: 13px; overflow-x: auto; white-space: nowrap; }
@@ -62,21 +54,12 @@
   </div>
   <p class="lede">Your own private home for all your bank and card data. It runs on your own free accounts, so only you can see it.</p>
 
-  <form class="gate" id="gate">
-    <label for="pass">Passphrase</label>
-    <div class="row">
-      <input id="pass" name="passphrase" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="120" required placeholder="From whoever shared Minty with you" />
-      <button type="submit" id="go">Continue</button>
-    </div>
-    <p class="msg" id="msg" role="alert"></p>
-  </form>
-
-  <div class="links" id="links" hidden>
-    <a class="btn" id="lStart" href="#">Get started (about 30 minutes)</a>
-    <a class="btn secondary" id="lFork" href="#">Copy Minty to your GitHub (fork)</a>
-    <a class="btn secondary" id="lZip" href="#">Download the code (ZIP)</a>
-    <div class="clone"><code id="lClone"></code><button type="button" id="copyClone">Copy</button></div>
-    <p class="note">The fork is the way to go: it updates itself every week. Use Minty as is, for personal use only (<a id="lLicense" href="#">license</a>).</p>
+  <div class="links" id="links">
+    <a class="btn" href="https://github.com/rg-code/minty/blob/main/GET-STARTED.md">Get started (about 30 minutes)</a>
+    <a class="btn secondary" href="https://github.com/rg-code/minty/fork">Copy Minty to your GitHub (fork)</a>
+    <a class="btn secondary" href="https://github.com/rg-code/minty/archive/refs/heads/main.zip">Download the code (ZIP)</a>
+    <div class="clone"><code id="lClone">git clone https://github.com/rg-code/minty.git</code><button type="button" id="copyClone">Copy</button></div>
+    <p class="note">The fork is the way to go: it updates itself every week. Use Minty as is, for personal use only (<a href="https://github.com/rg-code/minty/blob/main/LICENSE">license</a>).</p>
   </div>
 
   <section class="share" aria-label="Share Minty">
@@ -111,28 +94,7 @@ async function copy(text, btn) {
 }
 $("copyLink").addEventListener("click", (e) => copy(URL_, e.currentTarget));
 
-// the gate: the server logs every passphrase and returns the links for a right one
-function show(links) {
-  $("lStart").href = links.getStarted; $("lFork").href = links.fork; $("lZip").href = links.zip;
-  $("lClone").textContent = links.clone; $("lLicense").href = links.license;
-  $("gate").hidden = true; $("links").hidden = false;
-  try { sessionStorage.setItem("minty-links", JSON.stringify(links)); } catch {}
-}
-try { const saved = sessionStorage.getItem("minty-links"); if (saved) show(JSON.parse(saved)); } catch {}
 $("copyClone").addEventListener("click", (e) => copy($("lClone").textContent, e.currentTarget));
-$("gate").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const passphrase = $("pass").value.trim();
-  if (!passphrase) return;
-  $("go").disabled = true; $("msg").textContent = "";
-  try {
-    const r = await fetch("/api/check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ passphrase }) });
-    const d = await r.json().catch(() => ({}));
-    if (d.ok) show(d.links); else $("msg").textContent = d.error || "Something went wrong. Try again.";
-  } catch {
-    $("msg").textContent = "Couldn't reach the server. Check your connection and try again.";
-  } finally { $("go").disabled = false; }
-});
 </script>
 </body>
 </html>
