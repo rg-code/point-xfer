@@ -11,6 +11,14 @@ test("the Minty landing page links to the repo and the guide, with no gate", asy
   assert.doesNotMatch(html, /passphrase|\/api\//i);     // no gate, nothing logged
   assert.match(html, /id="copyLink"/);                   // share buttons
   assert.match(html, /id="shareReddit"/);
+  assert.doesNotMatch(html, /id="shareText"/);
+});
+
+test("the Minty landing page is always the light mint theme, whatever the system theme", async () => {
+  const html = await readFile(new URL("../minty-site/public/index.html", import.meta.url), "utf8");
+  assert.doesNotMatch(html, /prefers-color-scheme/);
+  assert.match(html, /<meta name="color-scheme" content="only light" \/>/);
+  assert.match(html, /--bg: #f2f8f5/);
 });
 
 test("Get started opens the latest guide in a panel, and stays a GitHub link without JavaScript", async () => {

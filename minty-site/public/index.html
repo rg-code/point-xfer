@@ -6,6 +6,8 @@
 <title>Minty</title>
 <meta name="description" content="Your own private home for all your bank and card transactions." />
 <meta name="robots" content="noindex" />
+<meta name="color-scheme" content="only light" />
+<meta name="theme-color" content="#f2f8f5" />
 <meta property="og:title" content="Minty" />
 <meta property="og:description" content="Your own private home for all your bank and card transactions." />
 <meta property="og:url" content="https://minty.milesmaximizer.com/" />
@@ -13,12 +15,9 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <style>
-  :root { color-scheme: light; --bg: #f2f8f5; --surface: #fff; --ink: #16181d; --muted: #5b6472; --hairline: #e3ece7;
+  :root { color-scheme: only light; --bg: #f2f8f5; --surface: #fff; --ink: #16181d; --muted: #5b6472; --hairline: #e3ece7;
           --brand: #0f3d33; --dot: #2db37c; --accent: #0f4d3c; --accent-ink: #fff; --err: #c92a2a; --shadow: rgba(0,0,0,.06);
           --code: #eef5f1; --scrim: rgba(10,30,24,.32); }
-  @media (prefers-color-scheme: dark) { :root { color-scheme: dark; --bg: #0e1413; --surface: #171a21; --ink: #e6e8ee; --muted: #9aa3b2;
-          --hairline: #272c37; --brand: #e8f5ef; --dot: #5fd3a0; --accent: #5fd3a0; --accent-ink: #0e1413; --err: #ff6b6b; --shadow: rgba(0,0,0,.4);
-          --code: #1f242c; --scrim: rgba(0,0,0,.55); } }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
          padding: 24px 16px; background: var(--bg); color: var(--ink);
@@ -128,7 +127,6 @@
       <button type="button" id="shareNative" hidden data-goatcounter-click="minty-share-native">Share</button>
       <button type="button" id="copyLink" data-goatcounter-click="minty-share-copy">Copy link</button>
       <a id="shareEmail" href="#" data-goatcounter-click="minty-share-email">Email</a>
-      <a id="shareText" href="#" data-goatcounter-click="minty-share-text">Text</a>
       <a id="shareWhatsApp" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-whatsapp">WhatsApp</a>
       <a id="shareReddit" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-reddit">Reddit</a>
       <a id="shareX" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-x">X</a>
@@ -171,7 +169,6 @@ $("year").textContent = new Date().getFullYear();
 // share
 const enc = encodeURIComponent;
 $("shareEmail").href = `mailto:?subject=${enc("Minty")}&body=${enc(TEXT + "\n\n" + URL_)}`;
-$("shareText").href = `sms:?&body=${enc(TEXT + " " + URL_)}`;
 $("shareWhatsApp").href = `https://wa.me/?text=${enc(TEXT + " " + URL_)}`;
 $("shareReddit").href = `https://www.reddit.com/submit?url=${enc(URL_)}&title=${enc("Minty: your own private home for all your bank and card transactions")}`;
 $("shareX").href = `https://x.com/intent/post?text=${enc(TEXT)}&url=${enc(URL_)}`;
