@@ -47,6 +47,8 @@ jobs:
           cp -r index.html 404.html manifest.webmanifest robots.txt sitemap.xml assets data _site/
           test -s _site/robots.txt && test -s _site/sitemap.xml && test -s _site/404.html   # 404.html also covers /museum_problem/
           # The art gallery problem, the reason the museum finder is "museum_problem".
+          # /minty/ redirects to minty.milesmaximizer.com (its own Cloudflare Pages project, minty-site/).
+          mkdir -p _site/minty && cp minty/index.html _site/minty/
           for d in art-gallery-problem art_gallery_problem Art-gallery-problem Art_gallery_problem; do
             mkdir -p _site/$d && cp art-gallery-problem/index.html _site/$d/
           done

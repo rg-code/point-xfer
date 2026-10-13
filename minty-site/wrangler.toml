@@ -1,0 +1,10 @@
+# minty.milesmaximizer.com: the Minty landing page (public/) and its passphrase gate
+# (functions/api/check.js), on Cloudflare Pages. Deploy: npx wrangler pages deploy (from here).
+name = "minty-site"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "minty-gate"
+database_id = "5ea8f0c8-1c05-497d-bc6d-0b05bc57b80e"

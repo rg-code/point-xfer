@@ -3,3 +3,6 @@ dist/
 _site/
 .DS_Store
 .claude/worktrees/
+
+# wrangler local state and cache (holds account and location details)
+.wrangler/
