@@ -14,12 +14,16 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <style>
   :root { color-scheme: light; --bg: #f2f8f5; --surface: #fff; --ink: #16181d; --muted: #5b6472; --hairline: #e3ece7;
-          --brand: #0f3d33; --dot: #2db37c; --accent: #0f4d3c; --accent-ink: #fff; --err: #c92a2a; --shadow: rgba(0,0,0,.06); }
+          --brand: #0f3d33; --dot: #2db37c; --accent: #0f4d3c; --accent-ink: #fff; --err: #c92a2a; --shadow: rgba(0,0,0,.06);
+          --code: #eef5f1; --scrim: rgba(10,30,24,.32); }
   @media (prefers-color-scheme: dark) { :root { color-scheme: dark; --bg: #0e1413; --surface: #171a21; --ink: #e6e8ee; --muted: #9aa3b2;
-          --hairline: #272c37; --brand: #e8f5ef; --dot: #5fd3a0; --accent: #5fd3a0; --accent-ink: #0e1413; --err: #ff6b6b; --shadow: rgba(0,0,0,.4); } }
+          --hairline: #272c37; --brand: #e8f5ef; --dot: #5fd3a0; --accent: #5fd3a0; --accent-ink: #0e1413; --err: #ff6b6b; --shadow: rgba(0,0,0,.4);
+          --code: #1f242c; --scrim: rgba(0,0,0,.55); } }
   * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); color: var(--ink);
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+         padding: 24px 16px; background: var(--bg); color: var(--ink);
          font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body:has(dialog[open]) { overflow: hidden; }
   main { width: min(460px, 100%); background: var(--surface); border: 1px solid var(--hairline); border-radius: 20px;
          padding: 32px 28px 26px; box-shadow: 0 1px 3px var(--shadow), 0 20px 50px -30px var(--shadow); }
   .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
@@ -44,6 +48,62 @@
           border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; }
   .share .btns a:hover, .share .btns button:hover { border-color: var(--muted); }
   .share .btns [hidden] { display: none; }
+
+  /* Footer: the other projects, with the Minty coin between them */
+  .site-foot { width: min(460px, 100%); text-align: center; font-size: 13.5px; color: var(--muted); }
+  .site-foot p { margin: 0; }
+  .projects { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px; margin: 6px 0 12px; }
+  .projects a { color: var(--ink); font-weight: 600; text-decoration: none; padding: 4px 2px; }
+  .projects a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .projects .sep { width: 14px; height: 14px; opacity: .9; }
+  .projects .sep.wrapped { visibility: hidden; }
+  .site-foot .legal { font-size: 12.5px; }
+  .site-foot .legal a { color: inherit; }
+
+  /* Get started: a panel that slides in from the right (full width on phones) */
+  dialog.panel { margin: 0 0 0 auto; padding: 0; border: 0; width: min(640px, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh;
+                 background: var(--surface); color: var(--ink); box-shadow: -20px 0 60px -30px rgba(0,0,0,.45); border-left: 1px solid var(--hairline); }
+  dialog.panel::backdrop { background: var(--scrim); }
+  dialog.panel[open] { animation: slide-in .22s ease-out; }
+  @keyframes slide-in { from { transform: translateX(40px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { dialog.panel[open] { animation: none; } }
+  .panel-inner { height: 100%; display: flex; flex-direction: column; }
+  .panel-head { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 20px; border-bottom: 1px solid var(--hairline); }
+  .panel-head img { width: 28px; height: 28px; }
+  .panel-head h2 { flex: 1; margin: 0; font-size: 17px; }
+  .panel-head a { font-size: 13.5px; color: var(--muted); }
+  .panel-head .close { background: transparent; color: var(--ink); font-size: 24px; line-height: 1; width: 44px; height: 44px; padding: 0; border-radius: 10px; }
+  .panel-head .close:hover { background: var(--code); }
+  .panel-body { flex: 1; overflow-y: auto; padding: 8px 24px 40px; overscroll-behavior: contain; }
+  .panel-body h1 { display: none; }
+  .panel-body h2 { font-size: 18px; margin: 28px 0 8px; }
+  .panel-body h3 { font-size: 16px; margin: 22px 0 6px; }
+  .panel-body p, .panel-body li { font-size: 15px; }
+  .panel-body ol, .panel-body ul { padding-left: 22px; }
+  .panel-body li { margin: 4px 0; }
+  .panel-body a { color: var(--accent); overflow-wrap: break-word; }
+  .panel-body code { background: var(--code); padding: 1px 5px; border-radius: 5px; font-size: 13px; overflow-wrap: anywhere; }
+  .panel-body pre { background: var(--code); padding: 12px; border-radius: 10px; overflow-x: auto; }
+  .panel-body pre code { padding: 0; overflow-wrap: normal; }
+  .panel-body hr { border: 0; border-top: 1px solid var(--hairline); margin: 28px 0; }
+  .panel-body blockquote { margin: 12px 0; padding: 4px 14px; border-left: 3px solid var(--dot); color: var(--muted); }
+  .panel-body .table { overflow-x: auto; margin: 12px 0; }
+  .panel-body table { border-collapse: collapse; font-size: 14px; min-width: 100%; }
+  .panel-body th, .panel-body td { border: 1px solid var(--hairline); padding: 6px 8px; text-align: left; vertical-align: top; }
+  .panel-body th { background: var(--code); }
+  .panel-body .status { color: var(--muted); }
+  @media (max-width: 520px) {
+    .panel-head a { display: none; }
+    .panel-body { padding: 4px 16px 32px; }
+    /* tables become one small card per row */
+    .panel-body table, .panel-body tbody, .panel-body tr, .panel-body td { display: block; min-width: 0; }
+    .panel-body thead { display: none; }
+    .panel-body tr { border: 1px solid var(--hairline); border-radius: 10px; padding: 6px 10px; margin: 10px 0; }
+    .panel-body td { border: 0; padding: 3px 0; }
+    .panel-body td[data-label]:not([data-label=""])::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .panel-body td:first-child { font-weight: 600; }
+    .panel-body td:first-child::before { display: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -55,35 +115,65 @@
   <p class="lede">Your own private home for all your bank and card transactions. It runs on your own accounts, so only you can see it. Finds and reconciles all card benefits (coupons) and a lot more.</p>
 
   <div class="links" id="links">
-    <a class="btn" href="https://github.com/rg-code/minty/blob/main/GET-STARTED.md">Get started (about 30 minutes)</a>
-    <a class="btn secondary" href="https://github.com/rg-code/minty/fork">Copy Minty to your GitHub (fork)</a>
-    <a class="btn secondary" href="https://github.com/rg-code/minty/archive/refs/heads/main.zip">Download the code (ZIP)</a>
-    <div class="clone"><code id="lClone">git clone https://github.com/rg-code/minty.git</code><button type="button" id="copyClone">Copy</button></div>
+    <a class="btn" id="getStarted" href="https://github.com/rg-code/minty/blob/main/GET-STARTED.md" data-goatcounter-click="minty-get-started">Get started (about 30 minutes)</a>
+    <a class="btn secondary" href="https://github.com/rg-code/minty/fork" data-goatcounter-click="minty-fork">Copy Minty to your GitHub (fork)</a>
+    <a class="btn secondary" href="https://github.com/rg-code/minty/archive/refs/heads/main.zip" data-goatcounter-click="minty-zip">Download the code (ZIP)</a>
+    <div class="clone"><code id="lClone">git clone https://github.com/rg-code/minty.git</code><button type="button" id="copyClone" data-goatcounter-click="minty-clone-copy">Copy</button></div>
     <p class="note">The fork is the way to go: it updates itself every week. Use Minty as is, for personal use only (<a href="https://github.com/rg-code/minty/blob/main/LICENSE">license</a>).</p>
   </div>
 
   <section class="share" aria-label="Share Minty">
     <h2>Share Minty</h2>
     <div class="btns">
-      <button type="button" id="shareNative" hidden>Share</button>
-      <button type="button" id="copyLink">Copy link</button>
-      <a id="shareEmail" href="#">Email</a>
-      <a id="shareText" href="#">Text</a>
-      <a id="shareWhatsApp" href="#" target="_blank" rel="noopener">WhatsApp</a>
-      <a id="shareX" href="#" target="_blank" rel="noopener">X</a>
+      <button type="button" id="shareNative" hidden data-goatcounter-click="minty-share-native">Share</button>
+      <button type="button" id="copyLink" data-goatcounter-click="minty-share-copy">Copy link</button>
+      <a id="shareEmail" href="#" data-goatcounter-click="minty-share-email">Email</a>
+      <a id="shareText" href="#" data-goatcounter-click="minty-share-text">Text</a>
+      <a id="shareWhatsApp" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-whatsapp">WhatsApp</a>
+      <a id="shareReddit" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-reddit">Reddit</a>
+      <a id="shareX" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-x">X</a>
     </div>
   </section>
 </main>
+
+<footer class="site-foot">
+  <p>More free tools, no ads:</p>
+  <nav class="projects" id="projects" aria-label="Other projects">
+    <a href="https://milesmaximizer.com/?utm_source=minty" title="Credit card point transfers" data-goatcounter-click="minty-to-miles">Miles Maximizer</a>
+    <img class="sep" src="/favicon.svg" alt="" width="14" height="14" />
+    <a href="https://milesmaximizer.com/inkling/?utm_source=minty" title="What joined or left inKind near you" data-goatcounter-click="minty-to-inkling">Inkling</a>
+    <img class="sep" src="/favicon.svg" alt="" width="14" height="14" />
+    <a href="https://milesmaximizer.com/museum_problem/?utm_source=minty" title="Free museum entry with a membership you already have" data-goatcounter-click="minty-to-museums">Museum finder</a>
+    <img class="sep" src="/favicon.svg" alt="" width="14" height="14" />
+    <a href="https://graze.milesmaximizer.com/?utm_source=minty" title="Free EV charging along your route" data-goatcounter-click="minty-to-graze">GRAZE</a>
+  </nav>
+  <p class="legal">© <span id="year">2026</span> rg-code. Minty is source-available under <a href="https://github.com/rg-code/minty/blob/main/LICENSE" rel="license">PolyForm Strict 1.0.0</a>.</p>
+</footer>
+
+<dialog class="panel" id="guide" aria-labelledby="guideTitle">
+  <div class="panel-inner">
+    <div class="panel-head">
+      <img src="/favicon.svg" alt="" width="28" height="28" />
+      <h2 id="guideTitle">Get started with Minty</h2>
+      <a href="https://github.com/rg-code/minty/blob/main/GET-STARTED.md" target="_blank" rel="noopener" data-goatcounter-click="minty-guide-github">Open on GitHub</a>
+      <button type="button" class="close" id="guideClose" aria-label="Close">×</button>
+    </div>
+    <div class="panel-body" id="guideBody"><p class="status">Loading the guide…</p></div>
+  </div>
+</dialog>
+
 <script>
 const URL_ = "https://minty.milesmaximizer.com/";
 const TEXT = "Minty: your own private home for all your bank and card transactions, on your own accounts. It also finds and reconciles your card benefits.";
 const $ = (id) => document.getElementById(id);
+$("year").textContent = new Date().getFullYear();
 
 // share
 const enc = encodeURIComponent;
 $("shareEmail").href = `mailto:?subject=${enc("Minty")}&body=${enc(TEXT + "\n\n" + URL_)}`;
 $("shareText").href = `sms:?&body=${enc(TEXT + " " + URL_)}`;
 $("shareWhatsApp").href = `https://wa.me/?text=${enc(TEXT + " " + URL_)}`;
+$("shareReddit").href = `https://www.reddit.com/submit?url=${enc(URL_)}&title=${enc("Minty: your own private home for all your bank and card transactions")}`;
 $("shareX").href = `https://x.com/intent/post?text=${enc(TEXT)}&url=${enc(URL_)}`;
 if (navigator.share) {
   $("shareNative").hidden = false;
@@ -93,8 +183,84 @@ async function copy(text, btn) {
   try { await navigator.clipboard.writeText(text); const t = btn.textContent; btn.textContent = "Copied"; setTimeout(() => (btn.textContent = t), 1500); } catch {}
 }
 $("copyLink").addEventListener("click", (e) => copy(URL_, e.currentTarget));
-
 $("copyClone").addEventListener("click", (e) => copy($("lClone").textContent, e.currentTarget));
+
+// Footer: hide a coin that ends or starts a wrapped line.
+function markWraps() {
+  for (const sep of document.querySelectorAll("#projects .sep")) {
+    const a = sep.previousElementSibling, b = sep.nextElementSibling;
+    sep.classList.toggle("wrapped", Math.abs(a.offsetTop - b.offsetTop) > 4);
+  }
+}
+markWraps();
+addEventListener("resize", markWraps);
+
+// Get started: the latest GET-STARTED.md from the repo, rendered in a side panel.
+// Without JavaScript (or if loading fails) the button is a plain link to GitHub.
+const REPO = "https://github.com/rg-code/minty/blob/main/";
+const RAW = "https://raw.githubusercontent.com/rg-code/minty/main/GET-STARTED.md";
+const LIBS = [
+  ["https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js", "sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA=="],
+  ["https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js", "sha512-jB0TkTBeQC9ZSkBqDhdmfTv1qdfbWpGE72yJ/01Srq6hEzZIz2xkz1e57p9ai7IeHMwEG7HpzG6NdptChif5Pg=="],
+];
+const guide = $("guide"), body = $("guideBody");
+let loading = null;
+function script([src, integrity]) {
+  return new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    Object.assign(s, { src, integrity, crossOrigin: "anonymous", referrerPolicy: "no-referrer", onload: ok, onerror: fail });
+    document.head.append(s);
+  });
+}
+const slug = (t) => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, "").replace(/\s/g, "-");
+function load() {
+  return loading ??= Promise.all([fetch(RAW, { cache: "no-cache" }).then((r) => (r.ok ? r.text() : Promise.reject(r.status))), ...LIBS.map(script)])
+    .then(([md]) => {
+      body.innerHTML = DOMPurify.sanitize(marked.parse(md, { gfm: true }));
+      for (const h of body.querySelectorAll("h2, h3")) h.id = slug(h.textContent);
+      for (const t of body.querySelectorAll("table")) {
+        const heads = [...t.querySelectorAll("th")].map((th) => th.textContent);
+        for (const tr of t.querySelectorAll("tbody tr")) [...tr.cells].forEach((td, i) => (td.dataset.label = heads[i] ?? ""));
+        const w = document.createElement("div"); w.className = "table"; t.replaceWith(w); w.append(t);
+      }
+      for (const a of body.querySelectorAll("a[href]")) {
+        const href = a.getAttribute("href");
+        if (href.startsWith("#")) continue;
+        if (!/^[a-z]+:/i.test(href)) a.href = REPO + href;
+        if (a.textContent === href && href.startsWith("https://")) {   // a bare URL: drop https://, let it break at / and .
+          a.textContent = "";
+          href.slice(8).split(/(?<=[/.])/).forEach((part, i) => { if (i) a.append(document.createElement("wbr")); a.append(part); });
+        }
+        a.target = "_blank"; a.rel = "noopener";
+      }
+    })
+    .catch(() => {
+      loading = null;
+      body.innerHTML = `<p class="status">The guide didn't load. <a href="${REPO}GET-STARTED.md" target="_blank" rel="noopener">Read it on GitHub</a>.</p>`;
+    });
+}
+function openGuide() {
+  load();
+  if (!guide.open) guide.showModal();
+  if (location.hash !== "#get-started") history.replaceState(null, "", "#get-started");
+}
+$("getStarted").addEventListener("click", (e) => {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;   // new tab: let the link go to GitHub
+  e.preventDefault();
+  openGuide();
+});
+$("getStarted").addEventListener("pointerenter", load, { once: true });
+$("guideClose").addEventListener("click", () => guide.close());
+guide.addEventListener("click", (e) => { if (e.target === guide) guide.close(); });   // the dimmed backdrop
+guide.addEventListener("close", () => history.replaceState(null, "", location.pathname + location.search));
+if (location.hash === "#get-started") openGuide();
 </script>
+
+<!-- GoatCounter (shared with milesmaximizer.com): no cookies, no personal data. The host goes in
+     the path so Minty's pages don't mix with milesmaximizer.com's (as GRAZE does). -->
+<script>window.goatcounter = { path: (p) => location.host + p };</script>
+<script data-goatcounter="https://rg-code.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Without JavaScript: GoatCounter's pixel counts the visit (the same path count.js uses). -->
+<noscript><img src="https://rg-code.goatcounter.com/count?p=minty.milesmaximizer.com/&amp;t=Minty%20(no%20JavaScript)" width="1" height="1" alt="" style="position:absolute;width:1px;height:1px;border:0" /></noscript>
 </body>
 </html>
