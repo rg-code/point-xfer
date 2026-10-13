@@ -51,3 +51,13 @@ test("milesmaximizer.com/minty/ redirects to the subdomain", async () => {
   const html = await readFile(new URL("../minty/index.html", import.meta.url), "utf8");
   assert.match(html, /location\.replace\("https:\/\/minty\.milesmaximizer\.com\//);
 });
+
+test("Try the live demo opens /demo/ in a side panel, built at deploy time and never committed", async () => {
+  const html = await readFile(new URL("../minty-site/public/index.html", import.meta.url), "utf8");
+  assert.match(html, /<a class="btn demo" id="demoOpen" href="\/demo\/" data-goatcounter-click="minty-demo-open">/);
+  assert.match(html, /<dialog class="panel wide" id="demo"/);
+  assert.match(html, /<iframe class="panel-frame" id="demoFrame"/);
+  assert.match(html, /location\.hash === "#demo"/);
+  const ignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
+  assert.match(ignore, /^minty-site\/public\/demo\/$/m);
+});
