@@ -23,7 +23,7 @@
          padding: 24px 16px; background: var(--bg); color: var(--ink);
          font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   body:has(dialog[open]) { overflow: hidden; }
-  main { width: min(460px, 100%); background: var(--surface); border: 1px solid var(--hairline); border-radius: 20px;
+  main { width: min(600px, 100%); background: var(--surface); border: 1px solid var(--hairline); border-radius: 20px;
          padding: 32px 28px 26px; box-shadow: 0 1px 3px var(--shadow), 0 20px 50px -30px var(--shadow); }
   .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
   .brand .coin { width: 64px; height: 64px; }
@@ -40,16 +40,57 @@
   .clone button { padding: 7px 12px; font-size: 13px; }
   .note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
   .note a { color: inherit; }
-  .share { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--hairline); }
-  .share h2 { font-size: 14px; margin: 0 0 10px; }
-  .share .btns { display: flex; flex-wrap: wrap; gap: 8px; }
-  .share .btns a, .share .btns button { font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 12px; border-radius: 999px;
-          border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; }
-  .share .btns a:hover, .share .btns button:hover { border-color: var(--muted); }
-  .share .btns [hidden] { display: none; }
+  /* In the main card: Share, Support and Contact, three raised cards a third of its width each (stacked on phones) */
+  :root { --raised: 0 1px 2px rgba(15,61,51,.08), 0 8px 20px -10px rgba(15,61,51,.28); }
+  .cards { margin-top: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--hairline); border-radius: 14px; padding: 14px 14px 16px;
+          box-shadow: var(--raised); display: flex; flex-direction: column; }
+  .card h2 { font-size: 15px; margin: 0 0 4px; }
+  .card p { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+  .card .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .pillbtn { font: inherit; font-size: 13px; font-weight: 600; padding: 7px 11px; border-radius: 999px; line-height: 1.2;
+             border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; }
+  .pillbtn:hover { border-color: var(--muted); }
+  .pillbtn.solid { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .card [hidden], .support-menu [hidden] { display: none !important; }
+
+  /* Support Minty: a raised button at the main card's top right; a menu of ways to help */
+  main { position: relative; }
+  .support { margin-left: auto; position: relative; z-index: 5; align-self: flex-start; }
+  .support-btn { font-size: 14px; padding: 8px 14px; border-radius: 999px; background: var(--surface); color: var(--ink);
+                 border: 1px solid var(--hairline); box-shadow: var(--raised); white-space: nowrap; }
+  .support-btn:hover { border-color: var(--muted); }
+  @media (max-width: 480px) { .support-btn .long { display: none; } }
+  .support-btn .heart { color: #d6336c; }
+  .support-menu { position: absolute; right: 0; top: calc(100% + 8px); width: min(300px, calc(100vw - 32px)); background: var(--surface);
+                  border: 1px solid var(--hairline); border-radius: 14px; box-shadow: 0 16px 40px -16px rgba(0,0,0,.35); padding: 8px; }
+  .support-menu a, .support-menu button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left;
+          padding: 9px 10px; border-radius: 10px; background: none; border: 0; color: var(--ink); font: inherit; font-size: 14px; font-weight: 600;
+          text-decoration: none; cursor: pointer; }
+  .support-menu a:hover, .support-menu button:hover { background: var(--code); }
+  .support-menu small { font-size: 12px; font-weight: 400; color: var(--muted); }
+  .support-menu hr { border: 0; border-top: 1px solid var(--hairline); margin: 6px 4px; }
+
+  /* Contact: a small form in a dialog; it emails the owner (via Inkling's Worker) without showing any address */
+  dialog.contact { width: min(460px, calc(100vw - 24px)); padding: 0; border: 1px solid var(--hairline); border-radius: 16px;
+                   background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px -30px rgba(0,0,0,.5); }
+  dialog.contact::backdrop { background: var(--scrim); }
+  .contact form { padding: 18px 20px 20px; display: grid; gap: 10px; }
+  .contact .head { display: flex; align-items: center; justify-content: space-between; }
+  .contact h2 { margin: 0; font-size: 17px; }
+  .contact label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+  .contact input, .contact textarea { font: inherit; font-size: 15px; font-weight: 400; padding: 9px 11px; border: 1px solid var(--hairline);
+                                     border-radius: 10px; background: var(--surface); color: var(--ink); }
+  .contact textarea { min-height: 120px; resize: vertical; }
+  .contact .x { background: transparent; color: var(--ink); font-size: 22px; width: 40px; height: 40px; padding: 0; }
+  .contact .fine { font-size: 12px; color: var(--muted); margin: 0; }
+  .contact .status { font-size: 13.5px; margin: 0; min-height: 1.2em; }
+  .contact .status.err { color: var(--err); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   /* Footer: the other projects, with the Minty coin between them */
-  .site-foot { width: min(460px, 100%); text-align: center; font-size: 13.5px; color: var(--muted); }
+  .site-foot { width: min(600px, 100%); text-align: center; font-size: 13.5px; color: var(--muted); }
   .site-foot p { margin: 0; }
   .projects { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px; margin: 6px 0 12px; }
   .projects a { color: var(--ink); font-weight: 600; text-decoration: none; padding: 4px 2px; }
@@ -113,6 +154,18 @@
   <div class="brand">
     <img class="coin" src="/coin.svg" alt="" width="64" height="64" />
     <svg class="word" viewBox="0 -1834 5405 2374" role="img" aria-label="Minty"><path d="M1434 0.0 1434.67 -673.33Q1434.67 -789.66 1374.67 -855.16Q1314.67 -920.66 1216.67 -920.66Q1157.34 -920.66 1107.5 -893.33Q1057.67 -866 1027.17 -811.33Q996.67 -756.66 996.67 -675.33L896 -726Q894.34 -839.67 944.84 -925.67Q995.34 -1011.67 1082.34 -1059.5Q1169.34 -1107.33 1277.34 -1107.33Q1451.67 -1107.33 1547.84 -1002.33Q1644 -897.33 1644 -723.33L1643.34 0.0ZM138.67 0.0V-1080.0H324.67V-768H349.34V0.0ZM787.33 0.0 788 -668.66Q788 -786.66 728.5 -853.66Q669 -920.66 568.67 -920.66Q470 -920.66 409.67 -853Q349.34 -785.33 349.34 -675.33L248.67 -739.33Q248.67 -844.67 299.67 -927.83Q350.67 -1011 437.84 -1059.17Q525 -1107.33 634.67 -1107.33Q749.67 -1107.33 830.67 -1058.5Q911.67 -1009.67 954.17 -922.67Q996.67 -835.67 996.67 -721.33L996 0.0Z M1912.0 0V-1080H2121.34V0.0Z M3167 0.0V-530.67Q3167 -594 3156.5 -660.5Q3146 -727 3116.67 -784.16Q3087.33 -841.33 3033.83 -876.33Q2980.33 -911.33 2894.33 -911.33Q2838 -911.33 2788.17 -892.5Q2738.34 -873.66 2700.67 -832.66Q2663 -791.67 2641.34 -725Q2619.67 -658.33 2619.67 -562L2489.67 -610.67Q2489.67 -757.67 2544.67 -870.17Q2599.67 -982.67 2702.84 -1046Q2806 -1109.33 2951.67 -1109.33Q3063.67 -1109.33 3139.84 -1073Q3216 -1036.67 3263.5 -978.17Q3311 -919.67 3336 -851Q3361 -782.33 3370 -716.17Q3379 -650 3379 -600V0.0ZM2407.67 0.0V-1080.0H2595V-768H2619.67V0.0Z M4245 0.0Q4143.33 20 4045.33 16.83Q3947.33 13.67 3870.33 -21.17Q3793.33 -56 3753.67 -131.33Q3719 -198.33 3716.67 -267.5Q3714.33 -336.67 3714.33 -424.67V-1380.0H3923.67V-435.34Q3923.67 -370 3925.17 -322Q3926.67 -274 3945.67 -241.34Q3981.67 -179.34 4060.34 -170.5Q4139 -161.67 4245 -177.34ZM3507.0 -912V-1080H4245V-912Z M4606 480.0 4814.67 -89.33 4818 78.67 4346.67 -1080.0H4565.34L4917.33 -185.34H4853.33L5189.33 -1080.0H5400.67L4805.34 480.0Z" fill="currentColor"/><path d="M1912.0 -1257.33V-1460H2121.34V-1257.33Z" fill="var(--dot)"/></svg>
+    <div class="support">
+      <button type="button" class="support-btn" id="supportBtn" aria-haspopup="true" aria-expanded="false" aria-controls="supportMenu" data-goatcounter-click="minty-support-open"><span class="heart" aria-hidden="true">♥</span> Support<span class="long"> Minty</span></button>
+      <div class="support-menu" id="supportMenu" hidden>
+        <a class="js-paypal" href="https://paypal.me/soulrg" target="_blank" rel="noopener" data-goatcounter-click="minty-support-paypal">PayPal<small>Chip in for hosting and time</small></a>
+        <a class="js-coffee" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-coffee" hidden>Buy me a coffee<small>A small one-off thanks</small></a>
+        <a class="js-inkind" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-inkind">Use my inKind referral<small>New to inKind? $25 off your first $50</small></a>
+        <a class="js-cards" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-cards" hidden>Use my credit card referrals<small>Cards I hold and like</small></a>
+        <hr />
+        <a href="https://github.com/rg-code/minty" target="_blank" rel="noopener" data-goatcounter-click="minty-support-star">Star Minty on GitHub<small>Click ★ Star at the top of the repo</small></a>
+        <button type="button" id="shareRepo" data-goatcounter-click="minty-support-share-repo">Share Minty's GitHub repo<small>Send the code's link to a friend</small></button>
+      </div>
+    </div>
   </div>
   <p class="lede">Your own private home for all your bank and card transactions. It runs on your own accounts, so only you can see it. Finds and reconciles all card benefits (coupons) and a lot more.</p>
 
@@ -125,18 +178,38 @@
     <p class="note">The fork is the way to go: it updates itself every week. Use Minty as is, for personal use only (<a href="https://github.com/rg-code/minty/blob/main/LICENSE">license</a>).</p>
   </div>
 
-  <section class="share" aria-label="Share Minty">
-    <h2>Share Minty</h2>
-    <div class="btns">
-      <button type="button" id="shareNative" hidden data-goatcounter-click="minty-share-native">Share</button>
-      <button type="button" id="copyLink" data-goatcounter-click="minty-share-copy">Copy link</button>
-      <a id="shareEmail" href="#" data-goatcounter-click="minty-share-email">Email</a>
-      <a id="shareWhatsApp" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-whatsapp">WhatsApp</a>
-      <a id="shareReddit" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-reddit">Reddit</a>
-      <a id="shareX" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-x">X</a>
-    </div>
-  </section>
+
+  <div class="cards">
+    <section class="card share" aria-labelledby="shareTitle">
+      <h2 id="shareTitle">Share Minty</h2>
+      <p>Know someone who'd like it?</p>
+      <div class="btns">
+        <button type="button" class="pillbtn" id="shareNative" hidden data-goatcounter-click="minty-share-native">Share</button>
+        <button type="button" class="pillbtn" id="copyLink" data-goatcounter-click="minty-share-copy">Copy link</button>
+        <a class="pillbtn" id="shareEmail" href="#" data-goatcounter-click="minty-share-email">Email</a>
+        <a class="pillbtn" id="shareWhatsApp" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-whatsapp">WhatsApp</a>
+        <a class="pillbtn" id="shareReddit" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-reddit">Reddit</a>
+        <a class="pillbtn" id="shareX" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-share-x">X</a>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="supportTitle">
+      <h2 id="supportTitle">Support Minty</h2>
+      <p>Free, with no ads. If it helps you:</p>
+      <div class="btns">
+        <a class="pillbtn solid js-paypal" href="https://paypal.me/soulrg" target="_blank" rel="noopener" data-goatcounter-click="minty-card-paypal">PayPal</a>
+        <a class="pillbtn js-coffee" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-card-coffee" hidden>Buy me a coffee</a>
+        <a class="pillbtn js-inkind" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-card-inkind">inKind referral</a>
+        <a class="pillbtn js-cards" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-card-cards" hidden>Card referrals</a>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="contactTitle">
+      <h2 id="contactTitle">Contact me</h2>
+      <p>A question, an idea or a bug? Send me a note.</p>
+      <div class="btns"><button type="button" class="pillbtn solid" id="contactOpen" data-goatcounter-click="minty-contact-open">Write to me</button></div>
+    </section>
+  </div>
 </main>
+
 
 <footer class="site-foot">
   <p>More free tools, no ads:</p>
@@ -151,6 +224,19 @@
   </nav>
   <p class="legal">© <span id="year">2026</span> rg-code. Minty is source-available under <a href="https://github.com/rg-code/minty/blob/main/LICENSE" rel="license">PolyForm Strict 1.0.0</a>.</p>
 </footer>
+
+<dialog class="contact" id="contact" aria-labelledby="contactDlgTitle">
+  <form id="contactForm" novalidate>
+    <div class="head"><h2 id="contactDlgTitle">Write to me</h2><button type="button" class="x" id="contactClose" aria-label="Close">×</button></div>
+    <label>Your name (optional)<input name="name" autocomplete="name" maxlength="80" /></label>
+    <label>Your email, so I can reply<input name="email" type="email" autocomplete="email" inputmode="email" required /></label>
+    <label>Message<textarea name="message" required maxlength="3000"></textarea></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+    <button type="submit" id="contactSend">Send</button>
+    <p class="status" id="contactStatus" role="status"></p>
+    <p class="fine">It goes straight to my inbox. Your address is used only to reply, never shared or added to a list.</p>
+  </form>
+</dialog>
 
 <dialog class="panel wide" id="demo" aria-labelledby="demoTitle">
   <div class="panel-inner">
@@ -197,6 +283,58 @@ async function copy(text, btn) {
 }
 $("copyLink").addEventListener("click", (e) => copy(URL_, e.currentTarget));
 $("copyClone").addEventListener("click", (e) => copy($("lClone").textContent, e.currentTarget));
+
+// Support Minty: the top-right menu and the middle card share these links. Empty ones stay hidden.
+const SUPPORT = {
+  paypal: "https://paypal.me/soulrg",
+  coffee: "https://buymeacoffee.com/functionR",
+  inkind: ["https://app.inkind.com/refer/KWTQFJ54", "https://app.inkind.com/refer/RHH7KKZU"],   // as on Inkling, taking turns
+  cards: "",                                        // a page of credit card referral links, once there is one
+};
+const REPO_URL = "https://github.com/rg-code/minty";
+let turn = 0;
+try { turn = Number(localStorage.getItem("minty-referral-turn")) || 0; localStorage.setItem("minty-referral-turn", String(turn + 1)); } catch { turn = Math.floor(Math.random() * 2); }
+const links = { "js-paypal": SUPPORT.paypal, "js-coffee": SUPPORT.coffee, "js-inkind": SUPPORT.inkind[turn % SUPPORT.inkind.length], "js-cards": SUPPORT.cards };
+for (const [cls, href] of Object.entries(links)) for (const a of document.getElementsByClassName(cls)) { a.hidden = !href; if (href) a.href = href; }
+const supportBtn = $("supportBtn"), supportMenu = $("supportMenu");
+const setSupport = (open) => { supportMenu.hidden = !open; supportBtn.setAttribute("aria-expanded", open); };
+supportBtn.addEventListener("click", () => setSupport(supportMenu.hidden));
+document.addEventListener("click", (e) => { if (!e.target.closest(".support")) setSupport(false); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !supportMenu.hidden) { setSupport(false); supportBtn.focus(); } });
+$("shareRepo").addEventListener("click", async (e) => {
+  if (navigator.share) return navigator.share({ title: "Minty on GitHub", url: REPO_URL }).catch(() => {});
+  const small = e.currentTarget.querySelector("small"), was = small.textContent;
+  try { await navigator.clipboard.writeText(REPO_URL); small.textContent = "Link copied"; setTimeout(() => (small.textContent = was), 1500); } catch {}
+});
+
+// Contact me: the form posts to Inkling's Worker, which emails the owner with the visitor's
+// address as Reply-To (no address of the owner's is on this page) and keeps only daily counts.
+const CONTACT_URL = "https://inkling-mcp.soul-clutching.workers.dev/contact";
+const contact = $("contact"), form = $("contactForm"), status = $("contactStatus");
+$("contactOpen").addEventListener("click", () => { status.textContent = ""; status.className = "status"; contact.showModal(); form.elements.email.focus(); });
+$("contactClose").addEventListener("click", () => contact.close());
+contact.addEventListener("click", (e) => { if (e.target === contact) contact.close(); });
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(form));
+  const say = (text, err = false) => { status.textContent = text; status.className = err ? "status err" : "status"; };
+  if (!form.elements.email.checkValidity() || !f.email) return say("Enter your email address, so I can reply.", true);
+  if (!String(f.message).trim()) return say("Write a message.", true);
+  $("contactSend").disabled = true;
+  say("Sending…");
+  try {
+    const r = await fetch(CONTACT_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ site: "minty", ...f }) });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(body.error || "Couldn't send it right now. Try again later.");
+    form.reset();
+    say("Sent. Thanks! I'll reply by email.");
+    try { window.goatcounter?.count?.({ path: "minty-contact-sent", title: "Contact form sent", event: true }); } catch {}
+  } catch (err) {
+    say(err.message === "Failed to fetch" ? "Couldn't reach the server. Try again later." : err.message, true);
+  } finally {
+    $("contactSend").disabled = false;
+  }
+});
 
 // Footer: hide a coin that ends or starts a wrapped line.
 function markWraps() {
