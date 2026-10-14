@@ -71,6 +71,9 @@
   .support-menu a:hover, .support-menu button:hover { background: var(--code); }
   .support-menu small { font-size: 12px; font-weight: 400; color: var(--muted); }
   .support-menu hr { border: 0; border-top: 1px solid var(--hairline); margin: 6px 4px; }
+  .pay-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }               /* PayPal and Buy Me a Coffee, half each */
+  .pay-row:has(> [hidden]) { grid-template-columns: 1fr; }
+  .pay-row a { border: 1px solid var(--hairline); font-size: 13px; padding: 9px 8px; white-space: nowrap; }
 
   /* Contact: a small form in a dialog; it emails the owner (via Inkling's Worker) without showing any address */
   dialog.contact { width: min(460px, calc(100vw - 24px)); padding: 0; border: 1px solid var(--hairline); border-radius: 16px;
@@ -157,8 +160,11 @@
     <div class="support">
       <button type="button" class="support-btn" id="supportBtn" aria-haspopup="true" aria-expanded="false" aria-controls="supportMenu" data-goatcounter-click="minty-support-open"><span class="heart" aria-hidden="true">♥</span> Support<span class="long"> Minty</span></button>
       <div class="support-menu" id="supportMenu" hidden>
-        <a class="js-paypal" href="https://paypal.me/soulrg" target="_blank" rel="noopener" data-goatcounter-click="minty-support-paypal">PayPal<small>Chip in for hosting and time</small></a>
-        <a class="js-coffee" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-coffee" hidden>Buy me a coffee<small>A small one-off thanks</small></a>
+        <div class="pay-row">
+          <a class="js-paypal" href="https://paypal.me/soulrg" target="_blank" rel="noopener" data-goatcounter-click="minty-support-paypal">PayPal<small>Any amount</small></a>
+          <a class="js-coffee" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-coffee" hidden>Buy me a coffee<small>A small thanks</small></a>
+        </div>
+        <hr />
         <a class="js-inkind" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-inkind">Use my inKind referral<small>New to inKind? $25 off your first $50</small></a>
         <a class="js-cards" href="#" target="_blank" rel="noopener" data-goatcounter-click="minty-support-cards" hidden>Use my credit card referrals<small>Cards I hold and like</small></a>
         <hr />
