@@ -6,4 +6,3 @@ _site/
 
 # wrangler local state and cache (holds account and location details)
 .wrangler/
-minty-site/public/demo/
