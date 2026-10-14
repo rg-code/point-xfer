@@ -16,6 +16,14 @@ redirects here. No forms.
   over sql.js; nothing is sent anywhere). It's built from rg-code/minty by `deploy.mjs` into
   `public/demo/`, which isn't committed here; see Minty's `docs/demo.md`. `#demo` opens it
   directly, and the frame starts loading when the button is hovered or focused.
+- **Under the main card:** three cards, a third of its width each (stacked on phones): **Share Minty**,
+  **Support Minty** (PayPal, the inKind referral, and Buy Me a Coffee and card referrals once they
+  have a link: `SUPPORT` in the page script) and **Contact me**.
+- **Support Minty** (top right) opens a menu: PayPal, Buy Me a Coffee, the inKind referral, card
+  referrals, Star on GitHub, and sharing the repo's link. Empty links stay hidden.
+- **Contact me** opens a small form that posts to Inkling's Worker (rg-code/RInkU, `POST /contact`).
+  It emails the owner with the visitor's address as Reply-To, so no address of the owner's is on
+  this page. It has a honeypot field and daily limits (3 per visitor, 20 in all), and only counts are kept.
 - **GoatCounter** (the shared `rg-code` site, no cookies, no personal data) counts visits with
   the host in the path, as GRAZE does (`minty.milesmaximizer.com/`), plus a `<noscript>` pixel.
   Click events are named `minty-*`.
