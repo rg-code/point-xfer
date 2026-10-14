@@ -46,9 +46,17 @@
   @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
   .card { background: var(--surface); border: 1px solid var(--hairline); border-radius: 14px; padding: 14px 14px 16px;
           box-shadow: var(--raised); display: flex; flex-direction: column; }
+  .card { text-align: center; justify-content: center; }
   .card h2 { font-size: 15px; margin: 0 0 4px; }
   .card p { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
-  .card .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  /* Buttons, centred: one per row in the three columns; two equal ones per row (an odd one centred
+     under them) once the cards stack on phones; one per row again on the narrowest phones. */
+  .card .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .card .btns > * { flex: 0 0 100%; min-width: 0; display: inline-flex; align-items: center; justify-content: center;
+                    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 7px 8px; }
+  @media (max-width: 640px) { .card .btns > * { flex-basis: calc(50% - 3px); font-size: 12.5px; padding-inline: 6px; } }
+  @media (max-width: 380px) { .card .btns > * { flex-basis: 100%; } }
+  .card .btns > :only-child { flex-basis: auto; padding-inline: 18px; }
   .pillbtn { font: inherit; font-size: 13px; font-weight: 600; padding: 7px 11px; border-radius: 999px; line-height: 1.2;
              border: 1px solid var(--hairline); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; }
   .pillbtn:hover { border-color: var(--muted); }
