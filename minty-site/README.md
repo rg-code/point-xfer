@@ -17,8 +17,8 @@ redirects here. No forms.
   `public/demo/`, which isn't committed here; see Minty's `docs/demo.md`. `#demo` opens it
   directly, and the frame starts loading when the button is hovered or focused.
 - **Inside the main card, at the bottom:** three raised cards, a third of its width each (stacked on phones): **Share Minty**,
-  **Support Minty** (PayPal, the inKind referral, and Buy Me a Coffee and card referrals once they
-  have a link: `SUPPORT` in the page script) and **Contact me**.
+  **Support Minty** (PayPal, Buy Me a Coffee, the inKind referral, and card referrals once they have a link:
+  `SUPPORT` in the page script) and **Contact me**.
 - **Support Minty** (a raised button at the main card's top right) opens a menu: PayPal, Buy Me a Coffee, the inKind referral, card
   referrals, Star on GitHub, and sharing the repo's link. Empty links stay hidden.
 - **Contact me** opens a small form that posts to Inkling's Worker (rg-code/RInkU, `POST /contact`).

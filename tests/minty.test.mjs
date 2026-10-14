@@ -70,6 +70,7 @@ test("under the main card: Share, Support and Contact cards; a Support Minty men
   for (const what of ["minty-support-paypal", "minty-support-coffee", "minty-support-inkind", "minty-support-cards", "minty-support-star", "minty-support-share-repo"])
     assert.ok(html.includes(`data-goatcounter-click="${what}"`), what);
   assert.match(html, /paypal\.me\/soulrg/);
+  assert.match(html, /coffee: "https:\/\/buymeacoffee\.com\/functionR"/);
   assert.match(html, /app\.inkind\.com\/refer\//);
 });
 
