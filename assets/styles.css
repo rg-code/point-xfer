@@ -694,19 +694,13 @@ dialog.finder::backdrop { background: color-mix(in srgb, #0a1220 45%, transparen
 }
 .site-foot p { margin: 0 0 8px; }
 .site-foot a { color: inherit; white-space: nowrap; }
-/* Verified date and museum link side by side, stacking when there's no room for both, with a
-   plane in the gap. The row clips its overflow, so once the second item wraps to a new line its
-   plane falls outside the left edge and disappears. The padding keeps focus rings inside the clip. */
-.foot-row { display: flex; flex-wrap: wrap; gap: 0 40px; overflow: hidden; margin: -4px; padding: 4px; }
-.foot-row p + p { position: relative; }
-.foot-row p + p::before {
-  content: "\2708\FE0E";
-  content: "\2708\FE0E" / "";
-  position: absolute;
-  left: -40px;
-  width: 40px;
-  text-align: center;
-}
+/* Support line and verified date on the left, the other rg-code apps on the right (stacked on
+   phones), © centered below. */
+.foot-cols { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 4px 32px; }
+.foot-main { flex: 1 1 380px; max-width: 64ch; }
+.foot-more { flex: 0 1 auto; margin: 0 0 8px auto; text-align: right; }
+.foot-more a { text-decoration: underline; }
+@media (max-width: 640px) { .foot-more { margin-left: 0; text-align: left; } }
 .site-foot .legal {
   margin: 8px 0 0;
   padding-top: 12px;
