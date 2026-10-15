@@ -28,8 +28,6 @@
     .not-found h1 { margin: 0 0 12px; font-size: var(--step-2); line-height: 1.15; }
     .not-found p { margin: 0 auto; max-width: 52ch; color: var(--muted); }
     .not-found a { color: var(--ink); white-space: nowrap; }
-    .site-foot { text-align: center; }
-    .site-foot p { margin-inline: auto; }
   </style>
 </head>
 <body>
@@ -38,9 +36,21 @@
     <h1>Sorry! That page doesn't exist.</h1>
     <p>Maybe a typo in the address, or a page that has moved. Try the <a href="/">transfer map</a> or the <a href="/museum_problem/">museum finder</a>.</p>
   </main>
+  <!-- Same footer as the five rg-code sites; this page serves every missing path, so it lists all five. -->
   <footer class="site-foot">
-    <p class="legal">© 2026 rg-code. Some rights reserved: <a href="https://github.com/rg-code/point-xfer/blob/main/LICENSE" rel="license">CC BY-NC-ND 4.0</a>.</p>
+    <div class="foot-cols">
+      <div class="foot-main">
+        <p>Free, with no ads. If these tools help, you can support them on <a href="https://ko-fi.com/mintyme" target="_blank" rel="noopener" data-goatcounter-click="404-kofi">Ko-fi</a>.</p>
+      </div>
+      <p class="foot-more">Also from rg-code: <a href="https://milesmaximizer.com/?utm_source=404" data-goatcounter-click="404-to-miles">Miles Maximizer</a>, for point transfers;
+        the <a href="https://milesmaximizer.com/museum_problem/?utm_source=404" data-goatcounter-click="404-to-museums">museum finder</a>, for free museum entry;
+        <a href="https://milesmaximizer.com/inkling/?utm_source=404" data-goatcounter-click="404-to-inkling">Inkling</a>, for inKind restaurants;
+        <a href="https://graze.milesmaximizer.com/?utm_source=404" data-goatcounter-click="404-to-graze">GRAZE</a>, for free EV charging;
+        and <a href="https://minty.milesmaximizer.com/?utm_source=404" data-goatcounter-click="404-to-minty">Minty</a>, for private money tracking.</p>
+    </div>
+    <p class="legal">© <span class="year">2026</span> rg-code. Some rights reserved: <a href="https://github.com/rg-code/point-xfer/blob/main/LICENSE" rel="license">CC BY-NC-ND 4.0</a>.</p>
   </footer>
+  <script>document.querySelectorAll(".year").forEach((y) => { y.textContent = new Date().getFullYear(); });</script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "45648a62337f464ab1cb0bb363762e8e"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- GoatCounter --><script data-goatcounter="https://rg-code.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
