@@ -1,40 +1,7 @@
 {
-  "updatedAt": "2026-10-03T16:28:51.593Z",
+  "updatedAt": "2026-10-15T04:50:39.740Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "amex-hilton-30",
-      "start": "2026-09-01",
-      "firstSeen": "2026-09-23",
-      "from": "amex",
-      "to": "hilton",
-      "bonus": 30,
-      "end": "2026-10-14",
-      "sources": [
-        {
-          "title": "Amex Launches 30% Transfer Bonus to Hilton Honors",
-          "url": "https://awardwallet.com/news/amex-membership-rewards/hilton-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Get a 30% transfer bonus from Amex Membership Rewards to Hilton Honors",
-          "url": "https://frequentmiler.com/amex-membership-rewards-hilton-honors-30-percent-transfer-bonus/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Amex to Hilton transfers now come with a 20% or 30% bonus (but it's a bad deal)",
-          "url": "https://travelingformiles.com/amex-hilton-transfer-bonus/",
-          "feed": "Traveling for Miles"
-        },
-        {
-          "title": "Amex transfer partners",
-          "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
-          "feed": "AwardTravelFinder"
-        }
-      ],
-      "note": "Targeted: check your Amex account. Some accounts see 20%.",
-      "manual": true
-    },
     {
       "id": "chase-marriott-70",
       "start": "2026-09-15",
@@ -373,6 +340,38 @@
     }
   ],
   "history": [
+    {
+      "id": "amex-hilton-30",
+      "from": "amex",
+      "to": "hilton",
+      "bonus": 30,
+      "end": "2026-10-14",
+      "sources": [
+        {
+          "title": "Amex Launches 30% Transfer Bonus to Hilton Honors",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/hilton-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 30% transfer bonus from Amex Membership Rewards to Hilton Honors",
+          "url": "https://frequentmiler.com/amex-membership-rewards-hilton-honors-30-percent-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Amex to Hilton transfers now come with a 20% or 30% bonus (but it's a bad deal)",
+          "url": "https://travelingformiles.com/amex-hilton-transfer-bonus/",
+          "feed": "Traveling for Miles"
+        },
+        {
+          "title": "Amex transfer partners",
+          "url": "https://awardtravelfinder.com/credit-card-transfers/amex-membership-rewards",
+          "feed": "AwardTravelFinder"
+        }
+      ],
+      "start": "2026-09-01",
+      "note": "Targeted: check your Amex account. Some accounts see 20%.",
+      "manual": true
+    },
     {
       "id": "bilt-hilton-200",
       "from": "bilt",
