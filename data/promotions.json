@@ -1,35 +1,7 @@
 {
-  "updatedAt": "2026-10-15T04:50:39.740Z",
+  "updatedAt": "2026-10-16T00:28:13.625Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "chase-marriott-70",
-      "start": "2026-09-15",
-      "firstSeen": "2026-09-23",
-      "from": "chase",
-      "to": "marriott",
-      "bonus": 70,
-      "end": "2026-10-15",
-      "sources": [
-        {
-          "title": "Chase Just Launched a 70% Transfer Bonus to Marriott Bonvoy",
-          "url": "https://awardwallet.com/news/chase-ultimate-rewards/marriott-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Get a 70% transfer bonus from Chase Ultimate Rewards to Marriott Bonvoy",
-          "url": "https://frequentmiler.com/70-percent-transfer-bonus-chase-ultimate-rewards-marriott-bonvoy/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Credit card transfer bonuses (September)",
-          "url": "https://thepointsguy.com/loyalty-programs/current-transfer-bonuses/",
-          "feed": "The Points Guy"
-        }
-      ],
-      "note": "Marriott can take up to 7 days to post the bonus points.",
-      "manual": true
-    },
     {
       "id": "c1-ba-20",
       "from": "c1",
@@ -340,6 +312,33 @@
     }
   ],
   "history": [
+    {
+      "id": "chase-marriott-70",
+      "from": "chase",
+      "to": "marriott",
+      "bonus": 70,
+      "end": "2026-10-15",
+      "sources": [
+        {
+          "title": "Chase Just Launched a 70% Transfer Bonus to Marriott Bonvoy",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/marriott-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 70% transfer bonus from Chase Ultimate Rewards to Marriott Bonvoy",
+          "url": "https://frequentmiler.com/70-percent-transfer-bonus-chase-ultimate-rewards-marriott-bonvoy/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Credit card transfer bonuses (September)",
+          "url": "https://thepointsguy.com/loyalty-programs/current-transfer-bonuses/",
+          "feed": "The Points Guy"
+        }
+      ],
+      "start": "2026-09-15",
+      "note": "Marriott can take up to 7 days to post the bonus points.",
+      "manual": true
+    },
     {
       "id": "amex-hilton-30",
       "from": "amex",
