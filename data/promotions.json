@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T00:28:13.625Z",
+  "updatedAt": "2026-10-20T17:17:35.934Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -307,6 +307,28 @@
           "title": "Citi ThankYou Points to Avios Up to 35% Transfer Bonus: Book Qsuites From 52k Avios, Cheap Partner Awards, and More",
           "url": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
           "feed": "AwardWallet"
+        }
+      ]
+    },
+    {
+      "id": "amex-marriott-35",
+      "from": "amex",
+      "to": "marriott",
+      "bonus": 35,
+      "start": null,
+      "end": "2026-12-10",
+      "firstSeen": "2026-10-20",
+      "endSource": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Transfer Amex Membership Rewards to Marriott With a 35% Bonus — But Is It Worth It?",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "New 35% Transfer Bonus From Amex Membership Rewards to Marriott Bonvoy [Ends Dec. 10]",
+          "url": "https://upgradedpoints.com/news/amex-marriott-bonvoy-transfer-bonus/",
+          "feed": "Upgraded Points"
         }
       ]
     }
