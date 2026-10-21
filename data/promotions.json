@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T13:55:08.128Z",
+  "updatedAt": "2026-10-21T18:44:03.724Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -306,6 +306,23 @@
         {
           "title": "Citi ThankYou Points to Avios Up to 35% Transfer Bonus: Book Qsuites From 52k Avios, Cheap Partner Awards, and More",
           "url": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
+          "feed": "AwardWallet"
+        }
+      ]
+    },
+    {
+      "id": "c1-virginred-30",
+      "from": "c1",
+      "to": "virginred",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-11-20",
+      "firstSeen": "2026-10-21",
+      "endSource": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Get a 30% Bonus When You Transfer Capital One Miles to Virgin Flying Club or Virgin Red",
+          "url": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
           "feed": "AwardWallet"
         }
       ]
