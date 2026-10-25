@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T11:43:39.652Z",
+  "updatedAt": "2026-10-25T20:57:26.752Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -224,6 +224,33 @@
       ]
     },
     {
+      "id": "citi-cathay-10",
+      "from": "citi",
+      "to": "cathay",
+      "bonus": 10,
+      "start": null,
+      "end": "2026-11-14",
+      "firstSeen": "2026-10-25",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://hub.thankyou.com/tygr-web/partnerProgramsListing.htm?",
+          "feed": "hub.thankyou.com"
+        },
+        {
+          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Citi ThankYou Points 10% Transfer Bonus To Cathay Pacific Asia Miles (1:1.10)",
+          "url": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/",
+          "feed": "Doctor of Credit"
+        }
+      ],
+      "endSource": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/"
+    },
+    {
       "id": "c1-virginred-30",
       "from": "c1",
       "to": "virginred",
@@ -246,23 +273,6 @@
       ]
     },
     {
-      "id": "citi-cathay-10",
-      "from": "citi",
-      "to": "cathay",
-      "bonus": 10,
-      "start": null,
-      "end": null,
-      "assumedEnd": "2026-11-24",
-      "firstSeen": "2026-10-25",
-      "sources": [
-        {
-          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
-          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
-          "feed": "AwardWallet"
-        }
-      ]
-    },
-    {
       "id": "amex-marriott-35",
       "from": "amex",
       "to": "marriott",
@@ -281,6 +291,11 @@
           "title": "Get a 35% transfer bonus from Amex Membership Rewards to Marriott Bonvoy",
           "url": "https://frequentmiler.com/35-percent-transfer-bonus-american-express-membership-rewards-marriott-bonvoy/",
           "feed": "Frequent Miler"
+        },
+        {
+          "title": "American Express Transfer Bonus: 35% To Marriott (1:1.35)",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-35-to-marriott-11-35-2/",
+          "feed": "Doctor of Credit"
         },
         {
           "title": "New 35% Transfer Bonus From Amex Membership Rewards to Marriott Bonvoy [Ends Dec. 10]",
