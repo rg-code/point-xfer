@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T04:53:29.784Z",
+  "updatedAt": "2026-10-25T11:43:39.652Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -242,6 +242,23 @@
           "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
           "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
           "feed": "Doctor of Credit"
+        }
+      ]
+    },
+    {
+      "id": "citi-cathay-10",
+      "from": "citi",
+      "to": "cathay",
+      "bonus": 10,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-11-24",
+      "firstSeen": "2026-10-25",
+      "sources": [
+        {
+          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
+          "feed": "AwardWallet"
         }
       ]
     },
