@@ -1,62 +1,7 @@
 {
-  "updatedAt": "2026-10-22T04:59:59.478Z",
+  "updatedAt": "2026-10-25T04:53:29.784Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "citi-jal-30",
-      "start": "2026-09-20",
-      "firstSeen": "2026-09-23",
-      "from": "citi",
-      "to": "jal",
-      "bonus": 30,
-      "end": "2026-10-24",
-      "note": "Launch bonus. No-annual-fee cards get 1,000 → 910.",
-      "sources": [
-        {
-          "title": "Citi Adds Japan Airlines Mileage Bank as Transfer Partner — Plus a Limited-Time 30% Transfer Bonus",
-          "url": "https://awardwallet.com/news/citi-thankyou-rewards/japan-airlines-transfer-partner/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Citi adds Japan Airlines as a 1:1 partner, launches 30% transfer bonus",
-          "url": "https://frequentmiler.com/citi-adds-japan-airlines-as-a-11-partner-launches-30-transfer-bonus/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Citi adds Japan Airlines as a transfer partner",
-          "url": "https://thepointsguy.com/news/citi-japan-airlines-transfer-partner/",
-          "feed": "The Points Guy"
-        }
-      ],
-      "manual": true
-    },
-    {
-      "id": "citi-lifemiles-25",
-      "start": "2026-09-20",
-      "firstSeen": "2026-09-23",
-      "from": "citi",
-      "to": "lifemiles",
-      "bonus": 25,
-      "end": "2026-10-24",
-      "sources": [
-        {
-          "title": "25% Transfer Bonus From Citi to LifeMiles",
-          "url": "https://awardwallet.com/news/avianca-lifemiles/lifemiles-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "25% transfer bonus to Avianca LifeMiles from Citi ThankYou Rewards",
-          "url": "https://frequentmiler.com/25-transfer-bonus-to-avianca-lifemiles-from-citi-thankyou-rewards-2/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Current credit card transfer bonuses",
-          "url": "https://www.pointsyeah.com/insider/deals/current-credit-card-transfer-bonuses",
-          "feed": "PointsYeah"
-        }
-      ],
-      "manual": true
-    },
     {
       "id": "amex-aeromexico-20",
       "from": "amex",
@@ -334,6 +279,59 @@
     }
   ],
   "history": [
+    {
+      "id": "citi-jal-30",
+      "from": "citi",
+      "to": "jal",
+      "bonus": 30,
+      "end": "2026-10-24",
+      "note": "Launch bonus. No-annual-fee cards get 1,000 → 910.",
+      "sources": [
+        {
+          "title": "Citi Adds Japan Airlines Mileage Bank as Transfer Partner — Plus a Limited-Time 30% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/japan-airlines-transfer-partner/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Citi adds Japan Airlines as a 1:1 partner, launches 30% transfer bonus",
+          "url": "https://frequentmiler.com/citi-adds-japan-airlines-as-a-11-partner-launches-30-transfer-bonus/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Citi adds Japan Airlines as a transfer partner",
+          "url": "https://thepointsguy.com/news/citi-japan-airlines-transfer-partner/",
+          "feed": "The Points Guy"
+        }
+      ],
+      "start": "2026-09-20",
+      "manual": true
+    },
+    {
+      "id": "citi-lifemiles-25",
+      "from": "citi",
+      "to": "lifemiles",
+      "bonus": 25,
+      "end": "2026-10-24",
+      "sources": [
+        {
+          "title": "25% Transfer Bonus From Citi to LifeMiles",
+          "url": "https://awardwallet.com/news/avianca-lifemiles/lifemiles-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "25% transfer bonus to Avianca LifeMiles from Citi ThankYou Rewards",
+          "url": "https://frequentmiler.com/25-transfer-bonus-to-avianca-lifemiles-from-citi-thankyou-rewards-2/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Current credit card transfer bonuses",
+          "url": "https://www.pointsyeah.com/insider/deals/current-credit-card-transfer-bonuses",
+          "feed": "PointsYeah"
+        }
+      ],
+      "start": "2026-09-20",
+      "manual": true
+    },
     {
       "id": "c1-ba-20",
       "from": "c1",
