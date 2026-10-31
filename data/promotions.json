@@ -1,49 +1,7 @@
 {
-  "updatedAt": "2026-10-27T07:59:15.751Z",
+  "updatedAt": "2026-10-31T05:54:58.635Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "amex-aeromexico-20",
-      "from": "amex",
-      "to": "aeromexico",
-      "bonus": 20,
-      "start": null,
-      "end": "2026-10-30",
-      "firstSeen": "2026-10-01",
-      "endSource": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
-      "sources": [
-        {
-          "title": "Offer page",
-          "url": "https://rewards.americanexpress.com/myca/loyalty/us/catalog/view/ptlanding/detail/5629f185e4b0b3d3bd79cc49?tier=MR",
-          "feed": "rewards.americanexpress.com"
-        },
-        {
-          "title": "Amex 20% Transfer Bonus to Aeromexico: Fly Biz to Mexico City, Madrid, or Tokyo for Less",
-          "url": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "American Express Transfer Bonus: 20% To AeroMexico",
-          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-20-to-aeromexico-3/",
-          "feed": "Doctor of Credit"
-        },
-        {
-          "title": "American Express Membership Rewards offering 20% transfer bonus to AeroMexico",
-          "url": "https://frequentmiler.com/american-express-membership-rewards-offering-20-transfer-bonus-to-aeromexico/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Get a 20% Bonus When You Transfer Amex Points to Aeromexico Rewards [Ends October 31]",
-          "url": "https://upgradedpoints.com/news/amex-transfer-bonus-aeromexico/",
-          "feed": "Upgraded Points"
-        },
-        {
-          "title": "Transfer Amex Points To Aeromexico Rewards With 20% Bonus: Worth It?",
-          "url": "https://onemileatatime.com/deals/amex-aeromexico-transfer-bonus/",
-          "feed": "One Mile at a Time"
-        }
-      ]
-    },
     {
       "id": "amex-flyingblue-25",
       "from": "amex",
@@ -343,6 +301,48 @@
     }
   ],
   "history": [
+    {
+      "id": "amex-aeromexico-20",
+      "from": "amex",
+      "to": "aeromexico",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-10-30",
+      "firstSeen": "2026-10-01",
+      "endSource": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://rewards.americanexpress.com/myca/loyalty/us/catalog/view/ptlanding/detail/5629f185e4b0b3d3bd79cc49?tier=MR",
+          "feed": "rewards.americanexpress.com"
+        },
+        {
+          "title": "Amex 20% Transfer Bonus to Aeromexico: Fly Biz to Mexico City, Madrid, or Tokyo for Less",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/aeromexico-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "American Express Transfer Bonus: 20% To AeroMexico",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-20-to-aeromexico-3/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "American Express Membership Rewards offering 20% transfer bonus to AeroMexico",
+          "url": "https://frequentmiler.com/american-express-membership-rewards-offering-20-transfer-bonus-to-aeromexico/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Get a 20% Bonus When You Transfer Amex Points to Aeromexico Rewards [Ends October 31]",
+          "url": "https://upgradedpoints.com/news/amex-transfer-bonus-aeromexico/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Aeromexico Rewards With 20% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-aeromexico-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
+    },
     {
       "id": "citi-jal-30",
       "from": "citi",
