@@ -1,7 +1,127 @@
 {
-  "updatedAt": "2026-10-31T05:54:58.635Z",
+  "updatedAt": "2026-11-01T06:21:08.363Z",
   "historySince": "2023-01-01",
   "promotions": [
+    {
+      "id": "citi-cathay-10",
+      "from": "citi",
+      "to": "cathay",
+      "bonus": 10,
+      "start": null,
+      "end": "2026-11-14",
+      "firstSeen": "2026-10-25",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://hub.thankyou.com/tygr-web/partnerProgramsListing.htm?",
+          "feed": "hub.thankyou.com"
+        },
+        {
+          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Citi ThankYou Points 10% Transfer Bonus To Cathay Pacific Asia Miles (1:1.10)",
+          "url": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "10% transfer bonus to Cathay Pacific Asia Miles from Citi ThankYou",
+          "url": "https://frequentmiler.com/10-transfer-bonus-citi-thankyou-rewards-to-cathay-pacific-asia-miles/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Transfer Citi ThankYou Points To Cathay Pacific With 10% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/cathay-pacific-asia-miles-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        },
+        {
+          "title": "Citi Launches 10% Transfer Bonus to Cathay Pacific [Until November 14]",
+          "url": "https://upgradedpoints.com/news/citi-cathay-pacific-transfer-bonus/",
+          "feed": "Upgraded Points"
+        }
+      ],
+      "endSource": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/"
+    },
+    {
+      "id": "c1-virginred-30",
+      "from": "c1",
+      "to": "virginred",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-11-20",
+      "firstSeen": "2026-10-21",
+      "endSource": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Get a 30% Bonus When You Transfer Capital One Miles to Virgin Flying Club or Virgin Red",
+          "url": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
+          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
+          "feed": "Doctor of Credit"
+        }
+      ]
+    },
+    {
+      "id": "c1-ba-20",
+      "from": "c1",
+      "to": "ba",
+      "bonus": 20,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-11-26",
+      "firstSeen": "2026-10-27",
+      "sources": [
+        {
+          "title": "Capital One Transfer Bonus: 20% To British Airways Avios (1:1.2)",
+          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-20-to-british-airways-avios-11-2-3/",
+          "feed": "Doctor of Credit"
+        }
+      ]
+    },
+    {
+      "id": "amex-marriott-35",
+      "from": "amex",
+      "to": "marriott",
+      "bonus": 35,
+      "start": null,
+      "end": "2026-12-10",
+      "firstSeen": "2026-10-20",
+      "endSource": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Transfer Amex Membership Rewards to Marriott With a 35% Bonus — But Is It Worth It?",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Get a 35% transfer bonus from Amex Membership Rewards to Marriott Bonvoy",
+          "url": "https://frequentmiler.com/35-percent-transfer-bonus-american-express-membership-rewards-marriott-bonvoy/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "American Express Transfer Bonus: 35% To Marriott (1:1.35)",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-35-to-marriott-11-35-2/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "New 35% Transfer Bonus From Amex Membership Rewards to Marriott Bonvoy [Ends Dec. 10]",
+          "url": "https://upgradedpoints.com/news/amex-marriott-bonvoy-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Marriott Bonvoy With 35% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-marriott-bonvoy-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ]
+    }
+  ],
+  "history": [
     {
       "id": "amex-flyingblue-25",
       "from": "amex",
@@ -181,126 +301,6 @@
         }
       ]
     },
-    {
-      "id": "citi-cathay-10",
-      "from": "citi",
-      "to": "cathay",
-      "bonus": 10,
-      "start": null,
-      "end": "2026-11-14",
-      "firstSeen": "2026-10-25",
-      "sources": [
-        {
-          "title": "Offer page",
-          "url": "https://hub.thankyou.com/tygr-web/partnerProgramsListing.htm?",
-          "feed": "hub.thankyou.com"
-        },
-        {
-          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
-          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Citi ThankYou Points 10% Transfer Bonus To Cathay Pacific Asia Miles (1:1.10)",
-          "url": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/",
-          "feed": "Doctor of Credit"
-        },
-        {
-          "title": "10% transfer bonus to Cathay Pacific Asia Miles from Citi ThankYou",
-          "url": "https://frequentmiler.com/10-transfer-bonus-citi-thankyou-rewards-to-cathay-pacific-asia-miles/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Transfer Citi ThankYou Points To Cathay Pacific With 10% Bonus: Worth It?",
-          "url": "https://onemileatatime.com/deals/cathay-pacific-asia-miles-transfer-bonus/",
-          "feed": "One Mile at a Time"
-        },
-        {
-          "title": "Citi Launches 10% Transfer Bonus to Cathay Pacific [Until November 14]",
-          "url": "https://upgradedpoints.com/news/citi-cathay-pacific-transfer-bonus/",
-          "feed": "Upgraded Points"
-        }
-      ],
-      "endSource": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/"
-    },
-    {
-      "id": "c1-virginred-30",
-      "from": "c1",
-      "to": "virginred",
-      "bonus": 30,
-      "start": null,
-      "end": "2026-11-20",
-      "firstSeen": "2026-10-21",
-      "endSource": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
-      "sources": [
-        {
-          "title": "Get a 30% Bonus When You Transfer Capital One Miles to Virgin Flying Club or Virgin Red",
-          "url": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
-          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
-          "feed": "Doctor of Credit"
-        }
-      ]
-    },
-    {
-      "id": "c1-ba-20",
-      "from": "c1",
-      "to": "ba",
-      "bonus": 20,
-      "start": null,
-      "end": null,
-      "assumedEnd": "2026-11-26",
-      "firstSeen": "2026-10-27",
-      "sources": [
-        {
-          "title": "Capital One Transfer Bonus: 20% To British Airways Avios (1:1.2)",
-          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-20-to-british-airways-avios-11-2-3/",
-          "feed": "Doctor of Credit"
-        }
-      ]
-    },
-    {
-      "id": "amex-marriott-35",
-      "from": "amex",
-      "to": "marriott",
-      "bonus": 35,
-      "start": null,
-      "end": "2026-12-10",
-      "firstSeen": "2026-10-20",
-      "endSource": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
-      "sources": [
-        {
-          "title": "Transfer Amex Membership Rewards to Marriott With a 35% Bonus — But Is It Worth It?",
-          "url": "https://awardwallet.com/news/amex-membership-rewards/marriott-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Get a 35% transfer bonus from Amex Membership Rewards to Marriott Bonvoy",
-          "url": "https://frequentmiler.com/35-percent-transfer-bonus-american-express-membership-rewards-marriott-bonvoy/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "American Express Transfer Bonus: 35% To Marriott (1:1.35)",
-          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-35-to-marriott-11-35-2/",
-          "feed": "Doctor of Credit"
-        },
-        {
-          "title": "New 35% Transfer Bonus From Amex Membership Rewards to Marriott Bonvoy [Ends Dec. 10]",
-          "url": "https://upgradedpoints.com/news/amex-marriott-bonvoy-transfer-bonus/",
-          "feed": "Upgraded Points"
-        },
-        {
-          "title": "Transfer Amex Points To Marriott Bonvoy With 35% Bonus: Worth It?",
-          "url": "https://onemileatatime.com/deals/amex-marriott-bonvoy-transfer-bonus/",
-          "feed": "One Mile at a Time"
-        }
-      ]
-    }
-  ],
-  "history": [
     {
       "id": "amex-aeromexico-20",
       "from": "amex",
