@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-01T06:21:08.363Z",
+  "updatedAt": "2026-11-01T15:16:39.427Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -80,6 +80,143 @@
           "title": "Capital One Transfer Bonus: 20% To British Airways Avios (1:1.2)",
           "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-20-to-british-airways-avios-11-2-3/",
           "feed": "Doctor of Credit"
+        }
+      ]
+    },
+    {
+      "id": "c1-flyingblue-20",
+      "from": "c1",
+      "to": "flyingblue",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-11-30",
+      "firstSeen": "2026-11-01",
+      "sources": [
+        {
+          "title": "Capital One Launches 20% Transfer Bonus Air France/KLM Flying Blue",
+          "url": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Capital One: 20% Transfer Bonus To AirFrance/KLM Flying Blue (1:1.2)",
+          "url": "https://www.doctorofcredit.com/capital-one-20-transfer-bonus-to-airfrance-klm-flying-blue-11-2-4/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Transfer Capital One Miles To Air France-KLM Flying Blue With 20% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/capital-one-flying-blue-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ],
+      "endSource": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/"
+    },
+    {
+      "id": "chase-ba-30",
+      "from": "chase",
+      "to": "ba",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-12-01",
+      "firstSeen": "2026-11-01",
+      "sources": [
+        {
+          "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Avios (1:1.3)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-avios-11-3/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
+          "url": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ],
+      "endSource": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/"
+    },
+    {
+      "id": "chase-iberia-30",
+      "from": "chase",
+      "to": "iberia",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-12-01",
+      "firstSeen": "2026-11-01",
+      "sources": [
+        {
+          "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Avios (1:1.3)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-avios-11-3/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
+          "url": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ],
+      "endSource": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/"
+    },
+    {
+      "id": "chase-aerlingus-30",
+      "from": "chase",
+      "to": "aerlingus",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-12-01",
+      "firstSeen": "2026-11-01",
+      "sources": [
+        {
+          "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Avios (1:1.3)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-avios-11-3/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
+          "url": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ],
+      "endSource": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/"
+    },
+    {
+      "id": "chase-wyndham-30",
+      "from": "chase",
+      "to": "wyndham",
+      "bonus": 30,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-12-01",
+      "firstSeen": "2026-11-01",
+      "sources": [
+        {
+          "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Wyndham (1:1.3)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-wyndham-11-3-2/",
+          "feed": "Doctor of Credit"
+        }
+      ]
+    },
+    {
+      "id": "chase-ihg-80",
+      "from": "chase",
+      "to": "ihg",
+      "bonus": 80,
+      "start": null,
+      "end": "2026-12-03",
+      "firstSeen": "2026-11-01",
+      "endSource": "https://awardwallet.com/news/chase-ultimate-rewards/ihg-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Chase Launches New 80% Transfer Bonus to IHG One Rewards — But Is It Worth It?",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/ihg-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Chase Ultimate Rewards: 80% Transfer Bonus To IHG (1:1.8)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-80-transfer-bonus-to-ihg-11-8-5/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Transfer Chase Points To IHG With 80% Bonus: Why It’s Not Worth It",
+          "url": "https://onemileatatime.com/deals/chase-ihg-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     },
