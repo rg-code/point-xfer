@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-01T20:35:06.405Z",
+  "updatedAt": "2026-11-02T20:24:12.261Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -103,12 +103,59 @@
           "feed": "Doctor of Credit"
         },
         {
+          "title": "20% transfer bonus to Air France / KLM Flying Blue from Capital One",
+          "url": "https://frequentmiler.com/20-transfer-bonus-to-air-france-klm-flying-blue-from-capital-one/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Transfer Capital One Miles To Air France-KLM Flying Blue With 20% Bonus: Worth It?",
           "url": "https://onemileatatime.com/deals/capital-one-flying-blue-transfer-bonus/",
           "feed": "One Mile at a Time"
+        },
+        {
+          "title": "Capital One Offering 20% Transfer Bonus to Flying Blue [Until November 30]",
+          "url": "https://upgradedpoints.com/news/capital-one-flying-blue-transfer-bonus/",
+          "feed": "Upgraded Points"
         }
       ],
       "endSource": "https://awardwallet.com/news/capital-one-rewards/flying-blue-transfer-bonus/"
+    },
+    {
+      "id": "amex-virgin-30",
+      "from": "amex",
+      "to": "virgin",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-11-30",
+      "firstSeen": "2026-11-02",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://rewards.americanexpress.com/myca/loyalty/us/catalog/view/ptlanding/detail/5629f184e4b0b3d3bd79cc43?tier=PR&intlink=us-mr-c463%7Cweb%7Caw%7Cmr%7Cxferair%7Cprtb&mrk=BC4EE450F1BA9CE370EF63D1528F966E",
+          "feed": "rewards.americanexpress.com"
+        },
+        {
+          "title": "Transfer Amex Membership Rewards Points to Virgin Atlantic Flying Club With a 30% Bonus",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "American Express Transfer Bonus: 30% To Virgin Atlantic",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-30-to-virgin-atlantic-8/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "30% Transfer Bonus From Amex Membership Rewards to Virgin Atlantic Flying Club",
+          "url": "https://upgradedpoints.com/news/amex-virgin-atlantic-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Virgin Atlantic Flying Club With 30% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-virgin-atlantic-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        }
+      ],
+      "endSource": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/"
     },
     {
       "id": "chase-ba-30",
@@ -123,6 +170,11 @@
           "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Avios (1:1.3)",
           "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-avios-11-3/",
           "feed": "Doctor of Credit"
+        },
+        {
+          "title": "Get a 30% bonus when transferring Chase Ultimate Rewards to Avios programs (BA, Iberia, & Aer Lingus)",
+          "url": "https://frequentmiler.com/get-a-30-bonus-when-transferring-chase-ultimate-rewards-to-avios-programs-ba-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
         },
         {
           "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
@@ -147,6 +199,11 @@
           "feed": "Doctor of Credit"
         },
         {
+          "title": "Get a 30% bonus when transferring Chase Ultimate Rewards to Avios programs (BA, Iberia, & Aer Lingus)",
+          "url": "https://frequentmiler.com/get-a-30-bonus-when-transferring-chase-ultimate-rewards-to-avios-programs-ba-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
           "url": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/",
           "feed": "One Mile at a Time"
@@ -169,12 +226,34 @@
           "feed": "Doctor of Credit"
         },
         {
+          "title": "Get a 30% bonus when transferring Chase Ultimate Rewards to Avios programs (BA, Iberia, & Aer Lingus)",
+          "url": "https://frequentmiler.com/get-a-30-bonus-when-transferring-chase-ultimate-rewards-to-avios-programs-ba-iberia-aer-lingus/",
+          "feed": "Frequent Miler"
+        },
+        {
           "title": "Transfer Chase Points To British Airways, Iberia, Aer Lingus, With 30% Bonus",
           "url": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/",
           "feed": "One Mile at a Time"
         }
       ],
       "endSource": "https://onemileatatime.com/deals/chase-british-airways-transfer-bonus/"
+    },
+    {
+      "id": "c1-emirates-30",
+      "from": "c1",
+      "to": "emirates",
+      "bonus": 30,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-12-02",
+      "firstSeen": "2026-11-02",
+      "sources": [
+        {
+          "title": "Capital One Adds New Airline Partner With 30% Bonus—Book Emirates Business Class Without Fuel Surcharges",
+          "url": "https://viewfromthewing.com/capital-one-adds-new-airline-partner-with-30-bonus-book-emirates-business-class-without-fuel-surcharges/",
+          "feed": "View from the Wing"
+        }
+      ]
     },
     {
       "id": "chase-wyndham-30",
@@ -194,6 +273,11 @@
           "title": "Chase Ultimate Rewards: 30% Transfer Bonus To Wyndham (1:1.3)",
           "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-30-transfer-bonus-to-wyndham-11-3-2/",
           "feed": "Doctor of Credit"
+        },
+        {
+          "title": "30% transfer bonus from Chase Ultimate Rewards to Wyndham Rewards",
+          "url": "https://frequentmiler.com/30-transfer-bonus-from-chase-ultimate-rewards-to-wyndham-rewards/",
+          "feed": "Frequent Miler"
         }
       ],
       "endSource": "https://awardwallet.com/news/chase-ultimate-rewards/wyndham-transfer-bonus/"
