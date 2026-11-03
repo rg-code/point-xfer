@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03T03:29:28.021Z",
+  "updatedAt": "2026-11-03T19:35:06.789Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -161,6 +161,23 @@
         }
       ],
       "endSource": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/"
+    },
+    {
+      "id": "citi-turkish-40",
+      "from": "citi",
+      "to": "turkish",
+      "bonus": 40,
+      "start": null,
+      "end": "2026-11-30",
+      "firstSeen": "2026-11-03",
+      "endSource": "https://upgradedpoints.com/news/citi-points-turkish-airlines-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Get a 40% Bonus When You Transfer Citi Points to Turkish Airlines [Until November 30]",
+          "url": "https://upgradedpoints.com/news/citi-points-turkish-airlines-transfer-bonus/",
+          "feed": "Upgraded Points"
+        }
+      ]
     },
     {
       "id": "chase-ba-30",
