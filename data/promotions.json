@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03T19:35:06.789Z",
+  "updatedAt": "2026-11-04T18:03:35.088Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -173,9 +173,19 @@
       "endSource": "https://upgradedpoints.com/news/citi-points-turkish-airlines-transfer-bonus/",
       "sources": [
         {
+          "title": "Offer page",
+          "url": "https://www.turkishairlines.com/en-us/miles-and-smiles/campaigns/earn-40-percent-extra-miles-with-citi/index.html",
+          "feed": "turkishairlines.com"
+        },
+        {
           "title": "Get a 40% Bonus When You Transfer Citi Points to Turkish Airlines [Until November 30]",
           "url": "https://upgradedpoints.com/news/citi-points-turkish-airlines-transfer-bonus/",
           "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Citi ThankYou Points To Turkish Miles&Smiles With 40% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/citi-turkish-miles-smiles-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     },
