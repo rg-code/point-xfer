@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-05T16:32:04.470Z",
+  "updatedAt": "2026-11-05T23:41:39.146Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -135,6 +135,26 @@
           "feed": "rewards.americanexpress.com"
         },
         {
+          "title": "Offer page",
+          "url": "https://global.americanexpress.com/rewards/transfer",
+          "feed": "global.americanexpress.com"
+        },
+        {
+          "title": "Offer page",
+          "url": "https://www.virginatlantic.com/en-US/flying-club/spend-points/reward-seats/saver-reward-seats",
+          "feed": "virginatlantic.com"
+        },
+        {
+          "title": "Offer page",
+          "url": "https://www.virginatlantic.com/en-US/flying-club/airline-partners/delta-air-lines",
+          "feed": "virginatlantic.com"
+        },
+        {
+          "title": "Offer page",
+          "url": "https://www.virginatlantic.com/en-US/flying-club/airline-partners/all-nippon-airways",
+          "feed": "virginatlantic.com"
+        },
+        {
           "title": "Transfer Amex Membership Rewards Points to Virgin Atlantic Flying Club With a 30% Bonus",
           "url": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/",
           "feed": "AwardWallet"
@@ -158,6 +178,11 @@
           "title": "Transfer Amex Points To Virgin Atlantic Flying Club With 30% Bonus: Worth It?",
           "url": "https://onemileatatime.com/deals/amex-virgin-atlantic-transfer-bonus/",
           "feed": "One Mile at a Time"
+        },
+        {
+          "title": "It’s Back: Transfer Bonus From Amex Membership Rewards® to Virgin Atlantic Flying Club",
+          "url": "https://upgradedpoints.com/news/american-express-virgin-atlantic-transfer-bonus/",
+          "feed": "Upgraded Points"
         }
       ],
       "endSource": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/"
