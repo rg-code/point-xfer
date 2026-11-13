@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-05T23:41:39.146Z",
+  "updatedAt": "2026-11-13T17:50:41.637Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -155,6 +155,21 @@
           "feed": "virginatlantic.com"
         },
         {
+          "title": "Offer page",
+          "url": "https://global.americanexpress.com/rewards/transfer?utm_campaign=the-points-guy&utm_content=409359&utm_medium=syndication&utm_source=The+Points+Guy",
+          "feed": "global.americanexpress.com"
+        },
+        {
+          "title": "Offer page",
+          "url": "https://www.americanexpress.com/content/dam/amex/us/rewards/membership-rewards/mr-terms-conditions-september-2026.pdf?mrlinknav=footer-tandc&utm_campaign=the-points-guy&utm_content=409359&utm_medium=syndication&utm_source=The+Points+Guy",
+          "feed": "americanexpress.com"
+        },
+        {
+          "title": "Offer page",
+          "url": "https://www.virginatlantic.com/en-US",
+          "feed": "virginatlantic.com"
+        },
+        {
           "title": "Transfer Amex Membership Rewards Points to Virgin Atlantic Flying Club With a 30% Bonus",
           "url": "https://awardwallet.com/news/amex-membership-rewards/virgin-atlantic-transfer-bonus/",
           "feed": "AwardWallet"
@@ -182,6 +197,16 @@
         {
           "title": "It’s Back: Transfer Bonus From Amex Membership Rewards® to Virgin Atlantic Flying Club",
           "url": "https://upgradedpoints.com/news/american-express-virgin-atlantic-transfer-bonus/",
+          "feed": "Upgraded Points"
+        },
+        {
+          "title": "How to book your dream trip to London with the American Express and Virgin Atlantic Flying Club 30% transfer bonus",
+          "url": "https://thepointsguy.com/loyalty-programs/amex-virgin-transfer-bonus-dream-trip/",
+          "feed": "The Points Guy"
+        },
+        {
+          "title": "How I’d Fly to London With Virgin Atlantic for 5,000 Amex Points",
+          "url": "https://upgradedpoints.com/news/amex-virgin-atlantic-transfer-bonus-london/",
           "feed": "Upgraded Points"
         }
       ],
