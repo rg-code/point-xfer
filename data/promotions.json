@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-15T17:15:46.036Z",
+  "updatedAt": "2026-11-15T22:56:41.187Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -403,6 +403,23 @@
           "title": "Capital One to Avios Up to 15% Transfer Bonus: Book Qsuites From 61k Miles, Cheap Partner Awards, and More",
           "url": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
           "feed": "AwardWallet"
+        }
+      ]
+    },
+    {
+      "id": "c1-qatar-15",
+      "from": "c1",
+      "to": "qatar",
+      "bonus": 15,
+      "start": null,
+      "end": null,
+      "assumedEnd": "2026-12-15",
+      "firstSeen": "2026-11-15",
+      "sources": [
+        {
+          "title": "Capital One: 15% Transfer Bonus To Qatar (1:1.15)",
+          "url": "https://www.doctorofcredit.com/capital-one-15-transfer-bonus-to-qatar-11-15/",
+          "feed": "Doctor of Credit"
         }
       ]
     }
