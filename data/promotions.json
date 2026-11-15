@@ -1,49 +1,7 @@
 {
-  "updatedAt": "2026-11-13T17:50:41.637Z",
+  "updatedAt": "2026-11-15T01:58:31.967Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "citi-cathay-10",
-      "from": "citi",
-      "to": "cathay",
-      "bonus": 10,
-      "start": null,
-      "end": "2026-11-14",
-      "firstSeen": "2026-10-25",
-      "sources": [
-        {
-          "title": "Offer page",
-          "url": "https://hub.thankyou.com/tygr-web/partnerProgramsListing.htm?",
-          "feed": "hub.thankyou.com"
-        },
-        {
-          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
-          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Citi ThankYou Points 10% Transfer Bonus To Cathay Pacific Asia Miles (1:1.10)",
-          "url": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/",
-          "feed": "Doctor of Credit"
-        },
-        {
-          "title": "10% transfer bonus to Cathay Pacific Asia Miles from Citi ThankYou",
-          "url": "https://frequentmiler.com/10-transfer-bonus-citi-thankyou-rewards-to-cathay-pacific-asia-miles/",
-          "feed": "Frequent Miler"
-        },
-        {
-          "title": "Transfer Citi ThankYou Points To Cathay Pacific With 10% Bonus: Worth It?",
-          "url": "https://onemileatatime.com/deals/cathay-pacific-asia-miles-transfer-bonus/",
-          "feed": "One Mile at a Time"
-        },
-        {
-          "title": "Citi Launches 10% Transfer Bonus to Cathay Pacific [Until November 14]",
-          "url": "https://upgradedpoints.com/news/citi-cathay-pacific-transfer-bonus/",
-          "feed": "Upgraded Points"
-        }
-      ],
-      "endSource": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/"
-    },
     {
       "id": "c1-virginred-30",
       "from": "c1",
@@ -450,6 +408,48 @@
     }
   ],
   "history": [
+    {
+      "id": "citi-cathay-10",
+      "from": "citi",
+      "to": "cathay",
+      "bonus": 10,
+      "start": null,
+      "end": "2026-11-14",
+      "firstSeen": "2026-10-25",
+      "sources": [
+        {
+          "title": "Offer page",
+          "url": "https://hub.thankyou.com/tygr-web/partnerProgramsListing.htm?",
+          "feed": "hub.thankyou.com"
+        },
+        {
+          "title": "Transfer Citi ThankYou® Points to Cathay With a 10% Transfer Bonus",
+          "url": "https://awardwallet.com/news/citi-thankyou-rewards/cathay-pacific-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Citi ThankYou Points 10% Transfer Bonus To Cathay Pacific Asia Miles (1:1.10)",
+          "url": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/",
+          "feed": "Doctor of Credit"
+        },
+        {
+          "title": "10% transfer bonus to Cathay Pacific Asia Miles from Citi ThankYou",
+          "url": "https://frequentmiler.com/10-transfer-bonus-citi-thankyou-rewards-to-cathay-pacific-asia-miles/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "Transfer Citi ThankYou Points To Cathay Pacific With 10% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/cathay-pacific-asia-miles-transfer-bonus/",
+          "feed": "One Mile at a Time"
+        },
+        {
+          "title": "Citi Launches 10% Transfer Bonus to Cathay Pacific [Until November 14]",
+          "url": "https://upgradedpoints.com/news/citi-cathay-pacific-transfer-bonus/",
+          "feed": "Upgraded Points"
+        }
+      ],
+      "endSource": "https://www.doctorofcredit.com/citi-thankyou-points-10-transfer-bonus-to-cathay-pacific-asia-miles-11-10/"
+    },
     {
       "id": "amex-flyingblue-25",
       "from": "amex",
