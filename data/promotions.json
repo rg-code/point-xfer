@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-15T01:58:31.967Z",
+  "updatedAt": "2026-11-15T17:15:46.036Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -20,23 +20,6 @@
         {
           "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
           "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
-          "feed": "Doctor of Credit"
-        }
-      ]
-    },
-    {
-      "id": "c1-ba-20",
-      "from": "c1",
-      "to": "ba",
-      "bonus": 20,
-      "start": null,
-      "end": null,
-      "assumedEnd": "2026-11-26",
-      "firstSeen": "2026-10-27",
-      "sources": [
-        {
-          "title": "Capital One Transfer Bonus: 20% To British Airways Avios (1:1.2)",
-          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-20-to-british-airways-avios-11-2-3/",
           "feed": "Doctor of Credit"
         }
       ]
@@ -405,9 +388,43 @@
           "feed": "One Mile at a Time"
         }
       ]
+    },
+    {
+      "id": "c1-ba-15",
+      "from": "c1",
+      "to": "ba",
+      "bonus": 15,
+      "start": null,
+      "end": "2026-12-14",
+      "firstSeen": "2026-11-15",
+      "endSource": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Capital One to Avios Up to 15% Transfer Bonus: Book Qsuites From 61k Miles, Cheap Partner Awards, and More",
+          "url": "https://awardwallet.com/news/airlines/qatar-airways-transfer-bonus/",
+          "feed": "AwardWallet"
+        }
+      ]
     }
   ],
   "history": [
+    {
+      "id": "c1-ba-20",
+      "from": "c1",
+      "to": "ba",
+      "bonus": 20,
+      "start": null,
+      "end": "2026-11-15",
+      "assumedEnd": "2026-11-26",
+      "firstSeen": "2026-10-27",
+      "sources": [
+        {
+          "title": "Capital One Transfer Bonus: 20% To British Airways Avios (1:1.2)",
+          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-20-to-british-airways-avios-11-2-3/",
+          "feed": "Doctor of Credit"
+        }
+      ]
+    },
     {
       "id": "citi-cathay-10",
       "from": "citi",
