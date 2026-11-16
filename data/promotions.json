@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-15T22:56:41.187Z",
+  "updatedAt": "2026-11-16T18:39:09.954Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -420,6 +420,50 @@
           "title": "Capital One: 15% Transfer Bonus To Qatar (1:1.15)",
           "url": "https://www.doctorofcredit.com/capital-one-15-transfer-bonus-to-qatar-11-15/",
           "feed": "Doctor of Credit"
+        },
+        {
+          "title": "15% transfer bonus to Qatar Privilege Club from Capital One Miles",
+          "url": "https://frequentmiler.com/15-transfer-bonus-to-qatar-privilege-club-from-capital-one-miles/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "15% Transfer Bonus From Capital One to Qatar Airways",
+          "url": "https://upgradedpoints.com/news/capital-one-qatar-airways-transfer-bonus/",
+          "feed": "Upgraded Points"
+        }
+      ]
+    },
+    {
+      "id": "amex-lifemiles-10",
+      "from": "amex",
+      "to": "lifemiles",
+      "bonus": 10,
+      "start": null,
+      "end": "2026-12-16",
+      "firstSeen": "2026-11-16",
+      "endSource": "https://upgradedpoints.com/news/amex-avianca-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Transfer Amex Points to Avianca Lifemiles With a 10% Bonus [Until December 16]",
+          "url": "https://upgradedpoints.com/news/amex-avianca-transfer-bonus/",
+          "feed": "Upgraded Points"
+        }
+      ]
+    },
+    {
+      "id": "chase-virgin-40",
+      "from": "chase",
+      "to": "virgin",
+      "bonus": 40,
+      "start": null,
+      "end": "2026-12-30",
+      "firstSeen": "2026-11-16",
+      "endSource": "https://upgradedpoints.com/news/chase-virgin-atlantic-transfer-bonus/",
+      "sources": [
+        {
+          "title": "New 40% Bonus From Chase to Virgin Atlantic [Ends 12/30]",
+          "url": "https://upgradedpoints.com/news/chase-virgin-atlantic-transfer-bonus/",
+          "feed": "Upgraded Points"
         }
       ]
     }
