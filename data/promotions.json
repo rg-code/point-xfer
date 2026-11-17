@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-16T18:39:09.954Z",
+  "updatedAt": "2026-11-17T02:58:17.965Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -430,6 +430,11 @@
           "title": "15% Transfer Bonus From Capital One to Qatar Airways",
           "url": "https://upgradedpoints.com/news/capital-one-qatar-airways-transfer-bonus/",
           "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Capital One Miles To Qatar Airways Privilege Club With 15% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/qatar-airways-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     },
@@ -444,9 +449,34 @@
       "endSource": "https://upgradedpoints.com/news/amex-avianca-transfer-bonus/",
       "sources": [
         {
+          "title": "Offer page",
+          "url": "https://www.lifemiles.com/deals/detail-page/0224US01",
+          "feed": "lifemiles.com"
+        },
+        {
+          "title": "Get a 10% Transfer Bonus on Amex Membership Rewards Points Transfers to Avianca LifeMiles",
+          "url": "https://awardwallet.com/news/amex-membership-rewards/avianca-lifemiles-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "10% transfer bonus to Avianca Lifemiles from Amex Membership Rewards",
+          "url": "https://frequentmiler.com/10-transfer-bonus-to-avianca-lifemiles-from-amex-membership-rewards/",
+          "feed": "Frequent Miler"
+        },
+        {
+          "title": "American Express Transfer Bonus: 10% To Avianca LifeMiles (1:1.10)",
+          "url": "https://www.doctorofcredit.com/american-express-transfer-bonus-10-to-avianca-lifemiles-11-10/",
+          "feed": "Doctor of Credit"
+        },
+        {
           "title": "Transfer Amex Points to Avianca Lifemiles With a 10% Bonus [Until December 16]",
           "url": "https://upgradedpoints.com/news/amex-avianca-transfer-bonus/",
           "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Amex Points To Avianca Lifemiles With 10% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/amex-avianca-lifemiles-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     },
