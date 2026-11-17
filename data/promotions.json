@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-17T02:58:17.965Z",
+  "updatedAt": "2026-11-17T22:28:15.813Z",
   "historySince": "2023-01-01",
   "promotions": [
     {
@@ -491,9 +491,24 @@
       "endSource": "https://upgradedpoints.com/news/chase-virgin-atlantic-transfer-bonus/",
       "sources": [
         {
+          "title": "Chase to Virgin Atlantic Transfer Bonus: Book Delta Awards From 6k Points, Biz to Europe From 21k Points",
+          "url": "https://awardwallet.com/news/chase-ultimate-rewards/virgin-atlantic-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Chase Ultimate Rewards: 40% Transfer Bonus To Virgin Atlantic (1:1.4)",
+          "url": "https://www.doctorofcredit.com/chase-ultimate-rewards-40-transfer-bonus-to-virgin-atlantic-11-4-4/",
+          "feed": "Doctor of Credit"
+        },
+        {
           "title": "New 40% Bonus From Chase to Virgin Atlantic [Ends 12/30]",
           "url": "https://upgradedpoints.com/news/chase-virgin-atlantic-transfer-bonus/",
           "feed": "Upgraded Points"
+        },
+        {
+          "title": "Transfer Chase Points To Virgin Atlantic Flying Club With 40% Bonus: Worth It?",
+          "url": "https://onemileatatime.com/deals/chase-virgin-atlantic-transfer-bonus/",
+          "feed": "One Mile at a Time"
         }
       ]
     }
