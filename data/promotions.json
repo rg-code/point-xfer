@@ -1,29 +1,7 @@
 {
-  "updatedAt": "2026-11-19T20:46:19.657Z",
+  "updatedAt": "2026-11-21T03:15:38.125Z",
   "historySince": "2023-01-01",
   "promotions": [
-    {
-      "id": "c1-virginred-30",
-      "from": "c1",
-      "to": "virginred",
-      "bonus": 30,
-      "start": null,
-      "end": "2026-11-20",
-      "firstSeen": "2026-10-21",
-      "endSource": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
-      "sources": [
-        {
-          "title": "Get a 30% Bonus When You Transfer Capital One Miles to Virgin Flying Club or Virgin Red",
-          "url": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
-          "feed": "AwardWallet"
-        },
-        {
-          "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
-          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
-          "feed": "Doctor of Credit"
-        }
-      ]
-    },
     {
       "id": "c1-flyingblue-20",
       "from": "c1",
@@ -524,6 +502,28 @@
     }
   ],
   "history": [
+    {
+      "id": "c1-virginred-30",
+      "from": "c1",
+      "to": "virginred",
+      "bonus": 30,
+      "start": null,
+      "end": "2026-11-20",
+      "firstSeen": "2026-10-21",
+      "endSource": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
+      "sources": [
+        {
+          "title": "Get a 30% Bonus When You Transfer Capital One Miles to Virgin Flying Club or Virgin Red",
+          "url": "https://awardwallet.com/news/capital-one-rewards/virgin-red-transfer-bonus/",
+          "feed": "AwardWallet"
+        },
+        {
+          "title": "Capital One Transfer Bonus: 30% Virgin Red/Virgin Atlantic",
+          "url": "https://www.doctorofcredit.com/capital-one-transfer-bonus-30-virgin-red-virgin-atlantic/",
+          "feed": "Doctor of Credit"
+        }
+      ]
+    },
     {
       "id": "c1-ba-20",
       "from": "c1",
